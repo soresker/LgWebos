@@ -1,0 +1,17 @@
+body {
+    height: 100%;
+    overflow: hidden;
+    font-family: 'Courier New', Courier, monospace;
+  }
+  
+  #process {
+    position: absolute;
+    background: rgba(0, 0, 0, 0.5);
+    right: 0;
+    bottom: 0;
+    z-index: 100;
+    font-size: 22px;
+    right: 0px;
+    max-width: 700px;
+  } 
+  

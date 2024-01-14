@@ -1,0 +1,12 @@
+{
+  "id": "com.lg.app.signage",
+  "version": "1.0.0",
+  "vendor": "FastApi",
+  "type": "web",
+  "main": "index.html",
+  "title": "ApiWebOs4",
+  "icon": "icon.png",
+  "largeIcon": "largeIcon.png", 
+  "inspectable": true,
+  "uiRevision": 2
+}

@@ -1,0 +1,74 @@
+
+.container {
+    position: relative;
+    width: 100%;
+}
+body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+  }
+.container img {
+    width: 100%;
+    height: auto;
+  }
+
+.apiLogo {
+    position: absolute;
+    width:100%;
+}
+
+.apiPlayer {
+    position: absolute;
+    top: 60%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    background-color: #508EB7;
+    color: white;
+    font-size: 16px;
+    padding: 12px 24px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+
+  .container .btn:hover {
+    background-color: black;
+  }
+ 
+  html, body {
+    height: 100%;
+    overflow: hidden;
+  }
+   
+  #connection {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    z-index: 100;
+  }
+  
+  #process {
+    position: absolute;
+    background: rgba(0,0,0,0.5);
+    right: 0;
+    bottom: 0;
+    z-index: 100;
+  }
+  
+  #iframe {
+    width: 100%;
+    height: 100vh;
+  }
+  
+  .notVisible {
+    display: none;
+  }
+  
+  #notification {
+    width: 350px;
+    bottom: 0;
+    position: absolute;
+    right: 0;
+  }

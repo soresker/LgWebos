@@ -1,0 +1,191 @@
+<html>
+
+<head>
+    <title>Fast Api WebOS4</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <!--  Include SCAP Library -->
+    <script type="text/javascript" src="./js/cordova/2.7.0/cordova.webos.js"></script>
+    <script type="text/javascript" src="./js/cordova-cd/signage.js"></script>
+    <script type="text/javascript" src="./js/cordova-cd/storage.js"></script>
+    <script type="text/javascript" src="./js/cordova-cd/configuration.js"></script>
+    <script type="text/javascript" src="./js/cordova-cd/deviceInfo.js"></script>
+    <script type="text/javascript" src="./js/cordova-cd/inputSource.js"></script>
+    <script type="text/javascript" src="./js/cordova-cd/power.js"></script>
+    <script type="text/javascript" src="./js/cordova-cd/sound.js"></script>
+    <script type="text/javascript" src="./js/cordova-cd/video.js"></script>
+    <script type="text/javascript" src="./js/signalr.js"></script>
+    <style>
+        textarea {
+            position: absolute;
+            height: 100%;
+            width: 20%;
+            right: 0px;
+            top: 0px;
+            z-index: 999999999;
+            background-color: black;
+            color: white;
+        }
+    </style>
+    <script type="text/javascript">
+
+        document.onreadystatechange = () => {
+            if (document.readyState === 'complete') {
+                _log("Docuement ready");
+            }
+        } 
+
+        function onMyFrameLoad() {
+
+            _log("MyFrameLoad");
+
+            document.getElementById('iframe').contentWindow.postMessage(JSON.stringify({ "MessageType": "initPlayer", "Data": { "filePath": "http://127.0.0.1:9080/example/", "videoMode": "0" } }), '*');
+
+            document.getElementById('iframe').contentWindow.postMessage(JSON.stringify({
+                "MessageType": "startPublishment",
+                "Data": {
+                    "calendar": {
+                        "templates": [
+                            {
+                                "days": "1111111",
+                                "templateUniqId": "842f1d0c4bb44dddbeb94a21a2e03ca",
+                                "endDate": "2023-11-11",
+                                "endTime": "23:59:00",
+                                "startDate": "2023-02-01",
+                                "startTime": "00:00:00",
+                                "id": 1
+                            }
+                        ]
+                    },
+                    "urlArray": [
+                        "https://cdn.jsdelivr.net/gh/belaviyo/download-with/samples/sample.png",
+                        "https://cdn.jsdelivr.net/gh/belaviyo/download-with/samples/sample.mp4"
+                    ],
+                    "templates": [
+                        {
+                            "duration": 86400,
+                            "templateUniqId": "842f1d0c4bb44dddbeb94a21a2e03ca",
+                            "width": 1920,
+                            "height": 1080,
+                            "x": 0,
+                            "y": 0,
+                            "z": 1,
+                            "name": "template1",
+                            "id": 9,
+                            "frames": [
+                                {
+                                    "frameUniqId": "7842f1d0c4bb44dddbeb94a21a2e03ca",
+                                    "width": 1920,
+                                    "height": 1080,
+                                    "x": 0,
+                                    "y": 0,
+                                    "z": 5,
+                                    "name": "frame1",
+                                    "id": 2,
+                                    "playlists": [
+                                        {
+                                            "contents": [
+                                                {
+                                                    "contentProperties": [
+                                                        {
+                                                            "name": "filename",
+                                                            "value": "sample.png"
+                                                        },
+                                                        {
+                                                            "name": "animation",
+                                                            "value": "none"
+                                                        },
+                                                        {
+                                                            "name": "displayoption",
+                                                            "value": "fit"
+                                                        }
+                                                    ],
+                                                    "duration": 15,
+                                                    "expireDate": "",
+                                                    "startDate": "",
+                                                    "startTime": "00:00:00",
+                                                    "endTime": "23:59:59",
+                                                    "days": "1111111",
+                                                    "contentUniqId": "sample",
+                                                    "width": 1920,
+                                                    "height": 1080,
+                                                    "name": "image 02",
+                                                    "type": "image",
+                                                    "id": 4
+                                                },
+                                                {
+                                                    "contentProperties": [
+                                                        {
+                                                            "name": "seekstart",
+                                                            "value": "0"
+                                                        },
+                                                        {
+                                                            "name": "seekend",
+                                                            "value": "0"
+                                                        },
+                                                        {
+                                                            "name": "loop",
+                                                            "value": "true"
+                                                        },
+                                                        {
+                                                            "name": "filename",
+                                                            "value": "sample.mp4"
+                                                        },
+                                                        {
+                                                            "name": "volume",
+                                                            "value": "5"
+                                                        },
+                                                        {
+                                                            "name": "animation",
+                                                            "value": ""
+                                                        },
+                                                        {
+                                                            "name": "displayption",
+                                                            "value": "fit"
+                                                        }
+                                                    ],
+                                                    "days": "1111111",
+                                                    "duration": 47,
+                                                    "expireDate": "",
+                                                    "startDate": "",
+                                                    "startTime": "00:00:00",
+                                                    "endTime": "23:59:59",
+                                                    "contentUniqId": "sample",
+                                                    "name": "video amqq",
+                                                    "width": 1920,
+                                                    "height": 1080,
+                                                    "type": "video",
+                                                    "id": 5
+                                                }
+                                            ],
+                                            "duration": 57,
+                                            "playlistUniqId": "c6c66a3c57dc4f25b806cf37d05896fb",
+                                            "name": "background",
+                                            "id": 3
+                                        }
+                                    ]
+                                }
+                            ],
+                            "triggertemplates": [],
+                            "version": "84f5e5be0c0ef1ba"
+                        }
+                    ]
+                }
+            }), "*")
+        }
+
+    </script>
+</head>
+
+
+<body>
+    <textarea id="debug"></textarea>
+    <!-- <iframe id="iframe" width="100%" height="95%" src="Playing/player.html" onload="onMyFrameLoad()"></iframe>  -->
+    <!-- <iframe id="iframe" width="100%" height="100%" src="Playing/player.html"></iframe> -->
+    <iframe id="iframe" width="100%" height="100%" src="Login/login.html"></iframe>
+    <script src="js/debug.js"></script>
+    <script src="js/downloader.js"></script>
+    <script src="js/filesystem.js"></script>
+    <script src="js/main.js"></script>
+</body>
+
+</html>
