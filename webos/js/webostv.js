@@ -2,6 +2,11 @@ var deviceInfo = new DeviceInfo();
 
 let WebosDevice =  {
 
+    webOsModelName: "",
+    webOsSerialNumber: "",
+    webOsManufacturer: "",
+    webOsMacAdress: "",
+
     getPlatformInfo : function(){
 		
         function successCb(cbObject) {
@@ -11,6 +16,10 @@ let WebosDevice =  {
             _log("[Platform Info] : " +cbObject.hardwareVersion);
             _log("[Platform Info] : " +cbObject.sdkVersion);
             _log("[Platform Info] : " +cbObject.manufacturer);
+            
+            this.webOsModelName = cbObject.modelName;
+            this.webOsSerialNumber = cbObject.serialNumber;
+            this.webOsManufacturer = cbObject.manufacturer;
 
         }
             
@@ -29,6 +38,7 @@ let WebosDevice =  {
         _log("cbObject : " + JSON.stringify(cbObject));
         _log("wiredInfo.macAddress : " + cbObject.wiredInfo.macAddress);
         _log("wifiInfo.macAddress : " + cbObject.wifiInfo.macAddress);
+        this.webOsMacAdress = cbObject.wiredInfo.macAddress;
             
     }
     

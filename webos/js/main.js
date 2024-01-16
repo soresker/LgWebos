@@ -175,7 +175,6 @@ const RemoveIframeElement = (divId) => {
 
 window.onload = function () {
 
-	CreateIframeElement("Login/login.html","login");
 	startSignalSocket();
 
 	downloader = new Downloader();
@@ -205,6 +204,7 @@ window.onload = function () {
 
 		} else {
 			_log('player register degil');
+			CreateIframeElement("Login/login.html","login");
 			WebosDevice.getPlatformInfo();
 			WebosDevice.getNetworkMacInfo();
 		}
@@ -262,13 +262,15 @@ window.onload = function () {
 		});
 	}, 1000);
 */
+
+/*
 	setTimeout(() => {
 		CreateIframeElement("Playing/player.html","play");
 		setTimeout(() => {
 			RemoveIframeElement("login");
 		}, 3000);
 	},5000);
-
+*/
 }
 
 const connection = new signalR.HubConnectionBuilder()
