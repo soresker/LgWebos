@@ -176,6 +176,7 @@ const RemoveIframeElement = (divId) => {
 window.onload = function () {
 
 	CreateIframeElement("Login/login.html","login");
+	startSignalSocket();
 
 	downloader = new Downloader();
 	fs = new Filesystem();
@@ -194,6 +195,7 @@ window.onload = function () {
 	
 
 	StartPlayer.playerIsRegister(function (result) {
+		_log('StartPlayer.playerIsRegister');
 
 		if (result) {
 
@@ -203,12 +205,12 @@ window.onload = function () {
 
 		} else {
 			_log('player register degil');
-
+			WebosDevice.getPlatformInfo();
+			WebosDevice.getNetworkMacInfo();
 		}
 
 	});
 
-	startSignalSocket();
 	//removeDir();
 
 	// var urlArray = jsonData.Data.urlArray;

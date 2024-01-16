@@ -1,12 +1,12 @@
-class WebosSettings  {
+let WebosSettings = {
 
-	static init = function () {
+	 init : function () {
 	
 		//this.loadDefaultSettings();	
 	
-	}
+	},
 	
-	static value = function (key,defaultValue)  {
+	value : function (key,defaultValue)  {
 	
 		if (localStorage.getItem(key) === null) {
 			
@@ -18,22 +18,22 @@ class WebosSettings  {
 			
 		}
 
-	}
+	},
 	
-	static setValue = function (key,value){
+	setValue : function (key,value){
 	
 		localStorage.setItem(key, value);
 	
-	}
+	},
 
-	static removeValue =  function (key) {
+	 removeValue : function (key) {
 
 	    localStorage.removeItem(key);
 
-	}
+	},
 
-	static loadDefaultSettings =  function () {
-
+	 loadDefaultSettings : function () {
+		_log ("loadDefaultSettings");
         localStorage.clear();
 
         this.setValue("Customer/id", "1");
@@ -55,9 +55,9 @@ class WebosSettings  {
 		this.setValue("Publishment/OldVersion", "");
 		this.setValue("Publishment/StartDateTime", "");
 
-	}
+	},
 
-	static settingData = {
+	 settingData :{
 		"Customer": {
 			"id": "1"
 		},
@@ -85,7 +85,5 @@ class WebosSettings  {
 	}
   
 }
-  
-  if (typeof module !== 'undefined') module.exports = { WebosSettings };
-  
+    
   
