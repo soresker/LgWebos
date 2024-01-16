@@ -4,16 +4,25 @@
     <title>Fast Api WebOS4</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <!--  Include SCAP Library -->
-    <script type="text/javascript" src="./js/cordova/2.7.0/cordova.webos.js"></script>
-    <script type="text/javascript" src="./js/cordova-cd/signage.js"></script>
-    <script type="text/javascript" src="./js/cordova-cd/storage.js"></script>
-    <script type="text/javascript" src="./js/cordova-cd/configuration.js"></script>
-    <script type="text/javascript" src="./js/cordova-cd/deviceInfo.js"></script>
-    <script type="text/javascript" src="./js/cordova-cd/inputSource.js"></script>
-    <script type="text/javascript" src="./js/cordova-cd/power.js"></script>
-    <script type="text/javascript" src="./js/cordova-cd/sound.js"></script>
-    <script type="text/javascript" src="./js/cordova-cd/video.js"></script>
-    <script type="text/javascript" src="./js/signalr.js"></script>
+    <script type="text/javascript" src="./js/cordova/2.7.0/cordova.webos.js" onload="loaded=true;"></script>
+    <script type="text/javascript" src="./js/cordova-cd/signage.js" onload="loaded=true;"></script>
+    <script type="text/javascript" src="./js/cordova-cd/storage.js" onload="loaded=true;"></script>
+    <script type="text/javascript" src="./js/cordova-cd/configuration.js" onload="loaded=true;"></script>
+    <script type="text/javascript" src="./js/cordova-cd/deviceInfo.js" onload="loaded=true;"></script>
+    <script type="text/javascript" src="./js/cordova-cd/inputSource.js" onload="loaded=true;"></script>
+    <script type="text/javascript" src="./js/cordova-cd/power.js" onload="loaded=true;"></script>
+    <script type="text/javascript" src="./js/cordova-cd/sound.js" onload="loaded=true;"></script>
+    <script type="text/javascript" src="./js/cordova-cd/video.js" onload="loaded=true;"></script>
+
+    <script type="text/javascript" src="./js/signalr.js" onload="loaded=true;"></script>
+    <script type="text/javascript" src="./js/debug.js" onload="loaded=true;"></script>
+    <script type="text/javascript" src="./js/downloader.js" onload="loaded=true;"></script>
+    <script type="text/javascript" src="./js/filesystem.js" onload="loaded=true;"></script>
+    <script type="text/javascript" src="./js/main.js" onload="loaded=true;"></script>
+
+    <div id="login"></div> 
+    <div id="play"></div> 
+
     <style>
         textarea {
             position: absolute;
@@ -30,9 +39,16 @@
 
         document.onreadystatechange = () => {
             if (document.readyState === 'complete') {
-                _log("Docuement ready");
+             _log("Docuement ready");
             }
         } 
+
+        if (loaded) {
+            console.log("Loaded All JS File Successfully!") ;
+        }
+        else {
+            console.log("NOT Loaded JS File Successfully!") ;
+        }
 
         function onMyFrameLoad() {
 
@@ -181,11 +197,7 @@
     <textarea id="debug"></textarea>
     <!-- <iframe id="iframe" width="100%" height="95%" src="Playing/player.html" onload="onMyFrameLoad()"></iframe>  -->
     <!-- <iframe id="iframe" width="100%" height="100%" src="Playing/player.html"></iframe> -->
-    <iframe id="iframe" width="100%" height="100%" src="Login/login.html"></iframe>
-    <script src="js/debug.js"></script>
-    <script src="js/downloader.js"></script>
-    <script src="js/filesystem.js"></script>
-    <script src="js/main.js"></script>
+
 </body>
 
 </html>

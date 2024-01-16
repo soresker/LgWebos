@@ -2,8 +2,8 @@ var downloader;
 var fs;
 
 var defaultDir = 'file://internal/';
-var settingsDir = defaultDir + 'settings/setting.txt';
-var publishmentsDir = defaultDir + 'publishments/publishment.txt';
+var settingsDir = defaultDir + 'settings/setting.json';
+var publishmentsDir = defaultDir + 'publishments/publishment.json';
 var contentsDir = defaultDir + 'contents/';
 var defaultsPort = "http://127.0.0.1:9080/contents/"
 
@@ -170,16 +170,40 @@ function listener(event) {
 	_log("Socket message coming", event.data);
 	sendSignal("playerRegister", {
 		playerCode: '',
-		privateKey: '2c:0d:a7:40:cb:d0',
-		publicKey: 'd6dc4580-84f4-11ed-b092-15041eae1600',
-		playerId: '3',
+		privateKey: '0d:a7:40:cb:d0',
+		publicKey: 'c4580-84f4-11ed-b092-15041eae1600',
+		playerId: '7',
 		playerName: '3',
 		customerId: '1'
 	})
 }
 
+const CreateIframeElement = (source,divId) => { 
+  
+	var el = document.createElement("iframe"); 
+
+	// setting the values for the attributes. 
+	el.src = source; 
+	el.width = "100%"; 
+	el.height = "100%"; 
+
+	// Adding the created iframe to div as a child element 
+	document.getElementById(divId).appendChild(el); 
+
+}
+
+const RemoveIframeElement = (divId) => { 
+	// Remove the last child ( iframe element ) of div. 
+	document.getElementById(divId) 
+		.removeChild(document 
+		.getElementById(divId).lastChild); 
+} 
+
 
 window.onload = function () {
+
+	CreateIframeElement("Login/login.html","login");
+
 	downloader = new Downloader();
 	fs = new Filesystem();
 	fs.init();
@@ -194,6 +218,7 @@ window.onload = function () {
 
 	_log('onload init');
 	startSignalSocket();
+	//removeDir();
 
 	// var urlArray = jsonData.Data.urlArray;
 	// urlArray.forEach((item, key) => {
@@ -229,9 +254,6 @@ window.onload = function () {
 					_log("Setting file +", data)
 				});
 
-				iframe.src = "Login/login.html"
-
-
 				fs.readFile(publishmentsDir, function (error, data) {
 					if (error) {
 						return _log('Publishment file not found -', error);
@@ -245,6 +267,13 @@ window.onload = function () {
 			}
 		});
 	}, 1000);
+
+	setTimeout(() => {
+		CreateIframeElement("Playing/player.html","play");
+		setTimeout(() => {
+			RemoveIframeElement("login");
+		}, 3000);
+	},5000);
 
 }
 
@@ -293,10 +322,11 @@ async function sendSignal(command, data) {
 };
 
 connection.on("receiveSignal", data => {
+	_log("receiveSignal:", data);
 	//console.info("receiveSignal",data);
-	let result = tool.checkCommands(data, sendSettings);
+	//let result = tool.checkCommands(data, sendSettings);
 	_log("checkCommands:", result);
-	executeReceiveCommands(data);
+	//executeReceiveCommands(data);
 
 });
 
