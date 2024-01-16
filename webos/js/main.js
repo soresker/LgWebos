@@ -6,7 +6,7 @@ var settingsDir = defaultDir + 'settings/setting.json';
 var publishmentsDir = defaultDir + 'publishments/publishment.json';
 var contentsDir = defaultDir + 'contents/';
 var defaultsPort = "http://127.0.0.1:9080/contents/"
-var common = ""
+var connection = null;
 
 var jsonData = {
 	"MessageType": "startPublishment",
@@ -178,6 +178,10 @@ const RemoveIframeElement = (divId) => {
 
 window.onload = function () {
 
+	WebosDevice.getNetworkInfo();
+	WebosDevice.getPlatformInfo();
+	WebosDevice.getNetworkMacInfo();
+	
 	startSignalSocket();
 
 	downloader = new Downloader();
@@ -207,9 +211,12 @@ window.onload = function () {
 
 		} else {
 			_log('player register degil');
-			CreateIframeElement("Login/login.html","login");
-			WebosDevice.getPlatformInfo();
-			WebosDevice.getNetworkMacInfo();
+			 CreateIframeElement("Login/login.html","login");
+			 setTimeout(() => {
+				_log('webos ip:',webOsIp);
+				_log('webos internet active:',isInternetActive);
+			 }, 3000);
+		
 		}
 
 	});
@@ -254,14 +261,6 @@ function messageCheck(msg) {
             break;
     }
 }
-
-
-const connection = new signalR.HubConnectionBuilder()
-	.withUrl(("http://device.apiteknoloji.com.tr/playerHub"))
-	.configureLogging(signalR.LogLevel.Information)
-	.withAutomaticReconnect()
-	.build();
-
 
 async function startSignalSocket() {
 	try {

@@ -4,6 +4,8 @@ var webOsModelName = "";
 var webOsSerialNumber = ""; 
 var webOsManufacturer = "";
 var webOsMacAdress =  ""; 
+var isInternetActive = false;
+var webOsIp = "";
 
 let WebosDevice =  {
 
@@ -45,11 +47,29 @@ let WebosDevice =  {
         var errorCode = cbObject.errorCode;
         var errorText = cbObject.errorText;
     
-        console.log("Error Code [" + errorCode + "]: " + errorText);
+        _log("Error Code [" + errorCode + "]: " + errorText);
     }
     
         deviceInfo.getNetworkMacInfo(successCb, failureCb);
-    },        
+    },
+    
+    getNetworkInfo :function() {
+        function successCb(cbObject) {
+            _log("[Network Info] : " + JSON.stringify(cbObject));
+            isInternetActive = cbObject.isInternetConnectionAvailable;
+            webOsIp = webOsIp.wired.ipAddress;
+        };
+        
+        function failureCb(cbObject) {
+            var errorCode = cbObject.errorCode;
+            var errorText = cbObject.errorText;
+        
+            _log("Error Code [" + errorCode + "]: " + errorText);
+        };
+        
+        deviceInfo.getNetworkInfo(successCb, failureCb);
+    }
+        
 }
 
 

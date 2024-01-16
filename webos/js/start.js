@@ -1,7 +1,8 @@
 let StartPlayer = {
      playerIsRegister : function(callback){
-		_log("Webos Registered");
+		
 		if(WebosSettings.value("PlayerSettings/status","0") != "0"){
+			_log("Webos Registered");
 			callback(true);		
 		}else{
 			
