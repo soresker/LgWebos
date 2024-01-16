@@ -7,33 +7,6 @@ var publishmentsDir = defaultDir + 'publishments/publishment.json';
 var contentsDir = defaultDir + 'contents/';
 var defaultsPort = "http://127.0.0.1:9080/contents/"
 
-var settingData = {
-	"Customer": {
-		"id": "1"
-	},
-	"Apis": {
-		"appServerUrl": "http://device.apiteknoloji.com.tr/playerHub"
-	},
-	"PlayerSettings": {
-		"playerName": "",
-		"playerId": "",
-		"playerCode": "",
-		"privateKey": "",
-		"publicKey": "",
-		"status": "1",
-		"screenWidth": 1920,
-		"screenHeight": 1080,
-		"videoType": "0",
-		"appVersion": "0",
-		"playerType": "PC"
-	},
-	"Publishment": {
-		"NewVersion": "",
-		"OldVersion": "",
-		"StartDateTime": ""
-	}
-}
-
 var jsonData = {
 	"MessageType": "startPublishment",
 	"Data": {
@@ -217,6 +190,24 @@ window.onload = function () {
 	}
 
 	_log('onload init');
+
+	
+
+	StartPlayer.playerIsRegister(function (result) {
+
+		if (result) {
+
+		//Player is registered
+		_log('player register');
+
+
+		} else {
+			_log('player register degil');
+
+		}
+
+	});
+
 	startSignalSocket();
 	//removeDir();
 
@@ -226,6 +217,7 @@ window.onload = function () {
 	// });  
 
 	//removeDir()
+	/*
 	setTimeout(() => {
 		fs.ls(defaultDir + 'settings', function (error, data) {
 			if (error) {
@@ -267,7 +259,7 @@ window.onload = function () {
 			}
 		});
 	}, 1000);
-
+*/
 	setTimeout(() => {
 		CreateIframeElement("Playing/player.html","play");
 		setTimeout(() => {
