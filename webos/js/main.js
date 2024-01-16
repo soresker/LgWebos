@@ -6,6 +6,7 @@ var settingsDir = defaultDir + 'settings/setting.json';
 var publishmentsDir = defaultDir + 'publishments/publishment.json';
 var contentsDir = defaultDir + 'contents/';
 var defaultsPort = "http://127.0.0.1:9080/contents/"
+var common = ""
 
 var jsonData = {
 	"MessageType": "startPublishment",
@@ -141,6 +142,8 @@ var jsonData = {
 
 function listener(event) {
 	_log("Socket message coming", event.data);
+	messageCheck( event.data);
+	/*
 	sendSignal("playerRegister", {
 		playerCode: '',
 		privateKey: '0d:a7:40:cb:d0',
@@ -148,7 +151,7 @@ function listener(event) {
 		playerId: '7',
 		playerName: '3',
 		customerId: '1'
-	})
+	})*/
 }
 
 const CreateIframeElement = (source,divId) => { 
@@ -218,51 +221,6 @@ window.onload = function () {
 	// 	download(item);
 	// });  
 
-	//removeDir()
-	/*
-	setTimeout(() => {
-		fs.ls(defaultDir + 'settings', function (error, data) {
-			if (error) {
-				_log('Setting file not found -', error);
-
-				fs.mkdir(defaultDir + 'settings/', function (error, data) {
-					if (error) {
-						_log('Setting dir not created -', error);
-					}
-					else {
-						_log('Setting dir created +', settingsDir);
-						fs.writeFile(settingsDir, settingData.toString(), function (error, data) {
-							if (error) {
-								_log('Setting file not created -', error);
-							} else {
-								_log("Setting file created +", settingData.toString());
-							}
-						});
-					}
-				});
-			}
-			else {
-				_log("Setting file found +", data)
-
-				fs.readFile(settingsDir, function (error, data) {
-					_log("Setting file +", data)
-				});
-
-				fs.readFile(publishmentsDir, function (error, data) {
-					if (error) {
-						return _log('Publishment file not found -', error);
-					}
-					_log("Publishment file +", data)
-
-					iframe.contentWindow.postMessage(JSON.stringify({ "MessageType": "initPlayer", "Data": { "filePath": defaultsPort, "videoMode": "0" } }), '*');
-
-					iframe.contentWindow.postMessage(JSON.stringify(data), "*")
-				});
-			}
-		});
-	}, 1000);
-*/
-
 /*
 	setTimeout(() => {
 		CreateIframeElement("Playing/player.html","play");
@@ -272,6 +230,31 @@ window.onload = function () {
 	},5000);
 */
 }
+
+function messageCheck(msg) {
+
+	 msg = JSON.parse(msg);
+	 _log("Message Check:",msg);
+	 _log("Message MessageType:",msg.MessageType);
+
+    switch (msg.MessageType) {
+
+        case commandMessage.Player_Register:
+			_log("Player_Register yapacaz",msg);
+			playerRegister(msg);
+            break;
+
+        case commandMessage.PlayingLog:
+            break;    
+
+        case commandMessage.PlayerReady:
+            break;
+           
+        default:
+            break;
+    }
+}
+
 
 const connection = new signalR.HubConnectionBuilder()
 	.withUrl(("http://device.apiteknoloji.com.tr/playerHub"))
@@ -356,3 +339,24 @@ function removeDir() {
 		_log('data', data);
 	})
 }
+
+function playerRegister(data) {
+
+	var isRegisterData = {
+		playerCode: "",
+		privateKey: webOsMacAdress,
+		publicKey: webOsMacAdress,
+		playerId: data.playerId,
+		playerName: webOsModelName,
+		customerId: data.customerId
+	}
+	 
+	WebosSettings.setValue("Customer/id", data.customerId);
+	WebosSettings.setValue("PlayerSettings/playerName", isRegisterData.playerName);
+	WebosSettings.setValue("PlayerSettings/playerId",data.playerId);
+
+	sendSignal(commandMessage.Player_Register,isRegisterData);
+	_log("Send Player Register:",isRegisterData);
+
+}
+

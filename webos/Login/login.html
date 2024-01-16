@@ -13,8 +13,9 @@
   <script type="text/javascript">
     function Register() {
       let loginIframePost = {};
-      loginIframePost.PlayerId = "playerId.val";
-      loginIframePost.PlayerName = "PlayerName.val";
+      loginIframePost.MessageType = "playerRegister";
+      loginIframePost.playerId = document.getElementById("playerId").value;
+      loginIframePost.customerId = document.getElementById("customerId").value;
       window.parent.postMessage(JSON.stringify(loginIframePost), '*');
     }
   </script>
@@ -28,8 +29,8 @@
   <div class="apiPlayer">
     <label for="playerId">Player Id : </label>
     <input type="text" name="playerId" value="" id="playerId" placeholder="" class="form-control" required>
-    <label for="playerName">Player Name : </label>
-    <input type="text" name="playerName" value="" id="playerName" placeholder="" class="form-control" required>
+    <label for="playerName">Customer Id : </label>
+    <input type="text" name="customerId" value="" id="customerId" placeholder="" class="form-control" required>
     <button class="btn" id="register" onclick="Register()">Register</button>
   </div>
 </body>
