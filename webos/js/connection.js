@@ -43,9 +43,6 @@ var connection = new signalR.HubConnectionBuilder()
     
     connection.on("receiveSignal", data => {
         _log("receiveSignal:", data);
-        //console.info("receiveSignal",data);
-        //let result = tool.checkCommands(data, sendSettings);
-        _log("checkCommands:", result);
-        //executeReceiveCommands(data);
+        executeReceiveCommands(data);
     
     });

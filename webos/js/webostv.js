@@ -39,8 +39,9 @@ let WebosDevice =  {
     function successCb(cbObject) {
         _log("cbObject : " + JSON.stringify(cbObject));
         _log("wiredInfo.macAddress : " + cbObject.wiredInfo.macAddress);
+        _log("wifiInfo.macAddress : " + cbObject.wifiInfo.macAddress);
         webOsMacAdress = cbObject.wiredInfo.macAddress;
-            
+        webOsMacAdress = cbObject.wifiInfo.macAddress;
     }
     
     function failureCb(cbObject) {
@@ -57,7 +58,7 @@ let WebosDevice =  {
         function successCb(cbObject) {
             _log("[Network Info] : " + JSON.stringify(cbObject));
             isInternetActive = cbObject.isInternetConnectionAvailable;
-            webOsIp = webOsIp.wired.ipAddress;
+            webOsIp = cbObject.wired.ipAddress; //sonra ac
         };
         
         function failureCb(cbObject) {
