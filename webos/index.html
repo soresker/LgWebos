@@ -17,6 +17,7 @@
     <script type="text/javascript" src="./js/cordova-cd/video.js" onload="loaded=true;"></script>
     <script type="text/javascript" src="./js/signalr.js" onload="loaded=true;"></script>
 
+    <script type="text/javascript" src="./js/remotecontrol.js" onload="loaded=true;"></script>
     <script type="text/javascript" src="./js/static.js" onload="loaded=true;"></script>
     <script type="text/javascript" src="./js/webostv.js" onload="loaded=true;"></script>
     <script type="text/javascript" src="./js/start.js" onload="loaded=true;"></script>
@@ -58,101 +59,6 @@
             console.log("NOT Loaded JS File Successfully!") ;
         }
 
-        function onMyFrameLoad() {
-
-            _log("MyFrameLoad");
-
-            document.getElementById('iframe').contentWindow.postMessage(JSON.stringify({ "MessageType": "initPlayer", "Data": { "filePath": "http://127.0.0.1:9080/example/", "videoMode": "0" } }), '*');
-
-            document.getElementById('iframe').contentWindow.postMessage(JSON.stringify({
-                "MessageType": "startPublishment",
-                "Data": {
-                    "calendar": {
-                        "templates": [
-                            {
-                                "days": "1111111",
-                                "templateUniqId": "842f1d0c4bb44dddbeb94a21a2e03ca",
-                                "endDate": "2023-11-11",
-                                "endTime": "23:59:00",
-                                "startDate": "2023-02-01",
-                                "startTime": "00:00:00",
-                                "id": 1
-                            }
-                        ]
-                    },
-                    "urlArray": [
-                        "https://cdn.jsdelivr.net/gh/belaviyo/download-with/samples/sample.png",
-                        "https://cdn.jsdelivr.net/gh/belaviyo/download-with/samples/sample.mp4"
-                    ],
-                    "templates": [
-                        {
-                            "duration": 86400,
-                            "templateUniqId": "842f1d0c4bb44dddbeb94a21a2e03ca",
-                            "width": 1920,
-                            "height": 1080,
-                            "x": 0,
-                            "y": 0,
-                            "z": 1,
-                            "name": "template1",
-                            "id": 9,
-                            "frames": [
-                                {
-                                    "frameUniqId": "7842f1d0c4bb44dddbeb94a21a2e03ca",
-                                    "width": 1920,
-                                    "height": 1080,
-                                    "x": 0,
-                                    "y": 0,
-                                    "z": 5,
-                                    "name": "frame1",
-                                    "id": 2,
-                                    "playlists": [
-                                        {
-                                            "contents": [
-                                                {
-                                                    "contentProperties": [
-                                                        {
-                                                            "name": "filename",
-                                                            "value": "95b66f7404ae437e9cbf8385c82fea63.png"
-                                                        },
-                                                        {
-                                                            "name": "animation",
-                                                            "value": "none"
-                                                        },
-                                                        {
-                                                            "name": "displayoption",
-                                                            "value": "fit"
-                                                        }
-                                                    ],
-                                                    "duration": 15,
-                                                    "expireDate": "",
-                                                    "startDate": "",
-                                                    "startTime": "00:00:00",
-                                                    "endTime": "23:59:59",
-                                                    "days": "1111111",
-                                                    "contentUniqId": "95b66f7404ae437e9cbf8385c82fea63",
-                                                    "width": 1920,
-                                                    "height": 1080,
-                                                    "name": "image 02",
-                                                    "type": "image",
-                                                    "id": 4
-                                                }
-                                            ],
-                                            "duration": 57,
-                                            "playlistUniqId": "c6c66a3c57dc4f25b806cf37d05896fb",
-                                            "name": "background",
-                                            "id": 3
-                                        }
-                                    ]
-                                }
-                            ],
-                            "triggertemplates": [],
-                            "version": "84f5e5be0c0ef1ba"
-                        }
-                    ]
-                }
-            }), "*")
-        }
-
     </script>
 </head>
 
@@ -160,7 +66,6 @@
 <body>
     <textarea id="debug"></textarea>
     <iframe id="iframe" frameborder="0" src="" 	width ="100%" height = "100%"></iframe>
-
 </body>
 
 </html>

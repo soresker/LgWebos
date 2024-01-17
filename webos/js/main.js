@@ -8,150 +8,9 @@ var contentsDir = defaultDir + 'contents/';
 var defaultsPort = "http://127.0.0.1:9080/file://internal/contents/"
 var connection = null;
 
-var jsonData = {
-	"MessageType": "startPublishment",
-	"Data": {
-		"calendar": {
-			"templates": [
-				{
-					"days": "1111111",
-					"templateUniqId": "842f1d0c4bb44dddbeb94a21a2e03ca",
-					"endDate": "2023-11-11",
-					"endTime": "23:59:00",
-					"startDate": "2023-02-01",
-					"startTime": "00:00:00",
-					"id": 1
-				}
-			]
-		},
-		"urlArray": [
-			"https://cdn.jsdelivr.net/gh/belaviyo/download-with/samples/sample.png",
-			"https://cdn.jsdelivr.net/gh/belaviyo/download-with/samples/sample.mp4"
-		],
-		"templates": [
-			{
-				"duration": 86400,
-				"templateUniqId": "842f1d0c4bb44dddbeb94a21a2e03ca",
-				"width": 1920,
-				"height": 1080,
-				"x": 0,
-				"y": 0,
-				"z": 1,
-				"name": "template1",
-				"id": 9,
-				"frames": [
-					{
-						"frameUniqId": "7842f1d0c4bb44dddbeb94a21a2e03ca",
-						"width": 1920,
-						"height": 1080,
-						"x": 0,
-						"y": 0,
-						"z": 5,
-						"name": "frame1",
-						"id": 2,
-						"playlists": [
-							{
-								"contents": [
-									{
-										"contentProperties": [
-											{
-												"name": "filename",
-												"value": "sample.png"
-											},
-											{
-												"name": "animation",
-												"value": "none"
-											},
-											{
-												"name": "displayoption",
-												"value": "fit"
-											}
-										],
-										"duration": 15,
-										"expireDate": "",
-										"startDate": "",
-										"startTime": "00:00:00",
-										"endTime": "23:59:59",
-										"days": "1111111",
-										"contentUniqId": "sample",
-										"width": 1920,
-										"height": 1080,
-										"name": "image 02",
-										"type": "image",
-										"id": 4
-									},
-									{
-										"contentProperties": [
-											{
-												"name": "seekstart",
-												"value": "0"
-											},
-											{
-												"name": "seekend",
-												"value": "0"
-											},
-											{
-												"name": "loop",
-												"value": "true"
-											},
-											{
-												"name": "filename",
-												"value": "sample.mp4"
-											},
-											{
-												"name": "volume",
-												"value": "5"
-											},
-											{
-												"name": "animation",
-												"value": ""
-											},
-											{
-												"name": "displayption",
-												"value": "fit"
-											}
-										],
-										"days": "1111111",
-										"duration": 47,
-										"expireDate": "",
-										"startDate": "",
-										"startTime": "00:00:00",
-										"endTime": "23:59:59",
-										"contentUniqId": "sample",
-										"name": "video amqq",
-										"width": 1920,
-										"height": 1080,
-										"type": "video",
-										"id": 5
-									}
-								],
-								"duration": 57,
-								"playlistUniqId": "c6c66a3c57dc4f25b806cf37d05896fb",
-								"name": "background",
-								"id": 3
-							}
-						]
-					}
-				],
-				"triggertemplates": [],
-				"version": "84f5e5be0c0ef1ba"
-			}
-		]
-	}
-};
-
 function listener(event) {
 	_log("Socket message coming", event.data);
 	messageCheck( event.data);
-	/*
-	sendSignal("playerRegister", {
-		playerCode: '',
-		privateKey: '0d:a7:40:cb:d0',
-		publicKey: 'c4580-84f4-11ed-b092-15041eae1600',
-		playerId: '7',
-		playerName: '3',
-		customerId: '1'
-	})*/
 }
 
 const CreateIframeElement = (source,divId) => { 
@@ -200,8 +59,6 @@ window.onload = function () {
 
 	_log('onload init');
 
-	
-
 	StartPlayer.playerIsRegister(function (result) {
 		_log('StartPlayer.playerIsRegister');
 
@@ -223,14 +80,6 @@ window.onload = function () {
 	});
 
 	sendHardbitSystemInfo();
-
-	//removeDir();
-
-	// var urlArray = jsonData.Data.urlArray;
-	// urlArray.forEach((item, key) => {
-	// 	download(item);
-	// });  
-
 /*
 	setTimeout(() => {
 		CreateIframeElement("Playing/player.html","play");
@@ -306,17 +155,6 @@ function playerRegister(data) {
 		customerId: data.customerId
 	}
 	
-/*
-	var isRegisterData = {
-		playerCode: "",
-		privateKey: "08:00:27:58:99:55",
-		publicKey: "08:00:27:58:99:55",
-		playerId: "9",
-		playerName: "WEBOS4.1",
-		customerId: "1"
-	}
-	 */
-
 	WebosSettings.setValue("Customer/id", data.customerId);
 	WebosSettings.setValue("PlayerSettings/playerName", isRegisterData.playerName);
 	WebosSettings.setValue("PlayerSettings/playerId",data.playerId);
@@ -336,13 +174,6 @@ if (commands.command === commandMessage.Player_Register )
 
       if (commands.status == true)
       {
-		/*
-		CreateIframeElement("Playing/player.html","play");
-		setTimeout(() => {
-			RemoveIframeElement("login");
-		}, 3000);
-		
-		*/	
 		var isGetPublishment = {
 			playerCode: "",
 			privateKey: webOsSerialNumber,
@@ -351,16 +182,6 @@ if (commands.command === commandMessage.Player_Register )
 			playerName: webOsModelName,
 			customerId: data.customerId
 		}
-	
-	/*
-		var isGetPublishment = {
-			playerCode: "",
-			privateKey: "08:00:27:58:99:55",
-			publicKey: "08:00:27:58:99:55",
-			playerId: "9",
-			playerName: "WEBOS4.1",
-			customerId: "1"
-		}*/
 		sendSignal(commandMessage.Check_Publishment, isGetPublishment);      
       }  
 
