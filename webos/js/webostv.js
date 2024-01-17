@@ -1,4 +1,7 @@
 var deviceInfo = new DeviceInfo();
+var power = new Power();
+var screenShot = new Signage();
+
 
 var webOsModelName = "";
 var webOsSerialNumber = ""; 
@@ -69,7 +72,89 @@ let WebosDevice =  {
         };
         
         deviceInfo.getNetworkInfo(successCb, failureCb);
-    }
+    },
+
+    deviceRestart: function () {
+
+        var options = {};
+        options.powerCommand = Power.PowerCommand.REBOOT;
+        
+        function successCb() {
+            // Do something
+        }
+        
+        function failureCb(cbObject) {
+            var errorCode = cbObject.errorCode;
+            var errorText = cbObject.errorText;
+        
+            console.log("Error Code [" + errorCode + "]: " + errorText);
+        }
+        
+        power.executePowerCommand(successCb, failureCb, options);
+
+    },
+
+    deviceShutDown: function () {
+
+        var options = {};
+        options.powerCommand = Power.PowerCommand.SHUTDOWN;
+        
+        function successCb() {
+            // Do something
+        }
+        
+        function failureCb(cbObject) {
+            var errorCode = cbObject.errorCode;
+            var errorText = cbObject.errorText;
+        
+            console.log("Error Code [" + errorCode + "]: " + errorText);
+        }
+        
+        power.executePowerCommand(successCb, failureCb, options);
+
+    },
+
+    deviceScreenOn: function () {
+
+        var options = {};
+        options.displayMode  = Power.DisplayMode.DISPLAY_ON;
+        
+        function successCb() {
+            _log("deviceScreenOn edildi");
+        }
+        
+        function failureCb(cbObject) {
+            var errorCode = cbObject.errorCode;
+            var errorText = cbObject.errorText;
+        
+            console.log("Error Code [" + errorCode + "]: " + errorText);
+        }
+        
+        power.setDisplayMode(successCb, failureCb, options);
+
+    },
+
+    deviceScreenOff: function () {
+
+        var options = {};
+        options.displayMode  = Power.DisplayMode.DISPLAY_OFF;
+        
+        function successCb() {
+            _log("deviceScreenOn edildi");
+        }
+        
+        function failureCb(cbObject) {
+            var errorCode = cbObject.errorCode;
+            var errorText = cbObject.errorText;
+        
+            console.log("Error Code [" + errorCode + "]: " + errorText);
+        }
+        
+        power.setDisplayMode(successCb, failureCb, options);
+
+    },
+
+
         
 }
 
