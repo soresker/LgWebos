@@ -1,6 +1,7 @@
 var deviceInfo = new DeviceInfo();
 var power = new Power();
 var screenShot = new Signage();
+var configuration = new Configuration();
 
 
 var webOsModelName = "";
@@ -87,7 +88,7 @@ let WebosDevice =  {
             var errorCode = cbObject.errorCode;
             var errorText = cbObject.errorText;
         
-            console.log("Error Code [" + errorCode + "]: " + errorText);
+            _log("Error Code [" + errorCode + "]: " + errorText);
         }
         
         power.executePowerCommand(successCb, failureCb, options);
@@ -107,7 +108,7 @@ let WebosDevice =  {
             var errorCode = cbObject.errorCode;
             var errorText = cbObject.errorText;
         
-            console.log("Error Code [" + errorCode + "]: " + errorText);
+            _log("Error Code [" + errorCode + "]: " + errorText);
         }
         
         power.executePowerCommand(successCb, failureCb, options);
@@ -127,7 +128,7 @@ let WebosDevice =  {
             var errorCode = cbObject.errorCode;
             var errorText = cbObject.errorText;
         
-            console.log("Error Code [" + errorCode + "]: " + errorText);
+            _log("Error Code [" + errorCode + "]: " + errorText);
         }
         
         power.setDisplayMode(successCb, failureCb, options);
@@ -147,15 +148,68 @@ let WebosDevice =  {
             var errorCode = cbObject.errorCode;
             var errorText = cbObject.errorText;
         
-            console.log("Error Code [" + errorCode + "]: " + errorText);
+            _log("Error Code [" + errorCode + "]: " + errorText);
         }
         
         power.setDisplayMode(successCb, failureCb, options);
 
     },
 
-
+    restartApplication :function () {
+        function successCb() {
+            _log("restart success : ");
+        }
         
+        function failureCb(cbObject) {
+            var errorCode = cbObject.errorCode;
+            var errorText = cbObject.errorText;
+        
+            _log("Error Code [" + errorCode + "]: " + errorText);
+        }
+        configuration.restartApplication(successCb, failureCb);
+    },
+
+    setPortraitMode: function () {
+        var options = {
+            portraitMode: Signage.OsdPortraitMode.ON
+        };
+        
+        var successCb = function () {
+            _log("Portrait Mode successfully Set");
+        };
+        
+        var failureCb = function (cbObject) {
+            var errorCode = cbObject.errorCode;
+            var errorText = cbObject.errorText;
+            _log(" Error Code [" + errorCode + "]: " + errorText);
+        };
+        
+        signage.setPortraitMode(successCb, failureCb, options);
+    },
+
+    upgradeIpkApplication :function () {
+        _log("upgradeIpkApplication");
+        var successCb = function () {
+            _log("IPK type app update successful");
+        };
+        
+        var failureCb = function (cbObject) {
+            var errorCode = cbObject.errorCode;
+            var errorText = cbObject.errorText;
+            _log(" Error Code [" + errorCode + "]: " + errorText);
+        };
+        
+        var options = {
+            type: Storage.AppType.IPK,
+            to: Storage.AppMode.LOCAL,
+            recovery: false
+        };
+        
+        storage.upgradeApplication(successCb, failureCb, options);
+    }
+        
+        
+         
 }
 
 

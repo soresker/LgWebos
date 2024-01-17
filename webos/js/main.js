@@ -9,7 +9,7 @@ var defaultsPort = "http://127.0.0.1:9080/file://internal/contents/"
 var connection = null;
 
 function listener(event) {
-	_log("Socket message coming", event.data);
+	_log("Html message coming", event.data);
 	messageCheck( event.data);
 }
 
@@ -23,7 +23,7 @@ const CreateIframeElement = (source,divId) => {
 	el.height = "100%"; 
 
 	// Adding the created iframe to div as a child element 
-	//document.getElementById(divId).appendChild(el); 
+	document.getElementById(divId).appendChild(el); 
 
 }
 
@@ -37,11 +37,11 @@ const RemoveIframeElement = (divId) => {
 
 window.onload = function () {
 
+	document.getElementById('iframe').setAttribute('src', 'Playing/player.html');
+
 	WebosDevice.getNetworkInfo();
 	WebosDevice.getPlatformInfo();
 	WebosDevice.getNetworkMacInfo();
-
-	document.getElementById('iframe').setAttribute('src', 'Playing/player.html');
 
 	startSignalSocket();
 
@@ -58,6 +58,8 @@ window.onload = function () {
 	}
 
 	_log('onload init');
+
+	//localStorage.clear();
 
 	StartPlayer.playerIsRegister(function (result) {
 		_log('StartPlayer.playerIsRegister');
