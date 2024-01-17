@@ -62,6 +62,7 @@ window.onload = function () {
 	//localStorage.clear();
 
 	StartPlayer.playerIsRegister(function (result) {
+		
 		_log('StartPlayer.playerIsRegister');
 
 		if (result) {
@@ -180,9 +181,9 @@ if (commands.command === commandMessage.Player_Register )
 			playerCode: "",
 			privateKey: webOsSerialNumber,
 			publicKey: webOsSerialNumber,
-			playerId: data.playerId,
+			playerId:  WebosSettings.value("PlayerSettings/playerId",""),
 			playerName: webOsModelName,
-			customerId: data.customerId
+			customerId: WebosSettings.value("Customer/id","")
 		}
 		sendSignal(commandMessage.Check_Publishment, isGetPublishment);      
       }  
@@ -213,8 +214,39 @@ if (commands.command === commandMessage.Player_Register )
         _log("Devamke :)");      
       }
    
-  }else{
-	_log("ELSE Commands");
+  }else if (commands.command === commandMessage.WinScreenShotRequest ){
+	_log("WinScreenShotRequest");  
+	WebosDevice.screenShot();    
+  }
+  else if (commands.command === commandMessage.Player_Restart ){
+	_log("Player_Restart");   
+	WebosDevice.deviceRestart();
+  }
+  else if (commands.command === commandMessage.Player_Shutdown ){
+	_log("Player_Shutdown");      
+	WebosDevice.deviceShutDown();
+  }
+  else if (commands.command === commandMessage.Check_Upgrade ){
+	_log("Check_Upgrade");    
+	//WebosDevice.upgradeIpkApplication();  
+  }
+  else if (commands.command === commandMessage.PlayerDeleted ){
+	_log("PlayerDeleted");      
+	localStorage.clear();
+  }
+  else if (commands.command === commandMessage.HealthCheck ){
+	_log("HealthCheck");      
+  }
+  else if (commands.command === commandMessage.AppRestart ){
+	_log("AppRestart"); 
+	WebosDevice.restartApplication();    
+  }
+  else if (commands.command === commandMessage.PlayerSettingsHere ){
+	_log("PlayerSettingsHere"); 
+	//WebosDevice.setPortraitMode();      
+  }
+  else{
+	_log("UNKNOWN Command");
   }
 
 }
@@ -222,6 +254,7 @@ if (commands.command === commandMessage.Player_Register )
 function fetchPublishment(readPublishment) {
 
 	_log("fetchPublishment :)");      
+
 	var Data = readPublishment;
  	var urlArray = readPublishment.urlArray;
 	 urlArray.forEach((item, key) => {
@@ -255,4 +288,20 @@ sendHardbitSystemInfo = (() => {
 		sendSignal(commandMessage.HealthCheck, systemInfData);      
 	  }, 10000);
   
-  });
+});
+
+sendScreenShot = ((base64Image) => {
+
+	  _log("sendScreenShot");
+	  var playerInfo = {
+		  privateKey: webOsSerialNumber,
+		  publicKey: webOsSerialNumber,
+		  playerId: WebosSettings.value("PlayerSettings/playerId",""),
+		  customerId: WebosSettings.value("Customer/id",""),
+		  base64Image: base64Image,
+		  screenResolution: '400x300',
+	  }
+
+	  sendSignal(commandMessage.Win_ScreenShot, playerInfo);      
+
+});

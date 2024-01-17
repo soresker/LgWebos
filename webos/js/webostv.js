@@ -206,10 +206,39 @@ let WebosDevice =  {
         };
         
         storage.upgradeApplication(successCb, failureCb, options);
+    },
+
+    screenShot: function () {
+        var options = {
+            save : false,
+            thumbnail : true,
+            imgResolution : Signage.ImgResolution.FHD
+        };
+        
+        var successCB = function (cbObject) {
+            var size = cbObject.size;
+            var encoding = cbObject.encoding;
+            var data = cbObject.data;
+        
+            _log("Got Data size:" + size);
+            _log("Got Data encoding :" + encoding);
+            _log("Got Data :" + data);
+            
+            var capturedElement = document.getElementById('captured_img');
+            capturedElement.src = 'data:image/jpeg;base64,' + data;
+            sendScreenShot('data:image/jpeg;base64,' + data);
+        };
+        
+        var failureCB = function (cbObject) {
+            var errorCode = cbObject.errorCode;
+            var errorText = cbObject.errorText;
+        
+            _log("Error Code [" + errorCode + "]: " + errorText);
+        }
+        
+        signage.captureScreen(successCB, failureCB, options);
     }
-        
-        
-         
+                        
 }
 
 
