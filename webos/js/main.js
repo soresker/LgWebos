@@ -62,7 +62,7 @@ window.onload = function () {
 	//localStorage.clear();
 
 	StartPlayer.playerIsRegister(function (result) {
-		
+
 		_log('StartPlayer.playerIsRegister');
 
 		if (result) {
@@ -216,15 +216,15 @@ if (commands.command === commandMessage.Player_Register )
    
   }else if (commands.command === commandMessage.WinScreenShotRequest ){
 	_log("WinScreenShotRequest");  
-	WebosDevice.screenShot();    
+	//WebosDevice.screenShot();    
   }
   else if (commands.command === commandMessage.Player_Restart ){
 	_log("Player_Restart");   
-	WebosDevice.deviceRestart();
+	//WebosDevice.deviceRestart();
   }
   else if (commands.command === commandMessage.Player_Shutdown ){
 	_log("Player_Shutdown");      
-	WebosDevice.deviceShutDown();
+	//WebosDevice.deviceShutDown();
   }
   else if (commands.command === commandMessage.Check_Upgrade ){
 	_log("Check_Upgrade");    
@@ -239,7 +239,7 @@ if (commands.command === commandMessage.Player_Register )
   }
   else if (commands.command === commandMessage.AppRestart ){
 	_log("AppRestart"); 
-	WebosDevice.restartApplication();    
+	//WebosDevice.restartApplication();    
   }
   else if (commands.command === commandMessage.PlayerSettingsHere ){
 	_log("PlayerSettingsHere"); 

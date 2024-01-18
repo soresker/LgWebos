@@ -21,6 +21,7 @@ static parseLatestPublishment =  function(data) {
         console.log("parseLatestPublishment");
 
         this.clearPublisment();
+        this.clearCurrentTemplate();
 
         this.currentPublishment = data;
 
