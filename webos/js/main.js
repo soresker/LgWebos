@@ -3,7 +3,7 @@ var fs;
 
 var defaultDir = 'file://internal/';
 var settingsDir = defaultDir + 'settings/setting.json';
-var publishmentsDir = defaultDir + 'publishments/publishment.json';
+var publishmentsDir = defaultDir + 'publishments/';
 var contentsDir = defaultDir + 'contents/';
 var defaultsPort = "http://127.0.0.1:9080/file://internal/contents/"
 var connection = null;
@@ -70,6 +70,12 @@ window.onload = function () {
 		//Player is registered
 		_log('player register');
 
+		var publishment = WebosSettings.value("Publishment/NewVersion","");
+
+		_log('publishment:',publishment);
+
+		readfile(publishment);
+
 		} else {
 			_log('player register degil');
 			 CreateIframeElement("Login/login.html","login");
@@ -116,6 +122,41 @@ function messageCheck(msg) {
             break;
     }
 }
+
+function readfile(fileName) {
+	_log('readfile:', fileName);
+	var path = publishmentsDir+fileName+".json";
+	_log('read file path:', path);
+	fs.readFile(path,function (readData) {
+		_log('readfile:', readData);
+		var Data = readData;
+		if (readData )
+		{
+			document.getElementById('iframe').contentWindow.postMessage(JSON.stringify({ "MessageType": "initPlayer", "Data": { "filePath": "http://127.0.0.1:9080/file://internal/contents/", "videoMode": "0" } }), '*');
+
+			document.getElementById('iframe').contentWindow.postMessage(JSON.stringify({
+				"MessageType": "startPublishment",Data
+			}), "*")
+			
+		}		
+		else
+			_log('not read json data:', data);
+	})
+}
+
+function writefile(fileName,data) {
+	_log('writefile path:', fileName);
+
+	var path = publishmentsDir+fileName+".json";
+	_log('writefile path:', path);
+	fs.writeFile(path,data, function (error) {
+		if (error)
+			return _log('error', error);
+		else
+			_log('write json data:', data);
+	})
+}
+
 function download(url) {
 	_log('download start:', url);
 	downloader.start({
@@ -200,14 +241,16 @@ if (commands.command === commandMessage.Player_Register )
 		  _log("Player ilk kez ayaga kalkiyor ve yayini indirmeli:",commands);
 		  WebosSettings.setValue("Publishment/NewVersion",commands.jsonData.publishmentName);
 		  WebosSettings.setValue("Publishment/OldVersion",commands.jsonData.publishmentName); 
+		  writefile(commands.jsonData.publishmentName,commands.jsonData.publishmentData); 
 		  fetchPublishment(commands.jsonData.publishmentData); 	
 		  _log("burayageldik mi :",commands.jsonData);
 
 	  }
 
-      if (playerStatus == true)
+      if (temp == commands.jsonData.publishmentName && playerStatus == true)
       {
         _log("Publisment dosyasi indiriliyor:",commands);
+		writefile(commands.jsonData.publishmentName,commands.jsonData.publishmentData); 
 		WebosSettings.setValue("Publishment/NewVersion",commands.jsonData.publishmentName);
         fetchPublishment(commands.jsonData.publishmentData);
       }else{
@@ -257,6 +300,8 @@ function fetchPublishment(readPublishment) {
 
 	var Data = readPublishment;
  	var urlArray = readPublishment.urlArray;
+
+
 	 urlArray.forEach((item, key) => {
 	 	download(item);
 	 });
