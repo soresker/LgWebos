@@ -156,7 +156,7 @@ function download(url, callback) {
 		url: url,
 		path: contentsDir,
 	}, function (error, data) {
-		_log('download complete' + (currentIndex + 1), error, data)
+		_log('download complete: ' + (currentIndex + 1) +' ✓' , error, data)
 		callback(error, data)
 	});
 }
