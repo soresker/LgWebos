@@ -60,7 +60,7 @@ window.onload = function () {
 	}
 
 	_log('onload init');
-
+	checkPublishment();
 	//localStorage.clear();
 
 	StartPlayer.playerIsRegister(function (result) {
@@ -71,12 +71,6 @@ window.onload = function () {
 
 			//Player is registered
 			_log('player register');
-
-			var publishment = WebosSettings.value("Publishment/NewVersion", "");
-
-			_log('publishment:', publishment);
-
-			readfile(publishment);
 
 		} else {
 			_log('player register degil');
@@ -118,6 +112,9 @@ function messageCheck(msg) {
 			break;
 
 		case commandMessage.PlayerReady:
+			var publishment = WebosSettings.value("Publishment/NewVersion", "");
+			_log('publishment:', publishment);
+			readfile(publishment);
 			break;
 
 		default:
@@ -126,31 +123,27 @@ function messageCheck(msg) {
 }
 
 function readfile(fileName) {
-	_log('readfile:', fileName);
 	var path = publishmentsDir + fileName + ".json";
 	_log('read file path:', path);
-	fs.readFile(path, function (readData) {
-		_log('readfile:', readData);
-		var Data = readData;
-		if (readData) {
-			document.getElementById('iframe').contentWindow.postMessage(JSON.stringify({ "MessageType": "initPlayer", "Data": { "filePath": "http://127.0.0.1:9080/file://internal/contents/", "videoMode": "0" } }), '*');
+	fs.readFile(path, function (error, data) {
+		_log('readfile3:', data);
+		document.getElementById('iframe').contentWindow.postMessage(JSON.stringify({ "MessageType": "initPlayer", "Data": { "filePath": "http://127.0.0.1:9080/file://internal/contents/", "videoMode": "0" } }), '*');
 
-			document.getElementById('iframe').contentWindow.postMessage(JSON.stringify({
-				"MessageType": "startPublishment", Data
-			}), "*")
-
-		}
-		else
-			_log('not read json data:', data);
+		document.getElementById('iframe').contentWindow.postMessage(data, "*")
 	})
 }
 
 function writefile(fileName, data) {
 	_log('writefile path:', fileName);
+	_log("data", data)
 
 	var path = publishmentsDir + fileName + ".json";
 	_log('writefile path:', path);
-	fs.writeFile(path, data, function (error) {
+	var Data = data
+	var jsonData = {
+		"MessageType": "startPublishment", Data
+	}
+	fs.writeFile(path, JSON.stringify(jsonData), function (error) {
 		if (error)
 			return _log('error', error);
 		else
@@ -163,30 +156,29 @@ function download(url, callback) {
 		url: url,
 		path: contentsDir,
 	}, function (error, data) {
-		_log('download complete', error, data)
+		_log('download complete' + (currentIndex + 1), error, data)
 		callback(error, data)
 	});
 }
-
 
 function downloadNext() {
 	var currentUrl = urlArray[currentIndex];
 	_log('download start:', 'download status:' + (currentIndex + 1) + '/' + urlArray.length);
 	_log('download file url:', currentUrl);
 	download(currentUrl, function (err, data) {
-		console.log("call")
 		if (currentIndex < urlArray.length) {
 			downloadNext()
 			currentIndex = currentIndex + 1
 		}
 		else {
 			currentIndex = 0
+			_log("download complated all files ✓")
 		}
 	})
 }
 
-function listDir() {
-	var path = defaultDir;
+function listDir(dir) {
+	var path = dir;
 	_log('listdir path', path);
 	fs.ls(path, function (error, data) {
 		if (error)
@@ -261,7 +253,7 @@ function executeReceiveCommands(commands) {
 
 		}
 
-		if (temp == commands.jsonData.publishmentName && playerStatus == true) {
+		if (temp != commands.jsonData.publishmentName && playerStatus == true) {
 			_log("Publisment dosyasi indiriliyor:", commands);
 			writefile(commands.jsonData.publishmentName, commands.jsonData.publishmentData);
 			WebosSettings.setValue("Publishment/NewVersion", commands.jsonData.publishmentName);
@@ -311,6 +303,7 @@ function fetchPublishment(readPublishment) {
 
 	_log("fetchPublishment :)");
 
+	listDir(publishmentsDir)
 	var Data = readPublishment;
 	urlArray = readPublishment.urlArray;
 
@@ -360,3 +353,35 @@ sendScreenShot = ((base64Image) => {
 	sendSignal(commandMessage.Win_ScreenShot, playerInfo);
 
 });
+
+function checkPublishment() {
+	fs.ls(defaultDir + 'publishments', function (error, data) {
+		if (error) {
+			_log('publishments file not found -', error);
+
+			fs.mkdir(defaultDir + 'publishments/', function (error, data) {
+				if (error) {
+					_log('publishments dir not created -', error);
+				}
+				else {
+					_log('publishments dir created +', publishmentsDir);
+				}
+			});
+		}
+	});
+
+	fs.ls(defaultDir + 'contents', function (error, data) {
+		if (error) {
+			_log('contents file not found -', error);
+
+			fs.mkdir(defaultDir + 'contents/', function (error, data) {
+				if (error) {
+					_log('contents dir not created -', error);
+				}
+				else {
+					_log('contents dir created +', contentsDir);
+				}
+			});
+		}
+	});
+}
