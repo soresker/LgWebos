@@ -289,6 +289,7 @@ function executeReceiveCommands(commands) {
 	}
 	else if (commands.command === commandMessage.PlayerDeleted) {
 		_log("PlayerDeleted");
+		window.localStorage.clear();
 		localStorage.clear();
 	}
 	else if (commands.command === commandMessage.HealthCheck) {
