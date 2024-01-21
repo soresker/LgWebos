@@ -9,34 +9,7 @@ var defaultsPort = "http://127.0.0.1:9080/file://internal/contents/"
 var connection = null;
 var urlArray;
 var currentIndex = 0
-
-function listener(event) {
-	_log("Html message coming", event.data);
-	messageCheck(event.data);
-}
-
-const CreateIframeElement = (source, divId) => {
-
-	var el = document.createElement("iframe");
-
-	// setting the values for the attributes. 
-	el.src = source;
-	el.width = "100%";
-	el.height = "100%";
-
-	// Adding the created iframe to div as a child element 
-	document.getElementById(divId).appendChild(el);
-
-}
-
-const RemoveIframeElement = (divId) => {
-	// Remove the last child ( iframe element ) of div. 
-	document.getElementById(divId)
-		.removeChild(document
-			.getElementById(divId).lastChild);
-}
-
-
+  
 window.onload = function () {
 
 	document.getElementById('iframe').setAttribute('src', 'Playing/player.html');
@@ -93,6 +66,32 @@ window.onload = function () {
 			}, 3000);
 		},5000);
 	*/
+}
+
+function listener(event) {
+	_log("Html message coming", event.data);
+	messageCheck(event.data);
+}
+
+const CreateIframeElement = (source, divId) => {
+
+	var el = document.createElement("iframe");
+
+	// setting the values for the attributes. 
+	el.src = source;
+	el.width = "100%";
+	el.height = "100%";
+
+	// Adding the created iframe to div as a child element 
+	document.getElementById(divId).appendChild(el);
+
+}
+
+const RemoveIframeElement = (divId) => {
+	// Remove the last child ( iframe element ) of div. 
+	document.getElementById(divId)
+		.removeChild(document
+			.getElementById(divId).lastChild);
 }
 
 function messageCheck(msg) {
@@ -156,7 +155,7 @@ function download(url, callback) {
 		url: url,
 		path: contentsDir,
 	}, function (error, data) {
-		_log('download complete: ' + (currentIndex + 1) +' ✓' , error, data)
+		_log('download complete: ' + (currentIndex + 1) + ' 😃', error, data)
 		callback(error, data)
 	});
 }
@@ -165,16 +164,26 @@ function downloadNext() {
 	var currentUrl = urlArray[currentIndex];
 	_log('download start:', 'download status:' + (currentIndex + 1) + '/' + urlArray.length);
 	_log('download file url:', currentUrl);
-	download(currentUrl, function (err, data) {
-		if (currentIndex < urlArray.length) {
+
+	var fileName = currentUrl.split('/').pop();
+	fs.ls(defaultDir + 'contents/' + fileName, function (error, data) {
+		if (error) {
+			download(currentUrl, function (err, data) {
+				if (currentIndex < urlArray.length) {
+					downloadNext()
+					currentIndex = currentIndex + 1
+				}
+				else {
+					currentIndex = 0
+					_log("download complated all files ✅")
+				}
+			});
+		} else {
+			_log("download file exist! Go Next File...")
 			downloadNext()
 			currentIndex = currentIndex + 1
 		}
-		else {
-			currentIndex = 0
-			_log("download complated all files ✓")
-		}
-	})
+	});
 }
 
 function listDir(dir) {
