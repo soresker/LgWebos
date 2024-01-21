@@ -1,4 +1,4 @@
-let Tools = {
+let WTools = {
 
      defaultValue : function(value, defaultValue) {
 
@@ -29,15 +29,15 @@ let Tools = {
 
 
     getDecodedString : function(stringValue) {
-        stringValue = Tools.replaceAll(stringValue, "&amp;", "&");
-        stringValue = Tools.replaceAll(stringValue, "&lt;", "<");
-        stringValue = Tools.replaceAll(stringValue, "&gt;", ">");
-        stringValue = Tools.replaceAll(stringValue, "&#xD;", "");
-        stringValue = Tools.replaceAll(stringValue, "&#xA;", " ");
-        stringValue = Tools.replaceAll(stringValue, "\r", "");
-        stringValue = Tools.replaceAll(stringValue, "\n", " ");
-        stringValue = Tools.replaceAll(stringValue, "&quot;", "\"");
-        stringValue = Tools.replaceAll(stringValue, "&apos;", "'");
+        stringValue = WTools.replaceAll(stringValue, "&amp;", "&");
+        stringValue = WTools.replaceAll(stringValue, "&lt;", "<");
+        stringValue = WTools.replaceAll(stringValue, "&gt;", ">");
+        stringValue = WTools.replaceAll(stringValue, "&#xD;", "");
+        stringValue = WTools.replaceAll(stringValue, "&#xA;", " ");
+        stringValue = WTools.replaceAll(stringValue, "\r", "");
+        stringValue = WTools.replaceAll(stringValue, "\n", " ");
+        stringValue = WTools.replaceAll(stringValue, "&quot;", "\"");
+        stringValue = WTools.replaceAll(stringValue, "&apos;", "'");
 
         return stringValue;
 

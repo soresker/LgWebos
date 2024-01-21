@@ -14,7 +14,7 @@ let WebosSettings = {
 		  
 		}else{
 			
-			return Tools.defaultValue(localStorage.getItem(key),defaultValue);
+			return WTools.defaultValue(localStorage.getItem(key),defaultValue);
 			
 		}
 

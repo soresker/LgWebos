@@ -39,7 +39,7 @@ const RemoveIframeElement = (divId) => {
 
 window.onload = function () {
 
-	document.getElementById('iframe').setAttribute('src', 'Playing/player.html');
+	//document.getElementById('iframe').setAttribute('src', 'Playing/player.html');
 
 	WebosDevice.getNetworkInfo();
 	WebosDevice.getPlatformInfo();
@@ -311,11 +311,11 @@ function fetchPublishment(readPublishment) {
 
 	_log("fetchPublishment download sonrasi:)");
 
-	document.getElementById('iframe').contentWindow.postMessage(JSON.stringify({ "MessageType": "initPlayer", "Data": { "filePath": "http://127.0.0.1:9080/file://internal/contents/", "videoMode": "0" } }), '*');
+	//document.getElementById('iframe').contentWindow.postMessage(JSON.stringify({ "MessageType": "initPlayer", "Data": { "filePath": "http://127.0.0.1:9080/file://internal/contents/", "videoMode": "0" } }), '*');
 
-	document.getElementById('iframe').contentWindow.postMessage(JSON.stringify({
+	//document.getElementById('iframe').contentWindow.postMessage(JSON.stringify({
 		"MessageType": "startPublishment", Data
-	}), "*")
+	//}), "*")
 
 }
 
