@@ -127,9 +127,18 @@ function readfile(fileName) {
 	_log('read file path:', path);
 	fs.readFile(path, function (error, data) {
 		_log('readfile3:', data);
-		document.getElementById('iframe').contentWindow.postMessage(JSON.stringify({ "MessageType": "initPlayer", "Data": { "filePath": "http://127.0.0.1:9080/file://internal/contents/", "videoMode": "0" } }), '*');
+		var Data = data;
+		let initPlayer = JSON.stringify({ "MessageType": "initPlayer", "Data": { "filePath": "http://127.0.0.1:9080/file://internal/contents/", "videoMode": "0" } })
+		Start_Handler.receiveMessage(initPlayer);
+	
+		let newPublish = JSON.stringify({
+			"MessageType": "startPublishment",Data
+		});
+		Start_Handler.receiveMessage(newPublish);
 
-		document.getElementById('iframe').contentWindow.postMessage(data, "*")
+		//document.getElementById('iframe').contentWindow.postMessage(JSON.stringify({ "MessageType": "initPlayer", "Data": { "filePath": "http://127.0.0.1:9080/file://internal/contents/", "videoMode": "0" } }), '*');
+
+		//document.getElementById('iframe').contentWindow.postMessage(data, "*")
 	})
 }
 
@@ -311,10 +320,17 @@ function fetchPublishment(readPublishment) {
 
 	_log("fetchPublishment download sonrasi:)");
 
-	//document.getElementById('iframe').contentWindow.postMessage(JSON.stringify({ "MessageType": "initPlayer", "Data": { "filePath": "http://127.0.0.1:9080/file://internal/contents/", "videoMode": "0" } }), '*');
+	let initPlayer = JSON.stringify({ "MessageType": "initPlayer", "Data": { "filePath": "http://127.0.0.1:9080/file://internal/contents/", "videoMode": "0" } })
+	Start_Handler.receiveMessage(initPlayer);
 
-	//document.getElementById('iframe').contentWindow.postMessage(JSON.stringify({
+	let newPublish = JSON.stringify({
 		"MessageType": "startPublishment", Data
+	});
+	Start_Handler.receiveMessage(newPublish);
+
+	//document.getElementById('iframe').contentWindow.postMessage(JSON.stringify({ "MessageType": "initPlayer", "Data": { "filePath": "http://127.0.0.1:9080/file://internal/contents/", "videoMode": "0" } }), '*');
+	//document.getElementById('iframe').contentWindow.postMessage(JSON.stringify({
+	//	"MessageType": "startPublishment", Data
 	//}), "*")
 
 }

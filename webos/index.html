@@ -85,6 +85,9 @@
 
         if (loaded) {
             console.log("Loaded All JS File Successfully!") ;
+            let responseIframe = {};
+                responseIframe.MessageType = "playerReady";
+                window.parent.postMessage(JSON.stringify(responseIframe),'*');
         }
         else {
             console.log("NOT Loaded JS File Successfully!") ;
