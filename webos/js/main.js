@@ -44,6 +44,7 @@ window.onload = function () {
 	WebosDevice.getNetworkInfo();
 	WebosDevice.getPlatformInfo();
 	WebosDevice.getNetworkMacInfo();
+	WebosDevice.getSystemUsageInfo()
 
 	startSignalSocket();
 
@@ -85,14 +86,6 @@ window.onload = function () {
 	});
 
 	sendHardbitSystemInfo();
-	/*
-		setTimeout(() => {
-			CreateIframeElement("Playing/player.html","play");
-			setTimeout(() => {
-				RemoveIframeElement("login");
-			}, 3000);
-		},5000);
-	*/
 }
 
 function messageCheck(msg) {

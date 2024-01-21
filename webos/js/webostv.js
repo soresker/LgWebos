@@ -237,7 +237,61 @@ let WebosDevice =  {
         }
         
         signage.captureScreen(successCB, failureCB, options);
+    },
+     getSystemUsageInfo :function() {
+
+        function successCb(cbObject) {
+           _log("cbObject : " + JSON.stringify(cbObject));
+        
+           _log("memory.total : " + cbObject.memory.total);
+           _log("memory.used : " + cbObject.memory.used);
+           _log("memory.free : " + cbObject.memory.free);
+           _log("memory.buffer : " + cbObject.memory.buffer);
+           _log("memory.cached : " + cbObject.memory.cached);
+        
+            for (var i in cbObject.cpus) {
+               _log("cpu.model " + cbObject.cpus[i].model);
+               _log("cpu.times.user " + cbObject.cpus[i].times.user);
+               _log("cpu.times.nice " + cbObject.cpus[i].times.nice);
+               _log("cpu.times.sys " + cbObject.cpus[i].times.sys);
+               _log("cpu.times.idle " + cbObject.cpus[i].times.idle);
+               _log("cpu.times.irq " + cbObject.cpus[i].times.irq);
+            }
+        
+            // Get usage information in percentage
+            var cpus = cbObject.cpus;
+            var memory = cbObject.memory;
+            for (var i = 0, len = cpus.length; i < len; i++) {
+               _log("CPU %s:", i);
+                var cpu = cpus[i],
+                    total = 0;
+                for (type in cpu.times)
+                    total += cpu.times[type];
+        
+                for (type in cpu.times)
+                   _log("	", type, Math.round(100 * cpu.times[type] / total));
+            }
+        
+            var actualFree = memory.free + memory.buffer + memory.cached;
+            //Actual memory usage ratio
+           _log("Memory: " + Math.round(100*((memory.total-actualFree)/memory.total))); 
+        }
+        
+        function failureCb(cbObject) {
+            var errorCode = cbObject.errorCode;
+            var errorText = cbObject.errorText;
+           _log("Error Code [" + errorCode + "]: " + errorText);
+        }
+        
+        var options = {
+            cpus: true,
+            memory: true
+        };
+        
+        var deviceInfo = new DeviceInfo();
+        deviceInfo.getSystemUsageInfo(successCb, failureCb, options);
     }
+        
                         
 }
 
