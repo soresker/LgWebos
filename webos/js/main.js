@@ -166,6 +166,7 @@ function downloadNext() {
 	_log('download file url:', currentUrl);
 
 	var fileName = currentUrl.split('/').pop();
+	_log('download file name:', fileName);
 	fs.ls(defaultDir + 'contents/' + fileName, function (error, data) {
 		if (error) {
 			download(currentUrl, function (err, data) {
