@@ -8,8 +8,8 @@ var contentsDir = defaultDir + 'contents/';
 var defaultsPort = "http://127.0.0.1:9080/file://internal/contents/"
 var connection = null;
 var urlArray;
-var currentIndex = 0
-  
+var currentIndex = -1
+
 window.onload = function () {
 
 	document.getElementById('iframe').setAttribute('src', 'Playing/player.html');
@@ -155,36 +155,55 @@ function download(url, callback) {
 		url: url,
 		path: contentsDir,
 	}, function (error, data) {
-		_log('download complete: ' + (currentIndex + 1) + ' 😃', error, data)
 		callback(error, data)
 	});
 }
 
 function downloadNext() {
-	var currentUrl = urlArray[currentIndex];
-	_log('download start:', 'download status:' + (currentIndex + 1) + '/' + urlArray.length);
-	_log('download file url:', currentUrl);
-
-	var fileName = currentUrl.split('/').pop();
-	_log('download file name:', fileName);
-	fs.ls(defaultDir + 'contents/' + fileName, function (error, data) {
-		if (error) {
-			download(currentUrl, function (err, data) {
-				if (currentIndex < urlArray.length) {
+	currentIndex = currentIndex + 1
+	if (currentIndex < urlArray.length) {
+		var currentUrl = urlArray[currentIndex];
+		_log('download start:', 'download status:' + (currentIndex + 1) + '/' + urlArray.length)
+		_log('download file url:', currentUrl)
+		var fileName = currentUrl.split('/').pop();
+		fileExists(contentsDir + fileName, function (error, data) {
+			if (data != null && data == false) {
+				download(currentUrl, function (err, data) {
+					if (err) {
+						_log("download failed: " + (currentIndex + 1) + '/' + urlArray.length)
+					} else {
+						_log('download complete: ' + (currentIndex + 1) + '/' + urlArray.length + ' 😃')
+					}
 					downloadNext()
-					currentIndex = currentIndex + 1
-				}
-				else {
-					currentIndex = 0
-					_log("download complated all files ✅")
-				}
-			});
-		} else {
-			_log("download file exist! Go Next File...")
-			downloadNext()
-			currentIndex = currentIndex + 1
-		}
-	});
+				})
+			}
+			else {
+				_log("download file exist! Go Next File: " + (currentIndex + 1) + '/' + urlArray.length)
+				downloadNext()
+			}
+		});
+	}
+	else {
+		currentIndex = -1
+		_log("download complated all files ✅")
+	}
+}
+
+function fileExists(files, callback) {
+	var successCb = function (cbObject) {
+		var exists = cbObject.exists;
+		callback(null, exists)
+	};
+
+	var failureCb = function (cbObject) {
+		callback(cbObject, null)
+	};
+
+	var options = {};
+	options.path = files;
+
+	var storage = new Storage();
+	storage.exists(successCb, failureCb, options);
 }
 
 function listDir(dir) {
