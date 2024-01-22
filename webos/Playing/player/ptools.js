@@ -59,14 +59,14 @@ function  Tools()  {
     } 
 
     Tools.prototype.replaceTRCharacters = function(value) {
-        let string = value.toUpperCase();
-        let letters = { "İ": "I", "Ş": "S", "Ğ": "G", "Ü": "U", "Ö": "O", "Ç": "C" };
+        var string = value.toUpperCase();
+        var letters = { "İ": "I", "Ş": "S", "Ğ": "G", "Ü": "U", "Ö": "O", "Ç": "C" };
         string = string.replace(/(([İŞĞÜÇÖ]))/g, function(letter) { return letters[letter]; })
         return string;
     }
 
     Tools.prototype.isEmptyObject =  function(obj) {
-        for (let prop in obj) {
+        for (var prop in obj) {
             if (obj.hasOwnProperty(prop))
                 return false;
         }

@@ -62,7 +62,7 @@ Content_Html.prototype.showContent = function(func) {
         }, 1000);
 
 
-        let message = {
+        var message = {
             Type : "openWebPage",
             Url :  this.contentInfo.getTypeContentProperty('url'),
             Duration: this.duration,
@@ -90,7 +90,7 @@ Content_Html.prototype.deleteUIElement = function() {
 
     try {
 
-        let message = {
+        var message = {
             Type : "closeWebPage",
             Url :  this.contentInfo.getTypeContentProperty('url'),
             Duration: this.duration,

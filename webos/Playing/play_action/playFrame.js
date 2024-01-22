@@ -50,15 +50,15 @@ Play_Frame.prototype.continueFrame = function(isComeFromEndOfAContent, notValidC
         isComeFromEndOfAContent = this.globalCameFromEndOfAContent;
     }
 
-    let validContentCount = 0;
+    var validContentCount = 0;
 
-    for (let i = 0; i < this.frameInfo.playlistInfoList.length; i++) {
+    for (var i = 0; i < this.frameInfo.playlistInfoList.length; i++) {
 
-        let playlistInfo = this.frameInfo.playlistInfoList[i];
+        var playlistInfo = this.frameInfo.playlistInfoList[i];
 
-        for (let j = 0; j < playlistInfo.contentInfoList.length; j++) {
+        for (var j = 0; j < playlistInfo.contentInfoList.length; j++) {
 
-            let contentInfo = playlistInfo.contentInfoList[j];
+            var contentInfo = playlistInfo.contentInfoList[j];
 
             if (contentInfo.isValid) {
 
@@ -90,7 +90,7 @@ Play_Frame.prototype.continueFrame = function(isComeFromEndOfAContent, notValidC
 
         this.contentIndex++;
 
-        let playlistInfo = this.frameInfo.playlistInfoList[0];
+        var playlistInfo = this.frameInfo.playlistInfoList[0];
 
         if (this.contentIndex >= playlistInfo.contentInfoList.length) {
 
@@ -104,10 +104,10 @@ Play_Frame.prototype.continueFrame = function(isComeFromEndOfAContent, notValidC
         if (notValidContent == undefined)
             notValidContent = false;
 
-        let playlistInfo = this.frameInfo.playlistInfoList[this.playlistIndex];
+        var playlistInfo = this.frameInfo.playlistInfoList[this.playlistIndex];
         if (playlistInfo.isSequent == true) {
 
-            let sequentContentIndex = playlistInfo.sequentContentIndex;
+            var sequentContentIndex = playlistInfo.sequentContentIndex;
 
 
             if (playlistInfo.startSequent) {
@@ -204,15 +204,15 @@ Play_Frame.prototype.checkNextContentSchedule = function() {
 
     console.log("Play_Frame.checkNextContentSchedule"+"Checking next content schedule.");
 
-    let playlistInfoList = this.frameInfo.playlistInfoList;
+    var playlistInfoList = this.frameInfo.playlistInfoList;
     if (playlistInfoList.length == 0)
         return true;
 
-    let contentInfoList = playlistInfoList[this.playlistIndex].contentInfoList;
+    var contentInfoList = playlistInfoList[this.playlistIndex].contentInfoList;
     if (contentInfoList.length == 0)
         return true;
 
-    let contentInfo = contentInfoList[this.contentIndex];
+    var contentInfo = contentInfoList[this.contentIndex];
 
     if (!contentInfo.isValid) {
         console.log("Play_Frame.checkNextContentSchedule"+"Content is marked as invalid. No need to check for schedule. Continuing.");
@@ -220,13 +220,13 @@ Play_Frame.prototype.checkNextContentSchedule = function() {
     }
 
     //days check start    
-    let days = contentInfo.days;
+    var days = contentInfo.days;
     console.log("Play_Frame.checkNextContentSchedule"+ "Checking day of week schedule for frame id:{0} content id:{1}. Days value:{2}".pxcFormatString(this.id, contentInfo.id, days));
 
     if (!Tools.isEmptyString(days) && days.length === 7) {
-        let currentDateTime =  moment();
+        var currentDateTime =  moment();
 
-        let dayOfWeek = currentDateTime.isoWeekday() - 1;
+        var dayOfWeek = currentDateTime.isoWeekday() - 1;
         if (days[dayOfWeek] == '0') {
             console.log("Play_Frame.checkNextContentSchedule"+"Content should not be played on this day. Returning false. Continuing.");
             return false;
@@ -239,7 +239,7 @@ Play_Frame.prototype.checkNextContentSchedule = function() {
     //days check end
 
     //start date check start
-    let contentStartDate = moment(contentInfo.startDate, "YYYY-MM-DD");
+    var contentStartDate = moment(contentInfo.startDate, "YYYY-MM-DD");
     console.log("Play_Frame.checkNextContentSchedule"+"Checking start date schedule for frame id:{0} content id:{1}. Start date value:{2}".pxcFormatString(this.id, contentInfo.id, contentInfo.startDate));
     if (contentStartDate.isValid()) {
         if (Tools.getDateTimeNow().isBefore(contentStartDate)) {
@@ -256,7 +256,7 @@ Play_Frame.prototype.checkNextContentSchedule = function() {
     //start time check start
     console.log("Play_Frame.checkNextContentSchedule"+ "Checking start time schedule for frame id:{0} content id:{1}. Start time value:{2}".pxcFormatString(this.id, contentInfo.id, contentInfo.startTime));
     if (moment(contentInfo.startTime, "HH:mm:ss").isValid()) {
-        let formedStartTime = Tools.getDateTimeNow().format("DD.MM.YYYY");
+        var formedStartTime = Tools.getDateTimeNow().format("DD.MM.YYYY");
         formedStartTime += " " + contentInfo.startTime;
         formedStartTime = moment(formedStartTime, "DD.MM.YYYY HH:mm:ss");
         if (formedStartTime.isValid()) {
@@ -275,7 +275,7 @@ Play_Frame.prototype.checkNextContentSchedule = function() {
     //end time check start
     console.log("Play_Frame.checkNextContentSchedule"+ "Checking end time schedule for frame id:{0} content id:{1}. End time value:{2}".pxcFormatString(this.id, contentInfo.id, contentInfo.endTime));
     if (moment(contentInfo.endTime, "HH:mm:ss").isValid()) {
-        let formedEndTime = Tools.getDateTimeNow().format("DD.MM.YYYY");
+        var formedEndTime = Tools.getDateTimeNow().format("DD.MM.YYYY");
         formedEndTime += " " + contentInfo.endTime;
         formedEndTime = moment(formedEndTime, "DD.MM.YYYY HH:mm:ss");
 
@@ -300,12 +300,12 @@ Play_Frame.prototype.playNextContent = function(isComeFromEndOfAContent) {
 
 
     isComeFromEndOfAContent = Tools.defaultValue(isComeFromEndOfAContent, true);
-    let isComeFromEndOfAContentStr = isComeFromEndOfAContent ? "true" : "false";
+    var isComeFromEndOfAContentStr = isComeFromEndOfAContent ? "true" : "false";
 
     this.takeCameFromEndOfAContentFromGlobal = false;
     this.globalCameFromEndOfAContent = false;
     console.log("Play_Frame.playNextContent" + "Checking next content schedule before playing. Play_Frame Id:{0}. PlaylistIndex:{1}. ContentIndex:{2}.".pxcFormatString(this.id, this.playlistIndex, this.contentIndex));
-    let checkNextContentSchedule = this.checkNextContentSchedule();
+    var checkNextContentSchedule = this.checkNextContentSchedule();
     if (!checkNextContentSchedule) {
 
         this.takeCameFromEndOfAContentFromGlobal = true;
@@ -315,19 +315,19 @@ Play_Frame.prototype.playNextContent = function(isComeFromEndOfAContent) {
 
         this.frameInfo.setContentIsOnScheduleAt(this.playlistIndex, this.contentIndex, false);
 
-        let validContentCount = 0;
+        var validContentCount = 0;
 
-        let playlisInfoList = this.frameInfo.playlistInfoList;
+        var playlisInfoList = this.frameInfo.playlistInfoList;
 
         if (playlisInfoList.length == 0) {
             console.log("Play_Frame.playNextContent"+ "Play_Frame: {0} does not contain a playlist. Unexpected case. Returning.".pxcFormatString(this.id));
             return;
         }
 
-        let contentInfoList = playlisInfoList[this.playlistIndex].contentInfoList;
+        var contentInfoList = playlisInfoList[this.playlistIndex].contentInfoList;
 
-        for (let II = 0; II < contentInfoList.length; II++) {
-            let contentInfo = contentInfoList[II];
+        for (var II = 0; II < contentInfoList.length; II++) {
+            var contentInfo = contentInfoList[II];
             if (contentInfo.isValid && contentInfo.isOnSchedule) {
                 validContentCount++;
             }
@@ -339,13 +339,13 @@ Play_Frame.prototype.playNextContent = function(isComeFromEndOfAContent) {
             }
         }
 
-        let nextCheckInterval = validContentCount === 0 ? 1000 : 100;
+        var nextCheckInterval = validContentCount === 0 ? 1000 : 100;
 
         if (this.singleShotTimer != 0) {
             clearTimeout(this.singleShotTimer);
         }
 
-        let _this = this;
+        var _this = this;
         this.singleShotTimer = setTimeout(function() {
             if (validContentCount == 0) {
                 _this.continueFrame();
@@ -358,7 +358,7 @@ Play_Frame.prototype.playNextContent = function(isComeFromEndOfAContent) {
         this.frameInfo.setContentIsOnScheduleAt(this.playlistIndex, this.contentIndex, true);
     }
 
-    let currentContentValidity = this.isCurrentContentValid;
+    var currentContentValidity = this.isCurrentContentValid;
 
     this.isCurrentContentValid = true;
 
@@ -381,10 +381,10 @@ Play_Frame.prototype.playNextContent = function(isComeFromEndOfAContent) {
     }
 
 
-    let contentInfoList = this.frameInfo.playlistInfoList[this.playlistIndex].contentInfoList;
-    let validContentCount = 0;
+    var contentInfoList = this.frameInfo.playlistInfoList[this.playlistIndex].contentInfoList;
+    var validContentCount = 0;
 
-    for (let II = 0; II < contentInfoList.length; II++) {
+    for (var II = 0; II < contentInfoList.length; II++) {
 
         if (contentInfoList[II].isValid) {
             validContentCount++;
@@ -396,10 +396,16 @@ Play_Frame.prototype.playNextContent = function(isComeFromEndOfAContent) {
     console.log("Play_Frame.playNextContent4"+ "Play_Frame:{0}. Valid content count:{1}".pxcFormatString(this.id, validContentCount));
 
     try {
-        let frameContentCount = 0;
+        var frameContentCount = 0;
+        /*
         this.frameInfo.playlistInfoList.forEach(element => {
             frameContentCount += contentInfoList.length;
         });
+        */
+        for (var index = 0; index < this.frameInfo.playlistInfoList.length; index++) {
+            frameContentCount += contentInfoList.length;            
+        }
+
         console.log("frameContentCount : " + frameContentCount)
         if (!currentContentValidity || frameContentCount == 1) {
             this.deleteCurrentContent();
@@ -414,7 +420,7 @@ Play_Frame.prototype.playNextContent = function(isComeFromEndOfAContent) {
 
         console.log("this.frameInfo.playlistInfoList[this.playlistIndex].uniqueKey : " , this.frameInfo.playlistInfoList[this.playlistIndex].uniqId)
 
-        let contentInfo = contentInfoList[this.contentIndex];
+        var contentInfo = contentInfoList[this.contentIndex];
         contentInfo.templateUniqueKey = this.frameInfo.templateUniqueKey;
         contentInfo.frameUniqueKey = this.frameInfo.uniqId;
         contentInfo.playlistUniqueKey = this.frameInfo.playlistInfoList[this.playlistIndex].uniqId;
@@ -482,10 +488,10 @@ Play_Frame.prototype.playNextContent = function(isComeFromEndOfAContent) {
         if (this.currentContent) {
             console.log(" this.currentContent.showContent : "+ JSON.stringify(contentInfo))
 
-            let this_ = this;
+            var this_ = this;
             if (this.previousContent)
                 this.currentContent.showContent(function() {
-                    setTimeout(() => {
+                    setTimeout(function() {
                         this_.deletePreviousContent();
                     }, 1000);
                 });
@@ -540,15 +546,15 @@ Play_Frame.prototype.deleteCurrentContent = function() {
 Play_Frame.prototype.isNextContentValid = function() {
 
 
-    let isValid = true;
+    var isValid = true;
 
-    let contentInfo = this.frameInfo.playlistInfoList[this.playlistIndex].contentInfoList[this.contentIndex];
+    var contentInfo = this.frameInfo.playlistInfoList[this.playlistIndex].contentInfoList[this.contentIndex];
 
     contentInfo.setTemplateId(this.frameInfo.templateId);
     contentInfo.setFrameId(this.id);
     contentInfo.setPlaylistId(this.frameInfo.playlistInfoList[this.playlistIndex].id);
     isValid = contentInfo.isValid;
-    let isValidStr = isValid ? "true" : "false";
+    var isValidStr = isValid ? "true" : "false";
 
     console.log("Play_Frame.isNextContentValid" + "Play_Frame:{0}. Content:{1}. Checking if next content is valid. Valid:{2}".pxcFormatString(this.id, contentInfo.id, isValidStr));
 
@@ -559,7 +565,7 @@ Play_Frame.prototype.isNextContentValid = function() {
     if (moment(contentInfo.expireDate, "YYYY-MM-DD HH:mm:ss").isValid()) {
 
         contentInfo.expireDate += " 23:59:59";
-        let expireDate = moment(contentInfo.expireDate, "YYYY-MM-DD HH:mm:ss");
+        var expireDate = moment(contentInfo.expireDate, "YYYY-MM-DD HH:mm:ss");
         if (expireDate.isBefore(Tools.getDateTimeNow())) {
             console.log("Play_Frame.isNextContentValid"+ "Play_Frame:{0}.Content:{1} is either expired or bad expiredate format. Settings content as invalid. ExpireDate:{2}".pxcFormatString(this.id, contentInfo.id, contentInfo.expireDate));
             this.frameInfo.setContentIsValidAt(this.playlistIndex, this.contentIndex, false);
@@ -584,7 +590,7 @@ Play_Frame.prototype.startFrame = function() {
     this.contentIndex = 0;
     this.playlistIndex = 0;
 
-    let playlistInfo = this.frameInfo.playlistInfoList[this.playlistIndex];
+    var playlistInfo = this.frameInfo.playlistInfoList[this.playlistIndex];
 
     console.log("Play_Frame.prototype.console.log:" +JSON.stringify(playlistInfo) ,'Info');
 

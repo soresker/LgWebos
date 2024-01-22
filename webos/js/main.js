@@ -15,7 +15,7 @@ function listener(event) {
 	messageCheck(event.data);
 }
 
-const CreateIframeElement = (source, divId) => {
+function CreateIframeElement  (source, divId) {
 
 	var el = document.createElement("iframe");
 
@@ -29,7 +29,7 @@ const CreateIframeElement = (source, divId) => {
 
 }
 
-const RemoveIframeElement = (divId) => {
+function RemoveIframeElement (divId) {
 	// Remove the last child ( iframe element ) of div. 
 	document.getElementById(divId)
 		.removeChild(document
@@ -76,11 +76,11 @@ window.onload = function () {
 		} else {
 			_log('player register degil');
 			CreateIframeElement("Login/login.html", "login");
-			setTimeout(() => {
+	/*		setTimeout(() => {
 				_log('webos ip:', webOsIp);
 				_log('webos internet active:', isInternetActive);
 			}, 3000);
-
+		*/	
 		}
 
 	});
@@ -130,31 +130,33 @@ function readfile(fileName) {
 		_log('readfile3:', data);
 		var Data = data;
 
-		var initPlayer = JSON.stringify({ "MessageType": "initPlayer", "Data": { "filePath": "http://127.0.0.1:9080/file://internal/contents/", "videoMode": "0" } })
+		var initPlayer = JSON.stringify({ "MessageType": "initPlayer", "Data": { "filePath": "http://127.0.0.1:9080/file://internal/contents/", "videoMode": "0" } });
 		Start_Handler.receiveMessage(initPlayer);
-	
+		/*
 		var newPublish = JSON.stringify({
 			"MessageType": "startPublishment", Data
 		});
-	
-		Start_Handler.receiveMessage(newPublish);
+		*/
+		Start_Handler.receiveMessage(JSON.stringify({
+			"MessageType": "startPublishment", "Data":Data
+		}));
 
 		//document.getElementById('iframe').contentWindow.postMessage(JSON.stringify({ "MessageType": "initPlayer", "Data": { "filePath": "http://127.0.0.1:9080/file://internal/contents/", "videoMode": "0" } }), '*');
 
 		//document.getElementById('iframe').contentWindow.postMessage(data, "*")
-	})
+	});
 }
 
 function writefile(fileName, data) {
 	_log('writefile path:', fileName);
-	_log("data", data)
+	_log("data", data);
 
 	var path = publishmentsDir + fileName + ".json";
 	_log('writefile path:', path);
-	var Data = data
-	var jsonData = {
+	var Data = data;
+	/*var jsonData = {
 		"MessageType": "startPublishment", Data
-	}
+	};*/
 	fs.writeFile(path, JSON.stringify(Data), function (error) {
 		if (error)
 			return _log('error', error);
@@ -324,13 +326,15 @@ function fetchPublishment(readPublishment) {
 
 	_log("fetchPublishment download sonrasi:)");
 
-	let initPlayer = JSON.stringify({ "MessageType": "initPlayer", "Data": { "filePath": "http://127.0.0.1:9080/file://internal/contents/", "videoMode": "0" } })
+	var initPlayer = JSON.stringify({ "MessageType": "initPlayer", "Data": { "filePath": "http://127.0.0.1:9080/file://internal/contents/", "videoMode": "0" } })
 	Start_Handler.receiveMessage(initPlayer);
-
-	let newPublish = JSON.stringify({
-		"MessageType": "startPublishment", Data
-	});
-	Start_Handler.receiveMessage(newPublish);
+/*
+	var newPublish = JSON.stringify({
+		"MessageType": "startPublishment", "Data":Data
+	});*/
+	Start_Handler.receiveMessage(JSON.stringify({
+		"MessageType": "startPublishment","Data":Data
+	}));
 
 	//document.getElementById('iframe').contentWindow.postMessage(JSON.stringify({ "MessageType": "initPlayer", "Data": { "filePath": "http://127.0.0.1:9080/file://internal/contents/", "videoMode": "0" } }), '*');
 	//document.getElementById('iframe').contentWindow.postMessage(JSON.stringify({
@@ -339,9 +343,9 @@ function fetchPublishment(readPublishment) {
 
 }
 
-sendHardbitSystemInfo = (() => {
+function sendHardbitSystemInfo  () {
 
-	setInterval(() => {
+	setInterval(function() {
 		_log("sendHardbitSystemInfo");
 		var systemInfData = {
 			playerCode: "",
@@ -356,9 +360,9 @@ sendHardbitSystemInfo = (() => {
 		sendSignal(commandMessage.HealthCheck, systemInfData);
 	}, 10000);
 
-});
+}
 
-sendScreenShot = ((base64Image) => {
+function sendScreenShot (base64Image)  {
 
 	_log("sendScreenShot");
 	var playerInfo = {
@@ -372,7 +376,7 @@ sendScreenShot = ((base64Image) => {
 
 	sendSignal(commandMessage.Win_ScreenShot, playerInfo);
 
-});
+}
 
 function checkPublishment() {
 	fs.ls(defaultDir + 'publishments', function (error, data) {

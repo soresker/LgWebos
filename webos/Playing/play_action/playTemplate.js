@@ -1,15 +1,13 @@
-class Play_Template {
+function Play_Template () {
 
-    constructor(){
+    this.name = "";
+    this.duration = 0;
+    this.uniqueKey = ""; //undefined düzelt akin
+    this.width = 0; 
+    this.height = 0; //manuel verildi düzeltilecek
+}
 
-        this.name = "";
-        this.duration = 0;
-        this.uniqueKey = ""; //undefined düzelt akin
-        this.width = 0; 
-        this.height = 0; //manuel verildi düzeltilecek
-    }
-
-startTemplate = function(templateInfo) {
+Play_Template.prototype.startTemplate = function(templateInfo) {
 
     this.name = templateInfo.name;
     this.duration = templateInfo.duration;
@@ -32,20 +30,20 @@ startTemplate = function(templateInfo) {
     
     this.frameList = [];
 
-    for (let i = 0; i < templateInfo.frameInfoList.length; i++) {
-        let newPlaylistInfoList = [];
-        for (let y = 0; y < templateInfo.frameInfoList[i].playlistInfoList.length; y++) {
+    for (var i = 0; i < templateInfo.frameInfoList.length; i++) {
+        var newPlaylistInfoList = [];
+        for (var y = 0; y < templateInfo.frameInfoList[i].playlistInfoList.length; y++) {
             if (templateInfo.frameInfoList[i].playlistInfoList[y].contentInfoList.length > 0)
                 newPlaylistInfoList.push(templateInfo.frameInfoList[i].playlistInfoList[y]);
         }
         templateInfo.frameInfoList[i].playlistInfoList = newPlaylistInfoList;
     }
 
-    for (let frameInfoKey in templateInfo.frameInfoList) {
-        let frameInfo = templateInfo.frameInfoList[frameInfoKey];
+    for (var frameInfoKey in templateInfo.frameInfoList) {
+        var frameInfo = templateInfo.frameInfoList[frameInfoKey];
         console.log("Template6", "Creating new Frame Widget. Frame Id:{0}".pxcFormatString(frameInfo.id));
         frameInfo.templateUniqueKey = this.uniqueKey;
-        let newFrame = new Play_Frame(frameInfo, this);
+        var newFrame = new Play_Frame(frameInfo, this);
         this.frameList.push(newFrame);
     }
 
@@ -55,10 +53,10 @@ startTemplate = function(templateInfo) {
 
 };
 
-deleteTemplate = function() {
+Play_Template.prototype.deleteTemplate = function() {
 
 
-    for (let i = 0; i < this.frameList.length; i++) {
+    for (var i = 0; i < this.frameList.length; i++) {
 
         this.frameList[i].deleteFrame();
 
@@ -69,29 +67,29 @@ deleteTemplate = function() {
 
 };
 
-generateUIElement = function() {
+Play_Template.prototype.generateUIElement = function() {
     return '<div id="template-{0}" class="playing-platform-template"style="width:{1}px; height:{2}px; position:{3};"></div>'.pxcFormatString(this.uniqueKey, this.width, this.height,this.position);
 };
 
 
-clearFrameList = function() {
+Play_Template.prototype.clearFrameList = function() {
 
     this.frameList = [];
 
 };
 
 
-addToFrameList = function(frame) {
+Play_Template.prototype.addToFrameList = function(frame) {
 
     this.frameList.push(frame);
 
 };
 
-startAllFrames = function() {
+Play_Template.prototype.startAllFrames = function() {
 
     console.log("startAllFrames  this.frameList.length: " +this.frameList.length ,'Info');
 
-    for (let i = 0; i < this.frameList.length; i++) {
+    for (var i = 0; i < this.frameList.length; i++) {
 
         this.frameList[i].startFrame();
 
@@ -99,5 +97,3 @@ startAllFrames = function() {
 
 };
 
-}
-if (typeof module !== 'undefined') module.exports = { Play_Template };

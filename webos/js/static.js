@@ -1,4 +1,4 @@
-let commandMessage = {
+var commandMessage = {
     Sys_Info: 'systeminfo',
     Download_Start: 'downloadStart',
     Download_End: 'downloadEnd',
