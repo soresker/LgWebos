@@ -1,6 +1,6 @@
-function Start_Handler () {
+var Start_Handler = {
 
-    Start_Handler.prototype.receiveMessage = function(msg) {
+    receiveMessage : function(msg) {
         msg = JSON.parse(msg);
         console.log("Start_Handler receiveMessage:",msg.MessageType);
         console.log("Start_Handler receiveMessage:",msg.Data);
@@ -22,7 +22,7 @@ function Start_Handler () {
                 break;
         }
     },
-    Start_Handler.prototype.sendLog = function(message, type) {
+    sendLog : function(message, type) {
         var logging = {};
         logging.Type = "playingLog";
         logging.Message = message;

@@ -1,14 +1,13 @@
-function Publishment_Reader (){
+var Publishment_Reader = {
 
-    this.currentPublishment = 0;
-    this.templateList = [];
-    this.calendarList = [];
-    this.worker = 0;
-    this.currentTemplate = 0;
-    this.templateInfo = "";  
-}
+    currentPublishment = 0,
+    templateList = [],
+    calendarList = [],
+    worker = 0,
+    currentTemplate = 0,
+    templateInfo = "",
 
-Publishment_Reader.prototype.parseLatestPublishment =  function(data) {
+parseLatestPublishment : function(data) {
 
         console.log("parseLatestPublishment");
 
@@ -42,9 +41,9 @@ Publishment_Reader.prototype.parseLatestPublishment =  function(data) {
 
         }
        
-    }
+    },
 
-Publishment_Reader.prototype.parseCalendars = function() {
+parseCalendars : function() {
     console.log("parseCalendars" ,'Info');
     if (!Publishment_Reader.currentPublishment.calendar) {
         this.calendarList = [];
@@ -83,9 +82,9 @@ Publishment_Reader.prototype.parseCalendars = function() {
             this.calendarList.push(templateCalendarInfo);
         }
     }
-}
+},
 
-Publishment_Reader.prototype.parseTemplates = function() {
+parseTemplates:function() {
 
     if (!Publishment_Reader.currentPublishment.templates) {
         Publishment_Reader.templateList = [];
@@ -110,9 +109,9 @@ Publishment_Reader.prototype.parseTemplates = function() {
         }
 
     }
-}
+},
 
-Publishment_Reader.prototype.parseFrames = function(templateInfo, templateInfoToParse) {
+parseFrames : function(templateInfo, templateInfoToParse) {
 
     if (!templateInfoToParse.frames) {
         return;
@@ -127,9 +126,9 @@ Publishment_Reader.prototype.parseFrames = function(templateInfo, templateInfoTo
         templateInfo.addToFrameInfoList(frameInfo);
     }
 
-}
+},
 
-Publishment_Reader.prototype.parsePlaylists = function(templateInfo, templateInfoToParse) {
+parsePlaylists : function(templateInfo, templateInfoToParse) {
     
     if (!templateInfoToParse.playlists) {
         return;
@@ -146,9 +145,9 @@ Publishment_Reader.prototype.parsePlaylists = function(templateInfo, templateInf
             templateInfo.addToPlaylistInfoList(playlistInfo);
         }
     }
-}
+},
 
-Publishment_Reader.prototype.parseContents = function(playlistInfo, playlistInfoToParse) {
+parseContents : function(playlistInfo, playlistInfoToParse) {
     if (!playlistInfoToParse.contents) {
         return;
     }
@@ -207,10 +206,9 @@ Publishment_Reader.prototype.parseContents = function(playlistInfo, playlistInfo
     for (var index = 0; index < contentArray.length; index++) {
         playlistInfo.addToContentInfoList(contentArray[index]);
     }
-}    
-    
+},    
 
-Publishment_Reader.prototype.parseBasicAttributes = function(info, object,uniqId) {
+parseBasicAttributes : function(info, object,uniqId) {
         
         info.duration = (Tools.defaultValue(object.duration, 0));
         info.uniqId = (Tools.defaultValue(uniqId, ""));
@@ -223,10 +221,9 @@ Publishment_Reader.prototype.parseBasicAttributes = function(info, object,uniqId
         info.z = (Tools.defaultValue(object.z, 0));
         info.position = (Tools.defaultValue(object.position, 0));
         console.log("parseBasicAttributes:",info);
-}
+},
 
-
-Publishment_Reader.prototype.clearPublisment =  function() {
+clearPublisment : function() {
 
     Publishment_Reader.templateList = [];
     Publishment_Reader.calendarList = [];
@@ -235,9 +232,9 @@ Publishment_Reader.prototype.clearPublisment =  function() {
         delete Publishment_Reader.currentPublishment;
         Publishment_Reader.currentPublishment = 0;
     }
-}
+},
 
-Publishment_Reader.prototype.clearCurrentTemplate =  function() {
+clearCurrentTemplate :function() {
     if (Publishment_Reader.currentTemplate) {
         Publishment_Reader.currentTemplate.deleteTemplate();
         Publishment_Reader.currentTemplate = 0;
@@ -245,4 +242,4 @@ Publishment_Reader.prototype.clearCurrentTemplate =  function() {
     }
 }
 
-
+}

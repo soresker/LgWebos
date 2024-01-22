@@ -296,13 +296,16 @@ function executeReceiveCommands(commands) {
 		_log("PlayerDeleted");
 		window.localStorage.clear();
 		localStorage.clear();
+		setTimeout(function()  {
+			WebosDevice.restartApplication();    
+		}, 2000);
 	}
 	else if (commands.command === commandMessage.HealthCheck) {
 		_log("HealthCheck");
 	}
 	else if (commands.command === commandMessage.AppRestart) {
 		_log("AppRestart");
-		//WebosDevice.restartApplication();    
+		WebosDevice.restartApplication();    
 	}
 	else if (commands.command === commandMessage.PlayerSettingsHere) {
 		_log("PlayerSettingsHere");

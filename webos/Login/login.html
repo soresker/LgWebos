@@ -12,11 +12,11 @@
   <link rel="stylesheet" href="./assets/login.css">
   <script type="text/javascript">
     function Register() {
-      let loginIframePost = {};
-      loginIframePost.MessageType = "playerRegister";
-      loginIframePost.playerId = document.getElementById("playerId").value;
-      loginIframePost.customerId = document.getElementById("customerId").value;
-      window.parent.postMessage(JSON.stringify(loginIframePost), '*');
+      var loginIframePost = {};
+      loginIframePost["MessageType"] = "playerRegister";
+      loginIframePost["playerId"] = document.getElementById("playerId").value;
+      loginIframePost["customerId"] = document.getElementById("customerId").value;
+      window.parent.postMessage(JSON.stringify(loginIframePost));
     }
   </script>
 </head>
