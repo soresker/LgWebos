@@ -1,51 +1,47 @@
-class Parse_Playlist{
+function Parse_Playlist(){
+	this.contentInfoList = [];
+}
+	
 
-	constructor()
-	{
-		this.contentInfoList = [];
+Parse_Playlist.prototype.clearContentInfoList = function() {
+	
+	this.contentInfoList = [];
+	
+};
+
+Parse_Playlist.prototype.addToContentInfoList = function(contentInfo) {
+	
+	this.contentInfoList.push(contentInfo);
+	
+};
+
+Parse_Playlist.prototype.setContentIsValidAt = function(contentIndex, isValid) {
+			
+	if(this.contentInfoList.length > 0){
+		
+		this.contentInfoList[contentIndex].isValid = isValid;
+		
 	}
 	
-
-clearContentInfoList = function() {
-	
-		this.contentInfoList = [];
-	
 };
 
-addToContentInfoList = function(contentInfo) {
+Parse_Playlist.prototype.removeContentAt = function(contentIndex) {
 	
-		this.contentInfoList.push(contentInfo);
-	
-};
-
-setContentIsValidAt = function(contentIndex, isValid) {
-			
-		if(this.contentInfoList.length > 0){
-			
-			this.contentInfoList[contentIndex].isValid = isValid;
-			
-		}
-	
-};
-
-removeContentAt = function(contentIndex) {
-	
-		if(this.contentInfoList.length > 0){
-			
-			delete this.contentInfoList[contentIndex];
-			
-		}
+	if(this.contentInfoList.length > 0){
+		
+		delete this.contentInfoList[contentIndex];
+		
+	}
 		
 };
 
-setContentIsOnScheduleAt = function (contentIndex, isOnSchedule) {
+Parse_Playlist.prototype.setContentIsOnScheduleAt = function (contentIndex, isOnSchedule) {
 
 	if (this.contentInfoList.length > 0) {
 
-			this.contentInfoList[contentIndex].isOnSchedule = isOnSchedule;
+		this.contentInfoList[contentIndex].isOnSchedule = isOnSchedule;
 
 	}
 
 };
-}
-if (typeof module !== 'undefined') module.exports = { Parse_Playlist };
+

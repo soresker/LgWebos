@@ -1,8 +1,7 @@
-class Logger {
+function Logger (){
 
-    static sendMessage =  function(content, status) {
+    Logger.prototype.sendMessage =  function(content, status) {
 
         Start_Handler.sendLog(content, 'Info');
     }
 }
-if (typeof module !== 'undefined') module.exports = { Logger };

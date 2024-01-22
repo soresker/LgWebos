@@ -11,7 +11,7 @@ var webOsMacAdress =  "";
 var isInternetActive = false;
 var webOsIp = "";
 
-let WebosDevice =  {
+var WebosDevice =  {
 
     getPlatformInfo : function(){
 		

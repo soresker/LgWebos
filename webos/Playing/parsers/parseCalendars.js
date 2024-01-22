@@ -1,6 +1,4 @@
-class Parse_Calendar{
-
-	constructor() {
+function Parse_Calendar (){
 
 		this.days = "";
 
@@ -15,36 +13,35 @@ class Parse_Calendar{
 		this.templateUniqId = "";
 	
 		this.templateId ="";
-	}
+	};
 
-	setDays = function (value) {
+	Parse_Calendar.prototype.setDays = function (value) {
 		this.days = Tools.defaultValue(value, "unknown");
 	};
 
-	setStartDate = function (value) {
+	Parse_Calendar.prototype.setStartDate = function (value) {
 		this.startDate = Tools.defaultValue(value, "unknown");
 	};
 
-	setEndDate = function (value) {
+	Parse_Calendar.prototype.setEndDate = function (value) {
 		this.endDate = Tools.defaultValue(value, "unknown");
 	};
 
-	setStartTime = function (value) {
+	Parse_Calendar.prototype.setStartTime = function (value) {
 		this.startTime = Tools.defaultValue(value, "unknown");
 	};
 
-	setEndTime = function (value) {
+	Parse_Calendar.prototype.setEndTime = function (value) {
 		this.endTime = Tools.defaultValue(value, "unknown");
 	};
 
-	setTemplateId = function (value) {
+	Parse_Calendar.prototype.setTemplateId = function (value) {
 		this.templateId = Tools.defaultValue(value, "unknown");
 	};
 
-	setTemplateUniqId = function (value) {
+	Parse_Calendar.prototype.setTemplateUniqId = function (value) {
 		this.templateUniqId = Tools.defaultValue(value, "unknown");
 	};
 
-}
-if (typeof module !== 'undefined') module.exports = { Parse_Calendar };
+
 

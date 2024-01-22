@@ -1,36 +1,31 @@
-class Parse_Template {
+function Parse_Template (){
 	
-	constructor() {
+	this.frameInfoList = [];
+	this.triggerRules = [];	
+	this.playlistInfoList = [];
+}
 
-		this.frameInfoList = [];
-		this.triggerRules = [];	
-		this.playlistInfoList = [];
-	}
-
-clearFrameInfoList = function() {
+Parse_Template.prototype.clearFrameInfoList = function() {
 	
 	this.frameInfoList = [];
 	
 };
 
-addToFrameInfoList = function(frameInfo) {
+Parse_Template.prototype.addToFrameInfoList = function(frameInfo) {
 	
 	this.frameInfoList.push(frameInfo);
 	
 };
 
 
-clearPlaylistInfoList = function() {
+Parse_Template.prototype.clearPlaylistInfoList = function() {
 	
 	this.playlistInfoList = [];
 
 };
 
-addToPlaylistInfoList = function(playlistInfo) {
+Parse_Template.prototype.addToPlaylistInfoList = function(playlistInfo) {
 
 	this.playlistInfoList.push(playlistInfo);
 	
 };
-
-}
-if (typeof module !== 'undefined') module.exports = { Parse_Template };

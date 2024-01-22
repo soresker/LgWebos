@@ -1,4 +1,4 @@
-let WebosSettings = {
+var WebosSettings = {
 
 	 init : function () {
 	

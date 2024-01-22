@@ -1,4 +1,4 @@
-let WTools = {
+var WTools = {
 
      defaultValue : function(value, defaultValue) {
 

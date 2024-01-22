@@ -1,4 +1,4 @@
-let StartPlayer = {
+var StartPlayer = {
      playerIsRegister : function(callback){
 		
 		if(WebosSettings.value("PlayerSettings/status","0") != "0"){

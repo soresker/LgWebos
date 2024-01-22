@@ -44,7 +44,7 @@ window.onload = function () {
 	WebosDevice.getNetworkInfo();
 	WebosDevice.getPlatformInfo();
 	WebosDevice.getNetworkMacInfo();
-	WebosDevice.getSystemUsageInfo()
+	//WebosDevice.getSystemUsageInfo()
 
 	startSignalSocket();
 
@@ -86,6 +86,14 @@ window.onload = function () {
 	});
 
 	sendHardbitSystemInfo();
+	/*
+		setTimeout(() => {
+			CreateIframeElement("Playing/player.html","play");
+			setTimeout(() => {
+				RemoveIframeElement("login");
+			}, 3000);
+		},5000);
+	*/
 }
 
 function messageCheck(msg) {
@@ -121,12 +129,14 @@ function readfile(fileName) {
 	fs.readFile(path, function (error, data) {
 		_log('readfile3:', data);
 		var Data = data;
-		let initPlayer = JSON.stringify({ "MessageType": "initPlayer", "Data": { "filePath": "http://127.0.0.1:9080/file://internal/contents/", "videoMode": "0" } })
+
+		var initPlayer = JSON.stringify({ "MessageType": "initPlayer", "Data": { "filePath": "http://127.0.0.1:9080/file://internal/contents/", "videoMode": "0" } })
 		Start_Handler.receiveMessage(initPlayer);
 	
-		let newPublish = JSON.stringify({
-			"MessageType": "startPublishment",Data
+		var newPublish = JSON.stringify({
+			"MessageType": "startPublishment", Data
 		});
+	
 		Start_Handler.receiveMessage(newPublish);
 
 		//document.getElementById('iframe').contentWindow.postMessage(JSON.stringify({ "MessageType": "initPlayer", "Data": { "filePath": "http://127.0.0.1:9080/file://internal/contents/", "videoMode": "0" } }), '*');
@@ -145,7 +155,7 @@ function writefile(fileName, data) {
 	var jsonData = {
 		"MessageType": "startPublishment", Data
 	}
-	fs.writeFile(path, JSON.stringify(jsonData), function (error) {
+	fs.writeFile(path, JSON.stringify(Data), function (error) {
 		if (error)
 			return _log('error', error);
 		else

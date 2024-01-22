@@ -1,4 +1,4 @@
-let Player = {
+var Player = {
 
     Content: {
 

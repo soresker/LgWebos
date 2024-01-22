@@ -1,17 +1,17 @@
-class  Tools  {
+function  Tools()  {
 
-    static defaultValue = function(value, defaultValue) {
+    Tools.prototype.defaultValue = function(value, defaultValue) {
 
         return "undefined" == typeof value ? defaultValue : value;
 
     }
 
-    static replaceAll = function(targetString, search, replacement) {
+    Tools.prototype.replaceAll = function(targetString, search, replacement) {
         return targetString.replace(new RegExp(search, 'g'), replacement);
 
     }
 
-    static guid = function() {
+    Tools.prototype.guid = function() {
 
         function s4() {
             return Math.floor((1 + Math.random()) * 0x10000)
@@ -23,12 +23,12 @@ class  Tools  {
 
     } 
 
-    static isObject = function(obj) {
+    Tools.prototype.isObject = function(obj) {
         return obj !== undefined && obj !== null && obj.constructor == Object;
     }
 
 
-    static getDecodedString = function(stringValue) {
+    Tools.prototype.getDecodedString = function(stringValue) {
         stringValue = Tools.replaceAll(stringValue, "&amp;", "&");
         stringValue = Tools.replaceAll(stringValue, "&lt;", "<");
         stringValue = Tools.replaceAll(stringValue, "&gt;", ">");
@@ -42,15 +42,15 @@ class  Tools  {
         return stringValue;
 
     }
-    static  htmlEncode =  function(value) {
+    Tools.prototype.htmlEncode =  function(value) {
         return $('<div/>').text(value).html();
     }
 
-    static htmlDecode =  function(value) {
+    Tools.prototype.htmlDecode =  function(value) {
         return $('<div/>').html(value).text();
     }
 
-    static isEmptyString = function(value) {
+    Tools.prototype.isEmptyString = function(value) {
 
         if (value == null || value == undefined)
             return true;
@@ -58,14 +58,14 @@ class  Tools  {
         return !(value.length > 0);
     } 
 
-    static replaceTRCharacters = function(value) {
+    Tools.prototype.replaceTRCharacters = function(value) {
         let string = value.toUpperCase();
         let letters = { "İ": "I", "Ş": "S", "Ğ": "G", "Ü": "U", "Ö": "O", "Ç": "C" };
         string = string.replace(/(([İŞĞÜÇÖ]))/g, function(letter) { return letters[letter]; })
         return string;
     }
 
-    static isEmptyObject =  function(obj) {
+    Tools.prototype.isEmptyObject =  function(obj) {
         for (let prop in obj) {
             if (obj.hasOwnProperty(prop))
                 return false;
@@ -74,18 +74,16 @@ class  Tools  {
         return true;
     }
 
-    static showImage = function() {
+    Tools.prototype.showImage = function() {
         console.log("showImage:" ,'Info');
         $('#player-image').show();
         console.log("showImage End" ,'Info');
     } 
-    static hideImage =  function() {
+    Tools.prototype.hideImage =  function() {
         $('#player-image').hide();
     } 
-    static getDateTimeNow = function() {
+    Tools.prototype.getDateTimeNow = function() {
         return moment();
     }
 
 }
-
-if (typeof module !== 'undefined') module.exports = { Tools };
