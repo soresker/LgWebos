@@ -240,6 +240,7 @@ function executeReceiveCommands(commands) {
 		WebosSettings.setValue("PlayerSettings/status", commands.status);
 
 		if (commands.status == true) {
+			RemoveIframeElement("login");
 			var isGetPublishment = {
 				playerCode: "",
 				privateKey: webOsSerialNumber,

@@ -16,7 +16,7 @@
       loginIframePost["MessageType"] = "playerRegister";
       loginIframePost["playerId"] = document.getElementById("playerId").value;
       loginIframePost["customerId"] = document.getElementById("customerId").value;
-      window.parent.postMessage(JSON.stringify(loginIframePost));
+      window.parent.postMessage(JSON.stringify(loginIframePost),'*');
     }
   </script>
 </head>

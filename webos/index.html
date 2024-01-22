@@ -71,7 +71,7 @@
         <img src="./Playing/common/noplaylist.png" />
     </div>
     <style>
-    
+    /*
         textarea {
             position: absolute;
             height: 100%;
@@ -81,17 +81,16 @@
             z-index: 999999999;
             background-color: black;
             color: white;
-        }
+        }*/
     </style>
     <script type="text/javascript">
 
-/*
-        document.onreadystatechange = () => {
+        document.onreadystatechange = function() {
             if (document.readyState === 'complete') {
-             _log("Docuement ready");
+                _log("Document ready");
             }
-        } 
-*/
+        };
+
         if (loaded) {
             console.log("Loaded All JS File Successfully!") ;
             var responseIframe = {};

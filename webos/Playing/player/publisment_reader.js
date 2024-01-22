@@ -1,11 +1,11 @@
 var Publishment_Reader = {
 
-    currentPublishment = 0,
-    templateList = [],
-    calendarList = [],
-    worker = 0,
-    currentTemplate = 0,
-    templateInfo = "",
+    currentPublishment : 0,
+    templateList : [],
+    calendarList : [],
+    worker :0,
+    currentTemplate : 0,
+    templateInfo : "",
 
 parseLatestPublishment : function(data) {
 
