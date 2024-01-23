@@ -5,7 +5,6 @@ var defaultDir = 'file://internal/';
 var settingsDir = defaultDir + 'settings/setting.json';
 var publishmentsDir = defaultDir + 'publishments/';
 var contentsDir = defaultDir + 'contents/';
-var defaultsPort = "http://127.0.0.1:9080/file://internal/contents/"
 var connection = null;
 var urlArray;
 var currentIndex = -1
@@ -130,7 +129,7 @@ function readfile(fileName) {
 		_log('readfile3:', data);
 		var Data = data;
 
-		var initPlayer = JSON.stringify({ "MessageType": "initPlayer", "Data": { "filePath": "http://127.0.0.1:9080/file://internal/contents/", "videoMode": "0" } });
+		var initPlayer = JSON.stringify({ "MessageType": "initPlayer", "Data": { "filePath": "./content/contents/", "videoMode": "0" } });
 		Start_Handler.receiveMessage(initPlayer);
 		/*
 		var newPublish = JSON.stringify({
@@ -360,7 +359,7 @@ function fetchPublishment(readPublishment) {
 
 	_log("fetchPublishment download sonrasi:)");
 
-	var initPlayer = JSON.stringify({ "MessageType": "initPlayer", "Data": { "filePath": "http://127.0.0.1:9080/file://internal/contents/", "videoMode": "0" } })
+	var initPlayer = JSON.stringify({ "MessageType": "initPlayer", "Data": { "filePath": "./content/contents/", "videoMode": "0" } })
 	Start_Handler.receiveMessage(initPlayer);
 /*
 	var newPublish = JSON.stringify({
