@@ -191,7 +191,7 @@ parseContents : function(playlistInfo, playlistInfoToParse) {
         if (currentContentInfoToParse.contentProperties) 
         {
             for (var index = 0; index < currentContentInfoToParse.contentProperties.length; index++) {
-                const element = currentContentInfoToParse.contentProperties[index];
+                var element = currentContentInfoToParse.contentProperties[index];
                 console.log("contentArray element:",element)
 
                 contentInfo.setTypeContentProperty(element.name,element.value);   

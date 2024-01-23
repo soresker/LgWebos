@@ -43,5 +43,4 @@ function Parse_Calendar (){
 		this.templateUniqId = Tools.defaultValue(value, "unknown");
 	};
 
-
-
+	if (typeof module !== 'undefined') module.exports = { Parse_Calendar };

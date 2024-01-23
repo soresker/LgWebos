@@ -45,3 +45,4 @@ Parse_Playlist.prototype.setContentIsOnScheduleAt = function (contentIndex, isOn
 
 };
 
+if (typeof module !== 'undefined') module.exports = { Parse_Playlist };
