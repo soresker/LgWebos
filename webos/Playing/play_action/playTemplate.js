@@ -75,5 +75,3 @@ Play_Template.prototype.startAllFrames = function () {
         this.frameList[i].startFrame();
     }
 };
-
-if (typeof module !== 'undefined') module.exports = { Play_Template };

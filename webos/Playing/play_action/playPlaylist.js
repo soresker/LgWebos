@@ -31,11 +31,11 @@ Play_Playlist.prototype.continuePlaylist = function() {
 
     if (this.stopPlaylistOperations) return;
 
-    let validContentCount = 0;
+    var validContentCount = 0;
 
-    for (let i = 0; i < this.playlistInfo.contentInfoList.length; i++) {
+    for (var i = 0; i < this.playlistInfo.contentInfoList.length; i++) {
 
-        let contentInfo = this.playlistInfo.contentInfoList[i];
+        var contentInfo = this.playlistInfo.contentInfoList[i];
 
         if (contentInfo.isValid) {
 
@@ -92,7 +92,7 @@ Play_Playlist.prototype.playNextContent = function() {
         }
 
 
-        let contentInfo = this.playlistInfo.contentInfoList[this.contentIndex];
+        var contentInfo = this.playlistInfo.contentInfoList[this.contentIndex];
         switch (contentInfo.type) {
 
 
@@ -165,9 +165,9 @@ Play_Playlist.prototype.setContentAnimations = function() {
     if (!this.previousContent)
         return;
 
-    let _this = this;
-    let $active = $("#content-" + this.previousContent.playlistContentUniqueKey);
-    let $next = $("#content-" + this.currentContent.playlistContentUniqueKey);
+    var _this = this;
+    var $active = $("#content-" + this.previousContent.playlistContentUniqueKey);
+    var $next = $("#content-" + this.currentContent.playlistContentUniqueKey);
     $next.css('z-index', 2);
     $active.fadeOut(1000, function() {
         $active.css('z-index', 1).show().removeClass('active');

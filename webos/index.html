@@ -68,7 +68,7 @@
 
     <div id="login"></div> 
     <div id="player-image">
-        <img src="./Playing/common/noplaylist.png" />
+        <img src="./Playing/common/noplaylist.png"/>
     </div>
     <style>
     /*
@@ -89,16 +89,16 @@
             if (document.readyState === 'complete') {
                 _log("Document ready");
             }
-        };
+        }
 
         if (loaded) {
-            console.log("Loaded All JS File Successfully!") ;
+            console.log("Loaded All JS File Successfully!");
             var responseIframe = {};
                 responseIframe.MessageType = "playerReady";
                 window.parent.postMessage(JSON.stringify(responseIframe),'*');
         }
         else {
-            console.log("NOT Loaded JS File Successfully!") ;
+            console.log("NOT Loaded JS File Successfully!");
         }
 
     </script>

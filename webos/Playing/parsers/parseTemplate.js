@@ -19,5 +19,3 @@ Parse_Template.prototype.clearPlaylistInfoList = function () {
 Parse_Template.prototype.addToPlaylistInfoList = function (playlistInfo) {
     this.playlistInfoList.push(playlistInfo);
 };
-
-if (typeof module !== 'undefined') module.exports = { Parse_Template };

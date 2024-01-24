@@ -52,14 +52,14 @@ Tools.isEmptyString = function (value) {
 };
 
 Tools.replaceTRCharacters = function (value) {
-    let string = value.toUpperCase();
-    let letters = { "İ": "I", "Ş": "S", "Ğ": "G", "Ü": "U", "Ö": "O", "Ç": "C" };
+    var string = value.toUpperCase();
+    var letters = { "İ": "I", "Ş": "S", "Ğ": "G", "Ü": "U", "Ö": "O", "Ç": "C" };
     string = string.replace(/(([İŞĞÜÇÖ]))/g, function (letter) { return letters[letter]; });
     return string;
 };
 
 Tools.isEmptyObject = function (obj) {
-    for (let prop in obj) {
+    for (var prop in obj) {
         if (obj.hasOwnProperty(prop))
             return false;
     }
@@ -80,5 +80,3 @@ Tools.hideImage = function () {
 Tools.getDateTimeNow = function () {
     return moment();
 };
-
-if (typeof module !== 'undefined') module.exports = { Tools };

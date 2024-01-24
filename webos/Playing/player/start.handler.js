@@ -28,5 +28,3 @@ Start_Handler.sendLog = function (message, type) {
     logging.LogType = type;
     window.parent.postMessage(JSON.stringify(logging));
 };
-
-if (typeof module !== 'undefined') module.exports = { Start_Handler };

@@ -25,6 +25,4 @@ function Parse_Frame() {
   Parse_Frame.prototype.removeContentAt = function (playlistIndex, contentIndex) {
 	this.playlistInfoList[playlistIndex].removeContentAt(contentIndex);
   };
-  
-  if (typeof module !== 'undefined') module.exports = { Parse_Frame };
-  
+    

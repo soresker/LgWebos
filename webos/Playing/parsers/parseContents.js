@@ -95,6 +95,4 @@ function Parse_Content() {
   Parse_Content.prototype.getTypeContentProperty = function (key) {
     return this.typeContentProperties[key.toLowerCase()];
   };
-  
-  if (typeof module !== "undefined") module.exports = { Parse_Content };
-  
+    

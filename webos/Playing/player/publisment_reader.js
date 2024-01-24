@@ -220,5 +220,3 @@ Publishment_Reader.clearCurrentTemplate = function () {
         $(".playing-platform-template").remove();
     }
 };
-
-if (typeof module !== 'undefined') module.exports = { Publishment_Reader };

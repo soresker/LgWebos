@@ -1,8 +1,6 @@
 var downloader;
 var fs;
-
 var defaultDir = 'file://internal/';
-var settingsDir = defaultDir + 'settings/setting.json';
 var publishmentsDir = defaultDir + 'publishments/';
 var contentsDir = defaultDir + 'contents/';
 var connection = null;
@@ -37,8 +35,6 @@ function RemoveIframeElement (divId) {
 
 
 window.onload = function () {
-
-	//document.getElementById('iframe').setAttribute('src', 'Playing/player.html');
 
 	WebosDevice.getNetworkInfo();
 	WebosDevice.getPlatformInfo();
@@ -75,24 +71,11 @@ window.onload = function () {
 		} else {
 			_log('player register degil');
 			CreateIframeElement("Login/login.html", "login");
-	/*		setTimeout(() => {
-				_log('webos ip:', webOsIp);
-				_log('webos internet active:', isInternetActive);
-			}, 3000);
-		*/	
 		}
 
 	});
 
 	sendHardbitSystemInfo();
-	/*
-		setTimeout(() => {
-			CreateIframeElement("Playing/player.html","play");
-			setTimeout(() => {
-				RemoveIframeElement("login");
-			}, 3000);
-		},5000);
-	*/
 }
 
 function messageCheck(msg) {

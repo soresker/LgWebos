@@ -34,5 +34,3 @@ Publisher.setCurrencyData = function (data) {
     };
     console.log("setCurrencyData:", Publisher.currencyValues);
 };
-
-if (typeof module !== 'undefined') module.exports = { Publisher };

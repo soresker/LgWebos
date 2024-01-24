@@ -27,6 +27,4 @@ function Parse_Playlist() {
 	  this.contentInfoList[contentIndex].isOnSchedule = isOnSchedule;
 	}
   };
-  
-  if (typeof module !== 'undefined') module.exports = { Parse_Playlist };
-  
+    

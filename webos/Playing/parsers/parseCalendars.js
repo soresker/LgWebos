@@ -35,6 +35,4 @@ function Parse_Calendar() {
   Parse_Calendar.prototype.setTemplateUniqId = function (value) {
 	this.templateUniqId = Tools.defaultValue(value, "unknown");
   };
-  
-  if (typeof module !== "undefined") module.exports = { Parse_Calendar };
-  
+    
