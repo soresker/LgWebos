@@ -396,10 +396,18 @@ Play_Frame.prototype.playNextContent = function(isComeFromEndOfAContent) {
     console.log("Play_Frame.playNextContent4"+ "Play_Frame:{0}. Valid content count:{1}".pxcFormatString(this.id, validContentCount));
 
     try {
+        /*
         var frameContentCount = 0;
         this.frameInfo.playlistInfoList.forEach(element => {
             frameContentCount += contentInfoList.length;
-        });
+        });*/
+        var frameContentCount = 0;
+
+        for (var i = 0; i < this.frameInfo.playlistInfoList.length; i++) {
+            var element = this.frameInfo.playlistInfoList[i];
+            frameContentCount += contentInfoList.length;
+        }
+
         console.log("frameContentCount : " + frameContentCount)
         if (!currentContentValidity || frameContentCount == 1) {
             this.deleteCurrentContent();
@@ -485,7 +493,7 @@ Play_Frame.prototype.playNextContent = function(isComeFromEndOfAContent) {
             var this_ = this;
             if (this.previousContent)
                 this.currentContent.showContent(function() {
-                    setTimeout(() => {
+                    setTimeout(function()  {
                         this_.deletePreviousContent();
                     }, 1000);
                 });

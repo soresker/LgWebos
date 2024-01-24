@@ -6,6 +6,7 @@ var contentsDir = defaultDir + 'contents/';
 var connection = null;
 var urlArray;
 var currentIndex = -1
+var globalPublishment = "";
 
 function listener(event) {
 	_log("Html message coming", event.data);
@@ -114,18 +115,9 @@ function readfile(fileName) {
 
 		var initPlayer = JSON.stringify({ "MessageType": "initPlayer", "Data": { "filePath": "./content/contents/", "videoMode": "0" } });
 		Start_Handler.receiveMessage(initPlayer);
-		/*
-		var newPublish = JSON.stringify({
-			"MessageType": "startPublishment", Data
-		});
-		*/
 		Start_Handler.receiveMessage(JSON.stringify({
 			"MessageType": "startPublishment", "Data":Data
 		}));
-
-		//document.getElementById('iframe').contentWindow.postMessage(JSON.stringify({ "MessageType": "initPlayer", "Data": { "filePath": "http://127.0.0.1:9080/file://internal/contents/", "videoMode": "0" } }), '*');
-
-		//document.getElementById('iframe').contentWindow.postMessage(data, "*")
 	});
 }
 
@@ -181,8 +173,9 @@ function downloadNext() {
 		});
 	}
 	else {
-		currentIndex = -1
-		_log("download complated all files ✅")
+		currentIndex = -1;
+		_log("download complated all files ✅");
+		showPlayer();
 	}
 }
 
@@ -310,7 +303,7 @@ function executeReceiveCommands(commands) {
 		window.localStorage.clear();
 		localStorage.clear();
 		setTimeout(function()  {
-			///WebosDevice.restartApplication();    
+			WebosDevice.restartApplication();    
 		}, 2000);
 	}
 	else if (commands.command === commandMessage.HealthCheck) {
@@ -329,33 +322,31 @@ function executeReceiveCommands(commands) {
 	}
 
 }
+function showPlayer() {
+
+	_log("showPlayer :)");
+	var Data = globalPublishment;
+	var initPlayer = JSON.stringify({ "MessageType": "initPlayer", "Data": { "filePath": "./content/contents/", "videoMode": "0" } })
+	Start_Handler.receiveMessage(initPlayer);
+
+	Start_Handler.receiveMessage(JSON.stringify({
+		"MessageType": "startPublishment","Data":Data
+	}));
+
+}
+
 
 function fetchPublishment(readPublishment) {
 
 	_log("fetchPublishment :)");
 
 	listDir(publishmentsDir)
-	var Data = readPublishment;
+	globalPublishment = readPublishment;
 	urlArray = readPublishment.urlArray;
 
 	downloadNext();
 
 	_log("fetchPublishment download sonrasi:)");
-
-	var initPlayer = JSON.stringify({ "MessageType": "initPlayer", "Data": { "filePath": "./content/contents/", "videoMode": "0" } })
-	Start_Handler.receiveMessage(initPlayer);
-/*
-	var newPublish = JSON.stringify({
-		"MessageType": "startPublishment", "Data":Data
-	});*/
-	Start_Handler.receiveMessage(JSON.stringify({
-		"MessageType": "startPublishment","Data":Data
-	}));
-
-	//document.getElementById('iframe').contentWindow.postMessage(JSON.stringify({ "MessageType": "initPlayer", "Data": { "filePath": "http://127.0.0.1:9080/file://internal/contents/", "videoMode": "0" } }), '*');
-	//document.getElementById('iframe').contentWindow.postMessage(JSON.stringify({
-	//	"MessageType": "startPublishment", Data
-	//}), "*")
 
 }
 

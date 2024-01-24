@@ -1,5 +1,5 @@
 (function( _global ) {
-    this.debugMode = true;
+    this.debugMode = false;
 
     function log(str) {
         this.logger = document.querySelector('#debug');
