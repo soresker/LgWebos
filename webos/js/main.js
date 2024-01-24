@@ -327,7 +327,7 @@ function executeReceiveCommands(commands) {
 		window.localStorage.clear();
 		localStorage.clear();
 		setTimeout(function()  {
-			WebosDevice.restartApplication();    
+			///WebosDevice.restartApplication();    
 		}, 2000);
 	}
 	else if (commands.command === commandMessage.HealthCheck) {

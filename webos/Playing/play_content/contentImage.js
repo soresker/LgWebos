@@ -50,11 +50,11 @@ Content_Image.prototype.showContent = function(func) {
 
         //Akin düzenlenecek
         Player_Ui_Creator.UIElement.appendHTML("#frame-" + this.frameUniqueKey, this.generateUIElement());
-        var fileExists = false;
-        var _this = this;
+        let fileExists = false;
+        let _this = this;
         //buraya path local path verilmeli    
         
-        var fileUrlEdits = Publisher.playerGlobalData.replace(/\\/g, '/')  + _this.fileName;
+        let fileUrlEdits = Publisher.playerGlobalData.replace(/\\/g, '/')  + _this.fileName;
         console.log("Publisher.initGlobalData.basePath2:" +fileUrlEdits);
 
         $("#content-" + _this.playlistContentUniqueKey).css('background-image', "url('{0}')".pxcFormatString(fileUrlEdits));

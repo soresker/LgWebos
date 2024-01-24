@@ -46,7 +46,7 @@ Content_Abstractor.prototype.deleteContent = function() {
 Content_Abstractor.prototype.showFailoverImage = function() {
 
     if ($("#content-" + this.uniqueKey + "-failover").length == 0) {
-        var failoverDiv = "<div id='content-{0}-failover' style='width:100%; height:100%; z-index:{1}; background-color:white; position:absolute;'><div id='content-{0}-failover-image' class='content-failover-image-visible' style='width:100%; height:100%; z-index:{1}'></div></div>".pxcFormatString(this.uniqueKey, this.z + 1);
+        let failoverDiv = "<div id='content-{0}-failover' style='width:100%; height:100%; z-index:{1}; background-color:white; position:absolute;'><div id='content-{0}-failover-image' class='content-failover-image-visible' style='width:100%; height:100%; z-index:{1}'></div></div>".pxcFormatString(this.uniqueKey, this.z + 1);
         //Akin append lazim
     }
 
@@ -62,9 +62,9 @@ Content_Abstractor.prototype.showContent = function() {
     this.contentStartDate = Tools.getDateTimeNow().format("YYYY-MM-DD HH:mm:ss.SSS");
     console.log("Content_Abstractor.showContent","");
 
-    var _this = this;
+    let _this = this;
 
-    var callMethod = function() {
+    let callMethod = function() {
         _this.contentEnded();
     }
 

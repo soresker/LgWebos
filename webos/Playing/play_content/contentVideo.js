@@ -81,7 +81,7 @@ Content_Video.prototype.showContent = function(func) {
         try {
 
            Player_Ui_Creator.UIElement.appendHTML("#frame-" + this.frameUniqueKey, this.generateUIElement());
-            var fileUrlEdits = Publisher.playerGlobalData.replace(/\\/g, '/')  + this.fileName;
+            let fileUrlEdits = Publisher.playerGlobalData.replace(/\\/g, '/')  + this.fileName;
     
             $(this.videoSelector).attr('src',fileUrlEdits);
             var video = document.getElementById("content-" + this.playlistContentUniqueKey + "-video");
@@ -141,9 +141,9 @@ Content_Video.prototype.showContent = function(func) {
         var video = document.getElementById("content-" + this.playlistContentUniqueKey + "-video");
 
         
-        var fileUrlEdits = Publisher.playerGlobalData.replace(/\\/g, '/')  + this.fileName;
+        let fileUrlEdits = Publisher.playerGlobalData.replace(/\\/g, '/')  + this.fileName;
 
-        var message = {
+        let message = {
             Type : "openFFMpeg",
             Path : fileUrlEdits,
             Duration:this.duration
@@ -208,9 +208,9 @@ Content_Video.prototype.deleteContent = function() {
         $('#content-' + this.playlistContentUniqueKey).remove();
         Content_Abstractor.prototype.deleteContent.call(this);
 
-        var fileUrlEdits = Publisher.playerGlobalData.replace(/\\/g, '/')  + this.fileName;
+        let fileUrlEdits = Publisher.playerGlobalData.replace(/\\/g, '/')  + this.fileName;
 
-        var message = {
+        let message = {
             Type : "closeFFMpeg",
             Path : fileUrlEdits
         }

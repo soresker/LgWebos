@@ -1,7 +1,7 @@
-function Logger (){
+function Logger() {}
 
-    Logger.prototype.sendMessage =  function(content, status) {
+Logger.sendMessage = function (content, status) {
+    Start_Handler.sendLog(content, 'Info');
+};
 
-        Start_Handler.sendLog(content, 'Info');
-    }
-}
+if (typeof module !== 'undefined') module.exports = { Logger };
