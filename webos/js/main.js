@@ -115,30 +115,27 @@ function readfile(fileName) {
 
 		var initPlayer = JSON.stringify({ "MessageType": "initPlayer", "Data": { "filePath": "./content/contents/", "videoMode": "0" } });
 		Start_Handler.receiveMessage(initPlayer);
-		Start_Handler.receiveMessage(JSON.stringify({
-			"MessageType": "startPublishment", "Data":Data
-		}));
+		Start_Handler.receiveMessage(data);
 	});
 }
 
 function writefile(fileName, data) {
 	_log('writefile path:', fileName);
-	_log("data", data);
+	_log("data", data)
 
 	var path = publishmentsDir + fileName + ".json";
 	_log('writefile path:', path);
-	var Data = data;
-	/*var jsonData = {
+	var Data = data
+	var jsonData = {
 		"MessageType": "startPublishment", Data
-	};*/
-	fs.writeFile(path, JSON.stringify(Data), function (error) {
+	}
+	fs.writeFile(path, JSON.stringify(jsonData), function (error) {
 		if (error)
 			return _log('error', error);
 		else
 			_log('write json data:', data);
 	})
 }
-
 function download(url, callback) {
 	downloader.start({
 		url: url,

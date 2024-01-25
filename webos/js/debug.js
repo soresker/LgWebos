@@ -24,7 +24,7 @@
     }
 
     function createTextarea(str, callback) {
-        
+        return;
         var textarea = document.createElement('textarea');
 
         textarea['id']                      = "debug";
