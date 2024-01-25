@@ -107,6 +107,9 @@ function messageCheck(msg) {
 }
 
 function readfile(fileName) {
+
+	Logger.sendMessage("readfile","");
+
 	var path = publishmentsDir + fileName + ".json";
 	_log('read file path:', path);
 	fs.readFile(path, function (error, data) {
@@ -125,10 +128,10 @@ function writefile(fileName, data) {
 
 	var path = publishmentsDir + fileName + ".json";
 	_log('writefile path:', path);
-	var Data = data
+	var Data = data;
 	var jsonData = {
-		"MessageType": "startPublishment", Data
-	}
+		"MessageType": "startPublishment", "Data":Data
+	};
 	fs.writeFile(path, JSON.stringify(jsonData), function (error) {
 		if (error)
 			return _log('error', error);
@@ -158,7 +161,8 @@ function downloadNext() {
 					if (err) {
 						_log("download failed: " + (currentIndex + 1) + '/' + urlArray.length)
 					} else {
-						_log('download complete: ' + (currentIndex + 1) + '/' + urlArray.length + ' 😃')
+						_log('download complete: ' + (currentIndex + 1) + '/' + urlArray.length + ' 😃');
+						Logger.sendMessage("download complete: " + (currentIndex + 1) + "/" + urlArray.length ,"");
 					}
 					downloadNext()
 				})
@@ -172,6 +176,7 @@ function downloadNext() {
 	else {
 		currentIndex = -1;
 		_log("download complated all files ✅");
+		Logger.sendMessage("download complated all files ✅","");
 		showPlayer();
 	}
 }
@@ -322,6 +327,8 @@ function executeReceiveCommands(commands) {
 function showPlayer() {
 
 	_log("showPlayer :)");
+	Logger.sendMessage("showPlayer","");
+
 	var Data = globalPublishment;
 	var initPlayer = JSON.stringify({ "MessageType": "initPlayer", "Data": { "filePath": "./content/contents/", "videoMode": "0" } })
 	Start_Handler.receiveMessage(initPlayer);
