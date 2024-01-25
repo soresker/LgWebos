@@ -55,7 +55,7 @@ Content_Image.prototype.showContent = function(func) {
         //buraya path local path verilmeli    
         
         var fileUrlEdits = Publisher.playerGlobalData.replace(/\\/g, '/')  + _this.fileName;
-        console.log("Publisher.initGlobalData.basePath2:" +fileUrlEdits);
+        console.log("Image.basePath2:" +fileUrlEdits);
 
         $("#content-" + _this.playlistContentUniqueKey).css('background-image', "url('{0}')".pxcFormatString(fileUrlEdits));
 

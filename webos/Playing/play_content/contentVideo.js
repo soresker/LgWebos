@@ -85,6 +85,7 @@ Content_Video.prototype.showContent = function(func) {
     
             $(this.videoSelector).attr('src',fileUrlEdits);
             var video = document.getElementById("content-" + this.playlistContentUniqueKey + "-video");
+            console.log("Video.basePath2:" +fileUrlEdits);
 
             if (this.settingSeekStart)
                 this.settingSeekStart = false;
@@ -161,7 +162,7 @@ Content_Video.prototype.showContent = function(func) {
 
 Content_Video.prototype.deleteUIElement = function() {
 
-   console.log("Video deleteUIElement " +"898872fa632043c8b3cbf2de847897dd", "info");
+   console.log("Video deleteUIElement "+ "info");
     try {
 
         if (this.attachedErrorHandler === true) {
