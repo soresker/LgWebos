@@ -189,8 +189,8 @@ Content_Video.prototype.deleteUIElement = function() {
         this.removeAllListeners(video, 'timeupdate');
 
     } catch (exception) {
-       console.log("Video deleteUIElement :" + exception, "error");
-       console.log("Content_Video.deleteUIElement",  + exception,"error");
+       console.log(" exception Video deleteUIElement :" + exception, "error");
+       console.log("exception  Content_Video.deleteUIElement",  + exception,"error");
         this.parentFrameObject.setCurrentContentValidity(false);
     } finally {}
 };

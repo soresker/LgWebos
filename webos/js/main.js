@@ -68,9 +68,12 @@ window.onload = function () {
 
 			//Player is registered
 			_log('player register');
+			Logger.sendMessage("player register","");
+
 
 		} else {
 			_log('player register degil');
+			Logger.sendMessage("player register degil","");
 			CreateIframeElement("Login/login.html", "login");
 		}
 
@@ -157,7 +160,8 @@ function downloadNext() {
 			if (data != null && data == false) {
 				download(currentUrl, function (err, data) {
 					if (err) {
-						_log("download failed: " + (currentIndex + 1) + '/' + urlArray.length)
+						_log("download failed: " + (currentIndex + 1) + '/' + urlArray.length);
+						Logger.sendMessage("download failed:"  + (currentIndex + 1),"");
 					} else {
 						_log('download complete: ' + (currentIndex + 1) + '/' + urlArray.length + ' 😃');
 						Logger.sendMessage("download complete: " + (currentIndex + 1) + "/" + urlArray.length ,"");
@@ -203,7 +207,8 @@ function listDir(dir) {
 		if (error)
 			return _log('error', error);
 		_log('data', data);
-		return data
+		Logger.sendMessage("List Contents"+data,"");
+		return data;
 	})
 }
 
@@ -234,12 +239,12 @@ function playerRegister(data) {
 
 	sendSignal(commandMessage.Player_Register, isRegisterData);
 	_log("Send Player Register:", isRegisterData);
-
+	Logger.sendMessage("Send Player Register:"+ isRegisterData,"");
 }
 
 function executeReceiveCommands(commands) {
 	_log("executeReceiveCommands");
-
+	Logger.sendMessage("Receive Command:"+ commands.command,"");
 	if (commands.command === commandMessage.Player_Register) {
 		_log("Receive commandMessage.Player_Register ");
 		WebosSettings.setValue("PlayerSettings/status", commands.status);
@@ -342,7 +347,7 @@ function showPlayer() {
 function fetchPublishment(readPublishment) {
 
 	_log("fetchPublishment :)");
-
+	Logger.sendMessage("start download","");
 	listDir(publishmentsDir)
 	globalPublishment = readPublishment;
 	urlArray = readPublishment.urlArray;
