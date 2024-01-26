@@ -114,8 +114,6 @@ function readfile(fileName) {
 	_log('read file path:', path);
 	fs.readFile(path, function (error, data) {
 		_log('readfile3:', data);
-		var Data = data;
-
 		var initPlayer = JSON.stringify({ "MessageType": "initPlayer", "Data": { "filePath": "./content/contents/", "videoMode": "0" } });
 		Start_Handler.receiveMessage(initPlayer);
 		Start_Handler.receiveMessage(data);
