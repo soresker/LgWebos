@@ -41,9 +41,6 @@ window.onload = function () {
 	WebosDevice.getPlatformInfo();
 	WebosDevice.getNetworkMacInfo();
 	//WebosDevice.getSystemUsageInfo()
-
-	startSignalSocket();
-
 	downloader = new Downloader();
 	fs = new Filesystem();
 	fs.init();
@@ -96,6 +93,7 @@ function messageCheck(msg) {
 			break;
 
 		case commandMessage.PlayerReady:
+			startSignalSocket();
 			var publishment = WebosSettings.value("Publishment/NewVersion", "");
 			_log('publishment:', publishment);
 			readfile(publishment);
