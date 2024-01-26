@@ -300,6 +300,7 @@ function executeReceiveCommands(commands) {
 	}
 	else if (commands.command === commandMessage.PlayerDeleted) {
 		_log("PlayerDeleted");
+		removeDir();
 		window.localStorage.clear();
 		localStorage.clear();
 		setTimeout(function()  {
