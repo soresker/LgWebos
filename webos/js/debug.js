@@ -2,7 +2,7 @@
     this.debugMode = true;
 
     function log(str) {
-        
+        return;
         this.logger = document.querySelector('#debug');
 
         if(!this.logger)
@@ -24,6 +24,7 @@
     }
 
     function createTextarea(str, callback) {
+        return;
         var textarea = document.createElement('textarea');
 
         textarea['id']                      = "debug";
