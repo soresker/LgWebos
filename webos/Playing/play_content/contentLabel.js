@@ -58,10 +58,10 @@ Content_Label.prototype.showContent = function () {
     
     try {
 
-        
+
         if(this.isMap == "1" )
         {
-        /*    
+        /*        
             var mapId = "content-{0}".pxcFormatString(this.frameUniqueKey);
             Player_Ui_Creator.UIElement.appendHTML("#frame-" + this.frameUniqueKey, this.generateUIElement());
 
@@ -119,11 +119,10 @@ Content_Label.prototype.showContent = function () {
                 var placemark = new ymaps.Placemark([this.latitude, this.longitude], { iconContent: '<div style="margin-left:10px;width:200px;padding:3px;background-color:rgba(255, 255, 255, 0.5);color:rgba(' + this.color + ');font-size:' + this.fontSize + 'px; font-weight:' + textFontWeight + '; font-style:' + textFontStyle + '; text-decoration:' + textTextDecoration+';"><strong>' + this.label + '</strong></div>' });
                 this.map.geoObjects.add(placemark);
             }
-   
+        
             $("#content-" + this.frameUniqueKey).show();
-            
          });
-            */
+         */
         } else{
 
 

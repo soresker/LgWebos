@@ -1,4 +1,4 @@
-let Player = {
+var Player = {
 
     Content: {
 
@@ -25,4 +25,4 @@ let Player = {
 
     }
 
-}
+};

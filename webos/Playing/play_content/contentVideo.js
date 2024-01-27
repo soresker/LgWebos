@@ -81,10 +81,11 @@ Content_Video.prototype.showContent = function(func) {
         try {
 
            Player_Ui_Creator.UIElement.appendHTML("#frame-" + this.frameUniqueKey, this.generateUIElement());
-            let fileUrlEdits = Publisher.playerGlobalData.replace(/\\/g, '/')  + this.fileName;
+            var fileUrlEdits = Publisher.playerGlobalData.replace(/\\/g, '/')  + this.fileName;
     
             $(this.videoSelector).attr('src',fileUrlEdits);
             var video = document.getElementById("content-" + this.playlistContentUniqueKey + "-video");
+            console.log("Video.basePath2:" +fileUrlEdits);
 
             if (this.settingSeekStart)
                 this.settingSeekStart = false;
@@ -141,9 +142,9 @@ Content_Video.prototype.showContent = function(func) {
         var video = document.getElementById("content-" + this.playlistContentUniqueKey + "-video");
 
         
-        let fileUrlEdits = Publisher.playerGlobalData.replace(/\\/g, '/')  + this.fileName;
+        var fileUrlEdits = Publisher.playerGlobalData.replace(/\\/g, '/')  + this.fileName;
 
-        let message = {
+        var message = {
             Type : "openFFMpeg",
             Path : fileUrlEdits,
             Duration:this.duration
@@ -161,7 +162,7 @@ Content_Video.prototype.showContent = function(func) {
 
 Content_Video.prototype.deleteUIElement = function() {
 
-   console.log("Video deleteUIElement " +"898872fa632043c8b3cbf2de847897dd", "info");
+   console.log("Video deleteUIElement "+ "info");
     try {
 
         if (this.attachedErrorHandler === true) {
@@ -188,8 +189,8 @@ Content_Video.prototype.deleteUIElement = function() {
         this.removeAllListeners(video, 'timeupdate');
 
     } catch (exception) {
-       console.log("Video deleteUIElement :" + exception, "error");
-       console.log("Content_Video.deleteUIElement",  + exception,"error");
+       console.log(" exception Video deleteUIElement :" + exception, "error");
+       console.log("exception  Content_Video.deleteUIElement",  + exception,"error");
         this.parentFrameObject.setCurrentContentValidity(false);
     } finally {}
 };
@@ -208,9 +209,9 @@ Content_Video.prototype.deleteContent = function() {
         $('#content-' + this.playlistContentUniqueKey).remove();
         Content_Abstractor.prototype.deleteContent.call(this);
 
-        let fileUrlEdits = Publisher.playerGlobalData.replace(/\\/g, '/')  + this.fileName;
+        var fileUrlEdits = Publisher.playerGlobalData.replace(/\\/g, '/')  + this.fileName;
 
-        let message = {
+        var message = {
             Type : "closeFFMpeg",
             Path : fileUrlEdits
         }

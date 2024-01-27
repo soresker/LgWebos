@@ -1,4 +1,4 @@
-let WebosSettings = {
+var WebosSettings = {
 
 	 init : function () {
 	
@@ -14,7 +14,7 @@ let WebosSettings = {
 		  
 		}else{
 			
-			return Tools.defaultValue(localStorage.getItem(key),defaultValue);
+			return WTools.defaultValue(localStorage.getItem(key),defaultValue);
 			
 		}
 
@@ -33,7 +33,7 @@ let WebosSettings = {
 	},
 
 	 loadDefaultSettings : function () {
-		_log ("loadDefaultSettings");
+		Logger.sendMessage ("loadDefaultSettings");
         localStorage.clear();
 
         this.setValue("Customer/id", "1");
