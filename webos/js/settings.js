@@ -33,7 +33,7 @@ var WebosSettings = {
 	},
 
 	 loadDefaultSettings : function () {
-		_log ("loadDefaultSettings");
+		Logger.sendMessage ("loadDefaultSettings");
         localStorage.clear();
 
         this.setValue("Customer/id", "1");

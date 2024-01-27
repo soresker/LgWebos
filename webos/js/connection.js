@@ -7,19 +7,19 @@ var connection = new signalR.HubConnectionBuilder()
 function startSignalSocket() {
     try {
         connection.start();
-        _log("SignalRF Connected.");
+        Logger.sendMessage("SignalRF Connected.");
     } catch (err) {
-        _log('startSignalSocket', err);
+        Logger.sendMessage('startSignalSocket', err);
     }
 }
 
 connection.onreconnected = function (connectionId) {
-    _log(connection.state === signalR.HubConnectionState.Connected);
-    _log("onreconnected id = ", connectionId);
+    Logger.sendMessage(connection.state === signalR.HubConnectionState.Connected);
+    Logger.sendMessage("onreconnected id = ", connectionId);
 };
 
 connection.onreconnecting = function (error) {
-    _log(connection.state === signalR.HubConnectionState.Reconnecting);
+    Logger.sendMessage(connection.state === signalR.HubConnectionState.Reconnecting);
 };
 
 connection.onclose = function () {
@@ -27,21 +27,21 @@ connection.onclose = function () {
 };
 
 connection.on("TestMessage", function (data) {
-    _log("Gelen Mesaj ha:" + data);
+    Logger.sendMessage("Gelen Mesaj ha:" + data);
 });
 
 function sendSignal(command, data) {
-    _log("Sending Command:", command);
-    _log("Sending JsonData:", data);
+    Logger.sendMessage("Sending Command:", command);
+    Logger.sendMessage("Sending JsonData:", data);
 
     try {
         connection.invoke(command, data);
     } catch (err) {
-        _log(err);
+        Logger.sendMessage(err);
     }
 }
 
 connection.on("receiveSignal", function (data) {
-    _log("receiveSignal:", data);
+    Logger.sendMessage("receiveSignal:", data);
     executeReceiveCommands(data);
 });

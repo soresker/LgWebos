@@ -9,7 +9,7 @@ var currentIndex = -1
 var globalPublishment = "";
 
 function listener(event) {
-	_log("Html message coming", event.data);
+	Logger.sendMessage("Html message coming", event.data);
 	messageCheck(event.data);
 }
 
@@ -49,30 +49,30 @@ window.onload = function () {
 	fs.init();
 
 	if (window.addEventListener) {
-		_log("message")
+		Logger.sendMessage("message")
 		window.addEventListener('message', listener, false);
 	} else if (window.attachEvent) {
-		_log("onmessage")
+		Logger.sendMessage("onmessage")
 		window.attachEvent('onmessage', listener);
 	}
 
-	_log('onload init');
+	Logger.sendMessage('onload init');
 	checkPublishment();
 	//localStorage.clear();
 
 	StartPlayer.playerIsRegister(function (result) {
 
-		_log('StartPlayer.playerIsRegister');
+		Logger.sendMessage('StartPlayer.playerIsRegister');
 
 		if (result) {
 
 			//Player is registered
-			_log('player register');
+			Logger.sendMessage('player register');
 			Logger.sendMessage("player register","");
 
 
 		} else {
-			_log('player register degil');
+			Logger.sendMessage('player register degil');
 			Logger.sendMessage("player register degil","");
 			CreateIframeElement("Login/login.html", "login");
 		}
@@ -85,13 +85,13 @@ window.onload = function () {
 function messageCheck(msg) {
 
 	msg = JSON.parse(msg);
-	_log("Message Check:", msg);
-	_log("Message MessageType:", msg.MessageType);
+	Logger.sendMessage("Message Check:", msg);
+	Logger.sendMessage("Message MessageType:", msg.MessageType);
 
 	switch (msg.MessageType) {
 
 		case commandMessage.Player_Register:
-			_log("Player_Register yapacaz", msg);
+			Logger.sendMessage("Player_Register yapacaz", msg);
 			playerRegister(msg);
 			break;
 
@@ -100,7 +100,7 @@ function messageCheck(msg) {
 
 		case commandMessage.PlayerReady:
 			var publishment = WebosSettings.value("Publishment/NewVersion", "");
-			_log('publishment:', publishment);
+			Logger.sendMessage('publishment:', publishment);
 			readfile(publishment);
 			break;
 
@@ -114,9 +114,9 @@ function readfile(fileName) {
 	Logger.sendMessage("readfile","");
 
 	var path = publishmentsDir + fileName + ".json";
-	_log('read file path:', path);
+	Logger.sendMessage('read file path:', path);
 	fs.readFile(path, function (error, data) {
-		_log('readfile3:', data);
+		Logger.sendMessage('readfile3:', data);
 		var initPlayer = JSON.stringify({ "MessageType": "initPlayer", "Data": { "filePath": "./content/contents/", "videoMode": "0" } });
 		Start_Handler.receiveMessage(initPlayer);
 		Start_Handler.receiveMessage(data);
@@ -124,20 +124,20 @@ function readfile(fileName) {
 }
 
 function writefile(fileName, data) {
-	_log('writefile path:', fileName);
-	_log("data", data)
+	Logger.sendMessage('writefile path:', fileName);
+	Logger.sendMessage("data", data)
 
 	var path = publishmentsDir + fileName + ".json";
-	_log('writefile path:', path);
+	Logger.sendMessage('writefile path:', path);
 	var Data = data;
 	var jsonData = {
 		"MessageType": "startPublishment", "Data":Data
 	};
 	fs.writeFile(path, JSON.stringify(jsonData), function (error) {
 		if (error)
-			return _log('error', error);
+			return Logger.sendMessage('error', error);
 		else
-			_log('write json data:', data);
+			Logger.sendMessage('write json data:', data);
 	})
 }
 function download(url, callback) {
@@ -153,31 +153,31 @@ function downloadNext() {
 	currentIndex = currentIndex + 1
 	if (currentIndex < urlArray.length) {
 		var currentUrl = urlArray[currentIndex];
-		_log('download start:', 'download status:' + (currentIndex + 1) + '/' + urlArray.length)
-		_log('download file url:', currentUrl)
+		Logger.sendMessage('download start:', 'download status:' + (currentIndex + 1) + '/' + urlArray.length)
+		Logger.sendMessage('download file url:', currentUrl)
 		var fileName = currentUrl.split('/').pop();
 		fileExists(contentsDir + fileName, function (error, data) {
 			if (data != null && data == false) {
 				download(currentUrl, function (err, data) {
 					if (err) {
-						_log("download failed: " + (currentIndex + 1) + '/' + urlArray.length);
+						Logger.sendMessage("download failed: " + (currentIndex + 1) + '/' + urlArray.length);
 						Logger.sendMessage("download failed:"  + (currentIndex + 1),"");
 					} else {
-						_log('download complete: ' + (currentIndex + 1) + '/' + urlArray.length + ' 😃');
+						Logger.sendMessage('download complete: ' + (currentIndex + 1) + '/' + urlArray.length + ' 😃');
 						Logger.sendMessage("download complete: " + (currentIndex + 1) + "/" + urlArray.length ,"");
 					}
 					downloadNext()
 				})
 			}
 			else {
-				_log("download file exist! Go Next File: " + (currentIndex + 1) + '/' + urlArray.length)
+				Logger.sendMessage("download file exist! Go Next File: " + (currentIndex + 1) + '/' + urlArray.length)
 				downloadNext()
 			}
 		});
 	}
 	else {
 		currentIndex = -1;
-		_log("download complated all files ✅");
+		Logger.sendMessage("download complated all files ✅");
 		Logger.sendMessage("download complated all files ✅","");
 		showPlayer();
 	}
@@ -202,11 +202,11 @@ function fileExists(files, callback) {
 
 function listDir(dir) {
 	var path = dir;
-	_log('listdir path', path);
+	Logger.sendMessage('listdir path', path);
 	fs.ls(path, function (error, data) {
 		if (error)
-			return _log('error', error);
-		_log('data', data);
+			return Logger.sendMessage('error', error);
+		Logger.sendMessage('data', data);
 		Logger.sendMessage("List Contents"+data,"");
 		return data;
 	})
@@ -214,11 +214,11 @@ function listDir(dir) {
 
 function removeDir() {
 	var path = defaultDir;
-	_log('rmdir path', path);
+	Logger.sendMessage('rmdir path', path);
 	fs.rmdir(path, { recursive: true }, function (error, data) {
 		if (error)
-			return _log('error', error);
-		_log('data', data);
+			return Logger.sendMessage('error', error);
+		Logger.sendMessage('data', data);
 	})
 }
 
@@ -238,15 +238,15 @@ function playerRegister(data) {
 	WebosSettings.setValue("PlayerSettings/playerId", data.playerId);
 
 	sendSignal(commandMessage.Player_Register, isRegisterData);
-	_log("Send Player Register:", isRegisterData);
+	Logger.sendMessage("Send Player Register:", isRegisterData);
 	Logger.sendMessage("Send Player Register:"+ isRegisterData,"");
 }
 
 function executeReceiveCommands(commands) {
-	_log("executeReceiveCommands");
+	Logger.sendMessage("executeReceiveCommands");
 	Logger.sendMessage("Receive Command:"+ commands.command,"");
 	if (commands.command === commandMessage.Player_Register) {
-		_log("Receive commandMessage.Player_Register ");
+		Logger.sendMessage("Receive commandMessage.Player_Register ");
 		WebosSettings.setValue("PlayerSettings/status", commands.status);
 
 		if (commands.status == true) {
@@ -263,48 +263,48 @@ function executeReceiveCommands(commands) {
 		}
 
 	} else if (commands.command === commandMessage.Check_Publishment) {
-		_log("commandMessage.Check_Publishment", commands.command);
+		Logger.sendMessage("commandMessage.Check_Publishment", commands.command);
 
 		var temp = WebosSettings.value("Publishment/NewVersion", "");
 		var playerStatus = WebosSettings.value("PlayerSettings/status", "");
 
 		if (temp == "" && playerStatus == true) {
-			_log("Player ilk kez ayaga kalkiyor ve yayini indirmeli:", commands);
+			Logger.sendMessage("Player ilk kez ayaga kalkiyor ve yayini indirmeli:", commands);
 			WebosSettings.setValue("Publishment/NewVersion", commands.jsonData.publishmentName);
 			WebosSettings.setValue("Publishment/OldVersion", commands.jsonData.publishmentName);
 			writefile(commands.jsonData.publishmentName, commands.jsonData.publishmentData);
 			fetchPublishment(commands.jsonData.publishmentData);
-			_log("burayageldik mi :", commands.jsonData);
+			Logger.sendMessage("burayageldik mi :", commands.jsonData);
 
 		}
 
 		if (temp != commands.jsonData.publishmentName && playerStatus == true) {
-			_log("Publisment dosyasi indiriliyor:", commands);
+			Logger.sendMessage("Publisment dosyasi indiriliyor:", commands);
 			writefile(commands.jsonData.publishmentName, commands.jsonData.publishmentData);
 			WebosSettings.setValue("Publishment/NewVersion", commands.jsonData.publishmentName);
 			fetchPublishment(commands.jsonData.publishmentData);
 		} else {
-			_log("Devamke :)");
+			Logger.sendMessage("Devamke :)");
 		}
 
 	} else if (commands.command === commandMessage.WinScreenShotRequest) {
-		_log("WinScreenShotRequest");
+		Logger.sendMessage("WinScreenShotRequest");
 		//WebosDevice.screenShot();    
 	}
 	else if (commands.command === commandMessage.Player_Restart) {
-		_log("Player_Restart");
+		Logger.sendMessage("Player_Restart");
 		//WebosDevice.deviceRestart();
 	}
 	else if (commands.command === commandMessage.Player_Shutdown) {
-		_log("Player_Shutdown");
+		Logger.sendMessage("Player_Shutdown");
 		//WebosDevice.deviceShutDown();
 	}
 	else if (commands.command === commandMessage.Check_Upgrade) {
-		_log("Check_Upgrade");
+		Logger.sendMessage("Check_Upgrade");
 		//WebosDevice.upgradeIpkApplication();  
 	}
 	else if (commands.command === commandMessage.PlayerDeleted) {
-		_log("PlayerDeleted");
+		Logger.sendMessage("PlayerDeleted");
 		removeDir();
 		window.localStorage.clear();
 		localStorage.clear();
@@ -313,24 +313,24 @@ function executeReceiveCommands(commands) {
 		}, 2000);
 	}
 	else if (commands.command === commandMessage.HealthCheck) {
-		_log("HealthCheck");
+		Logger.sendMessage("HealthCheck");
 	}
 	else if (commands.command === commandMessage.AppRestart) {
-		_log("AppRestart");
+		Logger.sendMessage("AppRestart");
 		WebosDevice.restartApplication();    
 	}
 	else if (commands.command === commandMessage.PlayerSettingsHere) {
-		_log("PlayerSettingsHere");
+		Logger.sendMessage("PlayerSettingsHere");
 		//WebosDevice.setPortraitMode();      
 	}
 	else {
-		_log("UNKNOWN Command");
+		Logger.sendMessage("UNKNOWN Command");
 	}
 
 }
 function showPlayer() {
 
-	_log("showPlayer :)");
+	Logger.sendMessage("showPlayer :)");
 	Logger.sendMessage("showPlayer","");
 
 	var Data = globalPublishment;
@@ -346,7 +346,7 @@ function showPlayer() {
 
 function fetchPublishment(readPublishment) {
 
-	_log("fetchPublishment :)");
+	Logger.sendMessage("fetchPublishment :)");
 	Logger.sendMessage("start download","");
 	listDir(publishmentsDir)
 	globalPublishment = readPublishment;
@@ -354,14 +354,14 @@ function fetchPublishment(readPublishment) {
 
 	downloadNext();
 
-	_log("fetchPublishment download sonrasi:)");
+	Logger.sendMessage("fetchPublishment download sonrasi:)");
 
 }
 
 function sendHardbitSystemInfo  () {
 
 	setInterval(function() {
-		_log("sendHardbitSystemInfo");
+		Logger.sendMessage("sendHardbitSystemInfo");
 		var systemInfData = {
 			playerCode: "",
 			privateKey: webOsSerialNumber,
@@ -379,7 +379,7 @@ function sendHardbitSystemInfo  () {
 
 function sendScreenShot (base64Image)  {
 
-	_log("sendScreenShot");
+	Logger.sendMessage("sendScreenShot");
 	var playerInfo = {
 		privateKey: webOsSerialNumber,
 		publicKey: webOsSerialNumber,
@@ -396,14 +396,14 @@ function sendScreenShot (base64Image)  {
 function checkPublishment() {
 	fs.ls(defaultDir + 'publishments', function (error, data) {
 		if (error) {
-			_log('publishments file not found -', error);
+			Logger.sendMessage('publishments file not found -', error);
 
 			fs.mkdir(defaultDir + 'publishments/', function (error, data) {
 				if (error) {
-					_log('publishments dir not created -', error);
+					Logger.sendMessage('publishments dir not created -', error);
 				}
 				else {
-					_log('publishments dir created +', publishmentsDir);
+					Logger.sendMessage('publishments dir created +', publishmentsDir);
 				}
 			});
 		}
@@ -411,14 +411,14 @@ function checkPublishment() {
 
 	fs.ls(defaultDir + 'contents', function (error, data) {
 		if (error) {
-			_log('contents file not found -', error);
+			Logger.sendMessage('contents file not found -', error);
 
 			fs.mkdir(defaultDir + 'contents/', function (error, data) {
 				if (error) {
-					_log('contents dir not created -', error);
+					Logger.sendMessage('contents dir not created -', error);
 				}
 				else {
-					_log('contents dir created +', contentsDir);
+					Logger.sendMessage('contents dir created +', contentsDir);
 				}
 			});
 		}

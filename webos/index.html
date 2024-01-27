@@ -12,8 +12,6 @@
     <link rel="stylesheet" href="./Playing/css/player.css?v=4.0">
 
     <!--  Include SCAP Library -->
-    <script type="text/javascript" src="./js/debug.js" onload="loaded=true;"></script>
-
     <script type="text/javascript" src="./js/cordova/2.7.0/cordova.webos.js" onload="loaded=true;"></script>
     <script type="text/javascript" src="./js/cordova-cd/signage.js" onload="loaded=true;"></script>
     <script type="text/javascript" src="./js/cordova-cd/storage.js" onload="loaded=true;"></script>
@@ -71,24 +69,13 @@
         <img src="./Playing/common/noplaylist.png"/>
     </div>
     <style>
-        /*
-        textarea {
-            position: absolute;
-            height: 100%;
-            width: 20%;
-            left: 0px;
-            top: 0px;
-            z-index: 999999999;
-            background-color: black;
-            color: white;
-        }
-        */
+        /**/     
     </style>
     <script type="text/javascript">
 
         document.onreadystatechange = function() {
             if (document.readyState === 'complete') {
-                _log("Document ready");
+                Logger.sendMessage("Document ready");
             }
         }
 
@@ -107,7 +94,6 @@
 
 
 <body>
-    <!--<textarea id="debug"></textarea> -->
 </body>
 
 </html>
