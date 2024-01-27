@@ -287,7 +287,7 @@ Play_Frame.prototype.checkNextContentSchedule = function() {
                 console.log("Play_Frame.checkNextContentSchedule"+"Schedule check has passed with success for end time. Continuing.");
             }
 
-        } else {4
+        } else {
             console.log("Play_Frame.checkNextContentSchedule" + "End time value is not a valid time. Continuing.");
         }
     }

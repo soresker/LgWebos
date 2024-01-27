@@ -239,11 +239,9 @@ function playerRegister(data) {
 
 	sendSignal(commandMessage.Player_Register, isRegisterData);
 	Logger.sendMessage("Send Player Register:", isRegisterData);
-	Logger.sendMessage("Send Player Register:"+ isRegisterData,"");
 }
 
 function executeReceiveCommands(commands) {
-	Logger.sendMessage("executeReceiveCommands");
 	Logger.sendMessage("Receive Command:"+ commands.command,"");
 	if (commands.command === commandMessage.Player_Register) {
 		Logger.sendMessage("Receive commandMessage.Player_Register ");
