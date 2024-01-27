@@ -82,32 +82,6 @@ window.onload = function () {
 	sendHardbitSystemInfo();
 }
 
-function listener(event) {
-	_log("Html message coming", event.data);
-	messageCheck(event.data);
-}
-
-const CreateIframeElement = (source, divId) => {
-
-	var el = document.createElement("iframe");
-
-	// setting the values for the attributes. 
-	el.src = source;
-	el.width = "100%";
-	el.height = "100%";
-
-	// Adding the created iframe to div as a child element 
-	document.getElementById(divId).appendChild(el);
-
-}
-
-const RemoveIframeElement = (divId) => {
-	// Remove the last child ( iframe element ) of div. 
-	document.getElementById(divId)
-		.removeChild(document
-			.getElementById(divId).lastChild);
-}
-
 function messageCheck(msg) {
 
 	msg = JSON.parse(msg);
