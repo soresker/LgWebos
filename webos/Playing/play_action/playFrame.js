@@ -492,11 +492,17 @@ Play_Frame.prototype.playNextContent = function(isComeFromEndOfAContent) {
 
             var this_ = this;
             if (this.previousContent)
+            {
+                this_.deletePreviousContent();
+
                 this.currentContent.showContent(function() {
+                    /*
                     setTimeout(function()  {
-                        this_.deletePreviousContent();
                     }, 1000);
+                    */
                 });
+            }
+            
             else {
                 console.log("else this.currentContent.showContent : "+ contentInfo)
                 this.currentContent.showContent();

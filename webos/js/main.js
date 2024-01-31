@@ -41,6 +41,7 @@ window.onload = function () {
 	WebosDevice.getPlatformInfo();
 	WebosDevice.getNetworkMacInfo();
 	//WebosDevice.getSystemUsageInfo()
+	WebosDevice.setUiTile(false);
 
 	startSignalSocket();
 
@@ -68,12 +69,11 @@ window.onload = function () {
 
 			//Player is registered
 			Logger.sendMessage('player register');
-			Logger.sendMessage("player register","");
-
+			Logger.sendMessage('player playerId:'+WebosSettings.value("PlayerSettings/playerId", ""));
+			Logger.sendMessage('player custormerId:'+WebosSettings.value("Customer/id", ""));
 
 		} else {
 			Logger.sendMessage('player register degil');
-			Logger.sendMessage("player register degil","");
 			CreateIframeElement("Login/login.html", "login");
 		}
 
@@ -287,19 +287,19 @@ function executeReceiveCommands(commands) {
 
 	} else if (commands.command === commandMessage.WinScreenShotRequest) {
 		Logger.sendMessage("WinScreenShotRequest");
-		//WebosDevice.screenShot();    
+		WebosDevice.screenShot();    
 	}
 	else if (commands.command === commandMessage.Player_Restart) {
 		Logger.sendMessage("Player_Restart");
-		//WebosDevice.deviceRestart();
+		WebosDevice.deviceRestart();
 	}
 	else if (commands.command === commandMessage.Player_Shutdown) {
 		Logger.sendMessage("Player_Shutdown");
-		//WebosDevice.deviceShutDown();
+		WebosDevice.deviceShutDown();
 	}
 	else if (commands.command === commandMessage.Check_Upgrade) {
 		Logger.sendMessage("Check_Upgrade");
-		//WebosDevice.upgradeIpkApplication();  
+		WebosDevice.upgradeIpkApplication();  
 	}
 	else if (commands.command === commandMessage.PlayerDeleted) {
 		Logger.sendMessage("PlayerDeleted");
@@ -319,7 +319,7 @@ function executeReceiveCommands(commands) {
 	}
 	else if (commands.command === commandMessage.PlayerSettingsHere) {
 		Logger.sendMessage("PlayerSettingsHere");
-		//WebosDevice.setPortraitMode();      
+		WebosDevice.setUiTile(false);      
 	}
 	else {
 		Logger.sendMessage("UNKNOWN Command");
@@ -329,7 +329,6 @@ function executeReceiveCommands(commands) {
 function showPlayer() {
 
 	Logger.sendMessage("showPlayer :)");
-	Logger.sendMessage("showPlayer","");
 
 	var Data = globalPublishment;
 	var initPlayer = JSON.stringify({ "MessageType": "initPlayer", "Data": { "filePath": "./content/contents/", "videoMode": "0" } })
@@ -344,7 +343,6 @@ function showPlayer() {
 
 function fetchPublishment(readPublishment) {
 
-	Logger.sendMessage("fetchPublishment :)");
 	Logger.sendMessage("start download","");
 	listDir(publishmentsDir)
 	globalPublishment = readPublishment;
