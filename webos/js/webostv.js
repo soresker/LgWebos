@@ -9,6 +9,11 @@ var webOsModelName = "";
 var webOsSerialNumber = ""; 
 var webOsManufacturer = "";
 var webOsMacAdress =  ""; 
+var webOsTotalMemory = "";
+var webOsUsedMemory = "";
+var webOsHardwareVersion = "";
+var webOsFirmwareVersion = "";
+
 var isInternetActive = false;
 var webOsIp = "";
 
@@ -26,10 +31,12 @@ WebosDevice.getPlatformInfo =  function(){
         Logger.sendMessage("[Platform Info] : " +cbObject.sdkVersion);
         Logger.sendMessage("[Platform Info] : " +cbObject.manufacturer);
         
+        webOsFirmwareVersion = cbObject.firmwareVersion;
+        webOsHardwareVersion = cbObject.hardwareVersion; 
         webOsModelName = cbObject.modelName;
         webOsSerialNumber = cbObject.serialNumber;
         webOsManufacturer = cbObject.manufacturer;
-
+        
     }
         
     function failureCb(cbObject) {
@@ -47,8 +54,13 @@ function successCb(cbObject) {
     Logger.sendMessage("cbObject : " + JSON.stringify(cbObject));
     Logger.sendMessage("wiredInfo.macAddress : " + cbObject.wiredInfo.macAddress);
     Logger.sendMessage("wifiInfo.macAddress : " + cbObject.wifiInfo.macAddress);
-    webOsMacAdress = cbObject.wiredInfo.macAddress;
-    webOsMacAdress = cbObject.wifiInfo.macAddress;
+
+    if(cbObject.wiredInfo.macAddress == "")
+    {
+        webOsMacAdress = cbObject.wifiInfo.macAddress;
+    }else{
+        webOsMacAdress = cbObject.wiredInfo.macAddress;
+    }
 }
 
 function failureCb(cbObject) {
@@ -237,7 +249,8 @@ WebosDevice.screenShot = function () {
         var capturedElement = document.getElementById('captured_img');
         capturedElement.src = 'data:image/jpeg;base64,' + data;
 
-        Logger.sendMessage("sendScreenShot");
+        sendScreenShot(data);
+        Logger.sendMessage("sendScreenShot",data);
         var playerInfo = {
             privateKey: webOsSerialNumber,
             publicKey: webOsSerialNumber,
@@ -273,6 +286,9 @@ WebosDevice.getSystemUsageInfo = function() {
        Logger.sendMessage("memory.buffer : " + cbObject.memory.buffer);
        Logger.sendMessage("memory.cached : " + cbObject.memory.cached);
     
+       this.webOsTotalMemory = cbObject.memory.total;
+       this.webOsUsedMemory = cbObject.memory.used;
+
         for (var i in cbObject.cpus) {
            Logger.sendMessage("cpu.model " + cbObject.cpus[i].model);
            Logger.sendMessage("cpu.times.user " + cbObject.cpus[i].times.user);

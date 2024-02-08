@@ -40,7 +40,7 @@ window.onload = function () {
 	WebosDevice.getNetworkInfo();
 	WebosDevice.getPlatformInfo();
 	WebosDevice.getNetworkMacInfo();
-	//WebosDevice.getSystemUsageInfo()
+	WebosDevice.getSystemUsageInfo()
 	WebosDevice.setUiTile(false);
 
 	startSignalSocket();
@@ -80,6 +80,7 @@ window.onload = function () {
 	});
 
 	sendHardbitSystemInfo();
+	sendSystemInfo();
 }
 
 function messageCheck(msg) {
@@ -101,7 +102,7 @@ function messageCheck(msg) {
 		case commandMessage.PlayerReady:
 			var publishment = WebosSettings.value("Publishment/NewVersion", "");
 			Logger.sendMessage('publishment:', publishment);
-			readfile(publishment);
+			this.readfile(publishment);
 			break;
 
 		default:
@@ -321,6 +322,9 @@ function executeReceiveCommands(commands) {
 		Logger.sendMessage("PlayerSettingsHere");
 		WebosDevice.setUiTile(false);      
 	}
+	else if (commands.command === commandMessage.Sys_Info) {
+		Logger.sendMessage(" Receive commandMessage.Sys_Info",commands);
+	}
 	else {
 		Logger.sendMessage("UNKNOWN Command");
 	}
@@ -375,10 +379,11 @@ function sendHardbitSystemInfo  () {
 
 function sendScreenShot (base64Image)  {
 
-	Logger.sendMessage("sendScreenShot");
+	Logger.sendMessage("sendScreenShot","");
+
 	var playerInfo = {
-		privateKey: webOsSerialNumber,
-		publicKey: webOsSerialNumber,
+		privateKey: webOsMacAdress,
+		publicKey: webOsMacAdress,
 		playerId: WebosSettings.value("PlayerSettings/playerId", ""),
 		customerId: WebosSettings.value("Customer/id", ""),
 		base64Image: base64Image,
@@ -386,7 +391,6 @@ function sendScreenShot (base64Image)  {
 	}
 
 	sendSignal(commandMessage.Win_ScreenShot, playerInfo);
-
 }
 
 function checkPublishment() {
@@ -419,4 +423,34 @@ function checkPublishment() {
 			});
 		}
 	});
+}
+
+function sendSystemInfo() {
+
+	setTimeout(function() {
+		
+		var systemInfData = {
+			privateKey: webOsMacAdress,
+			publicKey: webOsMacAdress,
+			deviceType: webOsModelName,
+			osType: 'Lg Webos '+webOsHardwareVersion,
+			osArch: webOsFirmwareVersion,
+			totalHddSize: webOsTotalMemory,
+			currentHddSize: webOsUsedMemory,
+			screenResolution: '',
+			fileSystemType: 'fat32',
+			ipAddress: webOsIp,
+			mac: webOsMacAdress,
+			playerDeviceType: 'Webos',
+			serialNo: webOsSerialNumber,
+			playerId: WebosSettings.value("PlayerSettings/playerId", ""),
+			appVersion: '1.0.1',
+			customerId: WebosSettings.value("Customer/id", "")
+	
+		}
+		sendSignal(commandMessage.Sys_Info, systemInfData);
+
+	}, 5000);
+
+
 }

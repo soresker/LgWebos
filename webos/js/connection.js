@@ -31,8 +31,8 @@ connection.on("TestMessage", function (data) {
 });
 
 function sendSignal(command, data) {
-    Logger.sendMessage("Sending Command:", command);
-    Logger.sendMessage("Sending JsonData:", data);
+    Logger.sendMessage("Sending Command "+JSON.stringify(command), "");
+    Logger.sendMessage("Sending JsonData:"+JSON.stringify(data), "");
 
     try {
         connection.invoke(command, data);
