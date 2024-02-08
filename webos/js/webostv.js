@@ -245,15 +245,11 @@ WebosDevice.screenShot = function () {
         Logger.sendMessage("Got Data size:" + size);
         Logger.sendMessage("Got Data encoding :" + encoding);
         Logger.sendMessage("Got Data :" + data);
-        
-        var capturedElement = document.getElementById('captured_img');
-        capturedElement.src = 'data:image/jpeg;base64,' + data;
 
-        sendScreenShot(data);
         Logger.sendMessage("sendScreenShot",data);
         var playerInfo = {
-            privateKey: webOsSerialNumber,
-            publicKey: webOsSerialNumber,
+            privateKey: webOsMacAdress,
+            publicKey: webOsMacAdress,
             playerId: WebosSettings.value("PlayerSettings/playerId", ""),
             customerId: WebosSettings.value("Customer/id", ""),
             base64Image: data,
@@ -261,8 +257,6 @@ WebosDevice.screenShot = function () {
         }
     
         sendSignal(commandMessage.Win_ScreenShot, playerInfo);
-
-        //sendScreenShot('data:image/jpeg;base64,' + data);
     };
     
     var failureCB = function (cbObject) {

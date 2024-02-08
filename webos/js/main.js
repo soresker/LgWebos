@@ -9,7 +9,7 @@ var currentIndex = -1
 var globalPublishment = "";
 
 function listener(event) {
-	Logger.sendMessage("Html message coming", event.data);
+	Logger.sendMessage("Html message coming brooo", event.data);
 	messageCheck(event.data);
 }
 
@@ -252,8 +252,8 @@ function executeReceiveCommands(commands) {
 			RemoveIframeElement("login");
 			var isGetPublishment = {
 				playerCode: "",
-				privateKey: webOsSerialNumber,
-				publicKey: webOsSerialNumber,
+				privateKey: webOsMacAdress,
+				publicKey: webOsMacAdress,
 				playerId: WebosSettings.value("PlayerSettings/playerId", ""),
 				playerName: webOsModelName,
 				customerId: WebosSettings.value("Customer/id", "")
@@ -364,8 +364,8 @@ function sendHardbitSystemInfo  () {
 		Logger.sendMessage("sendHardbitSystemInfo");
 		var systemInfData = {
 			playerCode: "",
-			privateKey: webOsSerialNumber,
-			publicKey: webOsSerialNumber,
+			privateKey: webOsMacAdress,
+			publicKey: webOsMacAdress,
 			playerId: WebosSettings.value("PlayerSettings/playerId", ""),
 			playerName: webOsModelName,
 			customerId: WebosSettings.value("Customer/id", "")
