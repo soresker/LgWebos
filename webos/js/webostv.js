@@ -1,8 +1,8 @@
-var deviceInfo = new DeviceInfo();
-var power = new Power();
-var signage = new Signage();
-var configuration = new Configuration();
-var storage = new Storage();
+//var deviceInfo = new DeviceInfo();
+//var power = new Power();
+//var signage = new Signage();
+//var configuration = new Configuration();
+//var storage = new Storage();
 
 
 var webOsModelName = "";
@@ -45,7 +45,8 @@ WebosDevice.getPlatformInfo =  function(){
         
         Logger.sendMessage("Error Code [" + errorCode + "]: " + errorText);
     }
-        
+
+    var deviceInfo = new DeviceInfo();   
     deviceInfo.getPlatformInfo(successCb, failureCb);
 } 
 
@@ -69,7 +70,7 @@ function failureCb(cbObject) {
 
     Logger.sendMessage("Error Code [" + errorCode + "]: " + errorText);
 }
-
+    var deviceInfo = new DeviceInfo();
     deviceInfo.getNetworkMacInfo(successCb, failureCb);
 } 
 
@@ -86,7 +87,8 @@ WebosDevice.getNetworkInfo = function() {
     
         Logger.sendMessage("Error Code [" + errorCode + "]: " + errorText);
     };
-    
+
+    var deviceInfo = new DeviceInfo();
     deviceInfo.getNetworkInfo(successCb, failureCb);
 } 
 
@@ -109,6 +111,7 @@ WebosDevice.deviceRestart = function () {
         Logger.sendMessage("Error Code [" + errorCode + "]: " + errorText);
     }
     
+    var power = new Power();
     power.executePowerCommand(successCb, failureCb, options);
 
 }
@@ -129,6 +132,7 @@ WebosDevice.deviceShutDown = function () {
         Logger.sendMessage("Error Code [" + errorCode + "]: " + errorText);
     }
     
+    var power = new Power();
     power.executePowerCommand(successCb, failureCb, options);
 
 } 
@@ -149,6 +153,7 @@ WebosDevice.deviceScreenOn = function () {
         Logger.sendMessage("Error Code [" + errorCode + "]: " + errorText);
     }
     
+    var power = new Power();
     power.setDisplayMode(successCb, failureCb, options);
 
 },
@@ -169,6 +174,7 @@ WebosDevice.deviceScreenOff = function () {
         Logger.sendMessage("Error Code [" + errorCode + "]: " + errorText);
     }
     
+    var power = new Power();
     power.setDisplayMode(successCb, failureCb, options);
 
 } 
@@ -184,6 +190,7 @@ WebosDevice.restartApplication = function () {
     
         Logger.sendMessage("Error Code [" + errorCode + "]: " + errorText);
     }
+    var configuration = new Configuration();
     configuration.restartApplication(successCb, failureCb);
 }
 
@@ -202,6 +209,7 @@ WebosDevice.setPortraitMode = function () {
         Logger.sendMessage(" Error Code [" + errorCode + "]: " + errorText);
     };
     
+    var signage = new Signage();
     signage.setPortraitMode(successCb, failureCb, options);
 } 
 
@@ -224,7 +232,7 @@ WebosDevice.upgradeIpkApplication = function () {
         to: Storage.AppMode.LOCAL,
         recovery: false
     };
-    //var storage = new Storage();
+    var storage = new Storage();
     storage.upgradeApplication(successCb, failureCb, options);
 }
 
@@ -264,6 +272,7 @@ WebosDevice.screenShot = function () {
         Logger.sendMessage("Error Code [" + errorCode + "]: " + errorText);
     }
     
+    var signage = new Signage();
     signage.captureScreen(successCB, failureCB, options);
 }
 
@@ -320,6 +329,7 @@ WebosDevice.getSystemUsageInfo = function() {
         memory: true
     };
     
+    var deviceInfo = new DeviceInfo();
     deviceInfo.getSystemUsageInfo(successCb, failureCb, options);
 }
 
@@ -346,6 +356,7 @@ WebosDevice.setUiTile = function(data) {
     Logger.sendMessage( "setUiTile Error Code [" + errorCode + "]: " + errorText); 
     };
 
+    var signage = new Signage();
     signage.setTileInfo(successCb, failureCb, options);
     
 }
