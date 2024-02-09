@@ -231,11 +231,9 @@ WebosDevice.upgradeIpkApplication = function () {
 WebosDevice.screenShot = function () {
     Logger.sendMessage("screenShot start");
 
-    var options = {
-        save : false,
-        thumbnail : true,
-        imgResolution : Signage.ImgResolution.FHD
-    };
+    var options = {};
+    options.save = false;
+    options.thumbnail = true;
     
     var successCB = function (cbObject) {
         var size = cbObject.size;
