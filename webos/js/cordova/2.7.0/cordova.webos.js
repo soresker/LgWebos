@@ -6531,6 +6531,8 @@ define("cordova/plugin/webos/service", function(require, exports, module) {
 
 var isLegacy = ((navigator.userAgent.indexOf("webOS")>-1) || (navigator.userAgent.indexOf("hpwOS")>-1));
 
+var reqs = {};
+
 function LS2Request(uri, params) {
     this.uri = uri;
     params = params || {};
@@ -6598,18 +6600,29 @@ LS2Request.prototype.send = function() {
             self.cancel();
         }
     };
+
+    //case using the same request instance
+    if (self.ts && reqs[self.ts]) {        
+    } else {
+        self.ts = performance.now();
+        reqs[self.ts] = self;
+    }
+
     this.bridge.call(this.uri, JSON.stringify(this.params));
 };
 
 LS2Request.prototype.cancel = function() {
     this.cancelled = true;
-    if(this.resubscribeJob) {
-            clearTimeout(this.delayID)
-        }
-        if(this.bridge) {
-            this.bridge.cancel();
-            this.bridge = undefined;
-        }
+    if (this.resubscribeJob) {
+        clearTimeout(this.delayID)
+    }
+    if (this.bridge) {
+        this.bridge.cancel();
+        this.bridge = undefined;
+    }
+    if(this.ts && reqs[this.ts]) {
+        delete reqs[this.ts];
+    }
 };
 
 LS2Request.prototype.toString = function() {
