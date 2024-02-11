@@ -24,34 +24,34 @@
     <script type="text/javascript" src="./js/cordova-cd/1.5/utility.js" onload="loaded=true;"></script>
     <script type="text/javascript" src="./js/signalr.js" onload="loaded=true;"></script>
 
-    <script type="text/javascript" src="./Playing/common/static.js" onload="loaded=true;"></script> 
-    <script type="text/javascript" src="./Playing/common/playerUICreator.js" onload="loaded=true;"></script> 
-    <script type="text/javascript" src="./Playing/utility/jquery-3.3.1.min.js"  onload="loaded=true;"></script>
-    <script type="text/javascript" src="./Playing/utility/moment-with-locales.js" onload="loaded=true;"></script> 
-    <script type="text/javascript" src="./Playing/utility/formatter.js" onload="loaded=true;"></script> 
-    <script type="text/javascript" src="./Playing/player/plogger.js" onload="loaded=true;"></script> 
+    <script type="text/javascript" src="./Playing/common/static.js" onload="loaded=true;"></script>
+    <script type="text/javascript" src="./Playing/common/playerUICreator.js" onload="loaded=true;"></script>
+    <script type="text/javascript" src="./Playing/utility/jquery-3.3.1.min.js" onload="loaded=true;"></script>
+    <script type="text/javascript" src="./Playing/utility/moment-with-locales.js" onload="loaded=true;"></script>
+    <script type="text/javascript" src="./Playing/utility/formatter.js" onload="loaded=true;"></script>
+    <script type="text/javascript" src="./Playing/player/plogger.js" onload="loaded=true;"></script>
     <script type="text/javascript" src="./Playing/player/ptools.js" onload="loaded=true;"></script>
 
-    <script type="text/javascript" src="./Playing/player/publisment_reader.js" onload="loaded=true;"></script> 
-    <script type="text/javascript" src="./Playing/player/publisher.js" onload="loaded=true;"></script> 
-    <script type="text/javascript" src="./Playing/player/start.handler.js" onload="loaded=true;"></script> 
+    <script type="text/javascript" src="./Playing/player/publisment_reader.js" onload="loaded=true;"></script>
+    <script type="text/javascript" src="./Playing/player/publisher.js" onload="loaded=true;"></script>
+    <script type="text/javascript" src="./Playing/player/start.handler.js" onload="loaded=true;"></script>
 
-    <script type="text/javascript" src="./Playing/parsers/parseCalendars.js" onload="loaded=true;"></script> 
-    <script type="text/javascript" src="./Playing/parsers/parseTemplate.js" onload="loaded=true;" ></script> 
-    <script type="text/javascript" src="./Playing/parsers/parseFrame.js" onload="loaded=true;"></script> 
-    <script type="text/javascript" src="./Playing/parsers/parsePlaylist.js" onload="loaded=true;"></script> 
-    <script type="text/javascript" src="./Playing/parsers/parseContents.js" onload="loaded=true;"></script> 
-<!-- -->
-    <script type="text/javascript" src="./Playing/play_action/playFrame.js" onload="loaded=true;"></script> 
-    <script type="text/javascript" src="./Playing/play_action/playTemplate.js" onload="loaded=true;"></script> 
-    <script type="text/javascript" src="./Playing/play_action/playPlaylist.js" onload="loaded=true;"></script> 
+    <script type="text/javascript" src="./Playing/parsers/parseCalendars.js" onload="loaded=true;"></script>
+    <script type="text/javascript" src="./Playing/parsers/parseTemplate.js" onload="loaded=true;"></script>
+    <script type="text/javascript" src="./Playing/parsers/parseFrame.js" onload="loaded=true;"></script>
+    <script type="text/javascript" src="./Playing/parsers/parsePlaylist.js" onload="loaded=true;"></script>
+    <script type="text/javascript" src="./Playing/parsers/parseContents.js" onload="loaded=true;"></script>
+    <!-- -->
+    <script type="text/javascript" src="./Playing/play_action/playFrame.js" onload="loaded=true;"></script>
+    <script type="text/javascript" src="./Playing/play_action/playTemplate.js" onload="loaded=true;"></script>
+    <script type="text/javascript" src="./Playing/play_action/playPlaylist.js" onload="loaded=true;"></script>
 
     <script type="text/javascript" src="./Playing/play_content/contentAbstract.js" onload="loaded=true;"></script>
-    <script type="text/javascript" src="./Playing/play_content/contentLabel.js" onload="loaded=true;"></script> 
-    <script type="text/javascript" src="./Playing/play_content/contentDate.js" onload="loaded=true;"></script> 
-    <script type="text/javascript" src="./Playing/play_content/contentHtml.js" onload="loaded=true;"></script> 
-    <script type="text/javascript" src="./Playing/play_content/contentImage.js" onload="loaded=true;"></script> 
-    <script type="text/javascript" src="./Playing/play_content/contentVideo.js" onload="loaded=true;"></script> 
+    <script type="text/javascript" src="./Playing/play_content/contentLabel.js" onload="loaded=true;"></script>
+    <script type="text/javascript" src="./Playing/play_content/contentDate.js" onload="loaded=true;"></script>
+    <script type="text/javascript" src="./Playing/play_content/contentHtml.js" onload="loaded=true;"></script>
+    <script type="text/javascript" src="./Playing/play_content/contentImage.js" onload="loaded=true;"></script>
+    <script type="text/javascript" src="./Playing/play_content/contentVideo.js" onload="loaded=true;"></script>
 
     <script type="text/javascript" src="./js/remotecontrol.js" onload="loaded=true;"></script>
     <script type="text/javascript" src="./js/static.js" onload="loaded=true;"></script>
@@ -64,16 +64,16 @@
     <script type="text/javascript" src="./js/main.js" onload="loaded=true;"></script>
     <script type="text/javascript" src="./js/connection.js" onload="loaded=true;"></script>
 
-    <div id="login"></div> 
+    <div id="login"></div>
     <div id="player-image">
-        <img src="./Playing/common/noplaylist.png"/>
+        <img src="./Playing/common/noplaylist.png" />
     </div>
     <style>
-        /**/     
+        /**/
     </style>
     <script type="text/javascript">
 
-        document.onreadystatechange = function() {
+        document.onreadystatechange = function () {
             if (document.readyState === 'complete') {
                 Logger.sendMessage("Document ready");
             }
@@ -82,16 +82,14 @@
         if (loaded) {
             console.log("Loaded All JS File Successfully!");
             var responseIframe = {};
-                responseIframe.MessageType = "playerReady";
-                window.parent.postMessage(JSON.stringify(responseIframe),'*');
+            responseIframe.MessageType = "playerReady";
+            window.parent.postMessage(JSON.stringify(responseIframe), '*');
         }
         else {
             console.log("NOT Loaded JS File Successfully!");
-        }
-
+        } 
     </script>
 </head>
-
 
 <body>
 </body>
