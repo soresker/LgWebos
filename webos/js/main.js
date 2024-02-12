@@ -68,6 +68,8 @@ window.onload = function () {
 		if (result) {
 
 			//Player is registered
+			Keyboard_Control.startListen(); //sonradan kapatilabilir
+			
 			Logger.sendMessage('player register');
 			Logger.sendMessage('player playerId:'+WebosSettings.value("PlayerSettings/playerId", ""));
 			Logger.sendMessage('player custormerId:'+WebosSettings.value("Customer/id", ""));
@@ -75,6 +77,7 @@ window.onload = function () {
 		} else {
 			Logger.sendMessage('player register degil');
 			CreateIframeElement("Login/login.html", "login");
+			Keyboard_Control.startListen();
 		}
 
 	});

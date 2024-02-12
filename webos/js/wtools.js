@@ -44,6 +44,49 @@ var WTools = {
     },
     getDateTimeNow : function() {
         return moment();
+    },
+
+    showUI: function () {
+
+        Logger.sendMessage('showUI');
+
+    },
+    removeUI: function () {
+
+        Logger.sendMessage('removeUI');
+
+    },
+
+    moveUp: function () {
+
+        Logger.sendMessage('moveUp');
+
+    },
+    moveDown: function () {
+   
+        Logger.sendMessage('moveDown');
+
+    },
+    moveLeft: function () {
+
+        Logger.sendMessage('moveLeft');
+
+    },
+    moveRight: function () {
+
+        Logger.sendMessage('moveRight');
+
+    },
+    submit: function () {
+
+        Logger.sendMessage('submit');
+
+    },
+
+    cancel: function () {
+
+        Logger.sendMessage('cancel');
+
     }
 
 }
