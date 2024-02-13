@@ -34,11 +34,42 @@ function RemoveIframeElement (divId) {
 			.getElementById(divId).lastChild);
 }
 
+function getWebOSVersion(){
+
+    function successCallback(successObject) {
+    	Logger.sendMessage('webOS Signage version: ' + successObject.webOSVersion);
+		webOsHardwareVersion = successObject.webOSVersion;
+		
+		if(successObject.webOSVersion <= "3.0")
+		{
+			Logger.sendMessage('webOS 3 ve ya 3 ten kuccuk: ' + successObject.webOSVersion);
+			$('body').append('<script type="text/javascript" src="./js/cordova-cd/1.5/power.js" onload="loaded=true;"></script>');
+		}
+		else{
+			Logger.sendMessage('webOS 3 ten buyyuk: ' + successObject.webOSVersion);
+			$('body').append('<script type="text/javascript" src="./js/cordova-cd/1.5/power16.js" onload="loaded=true;"></script>');
+		}
+    }
+    function failureCallback(failureObject) {
+		$('body').append('<script type="text/javascript" src="./js/cordova-cd/1.5/power16.js" onload="loaded=true;"></script>');
+        Logger.sendMessage('[' + failureObject.errorCode + ']' + failureObject.errorText);
+    }
+	var custom = new Custom();
+
+    custom.Signage.getwebOSVersion(successCallback, failureCallback);
+
+}
 
 window.onload = function () {
 
-	WebosDevice.getNetworkInfo();
+	/*
+	var script = document.createElement('script');
+    script.src = "./js/cordova-cd/1.5/power.js";
+    document.head.appendChild(script);
+	*/
+	this.getWebOSVersion();
 	WebosDevice.getPlatformInfo();
+	WebosDevice.getNetworkInfo();
 	WebosDevice.getNetworkMacInfo();
 	WebosDevice.getSystemUsageInfo()
 	WebosDevice.setUiTile(false);
@@ -68,8 +99,8 @@ window.onload = function () {
 		if (result) {
 
 			//Player is registered
-			Keyboard_Control.startListen(); //sonradan kapatilabilir
-			
+			//Keyboard_Control.startListen(); //sonradan kapatilabilir
+
 			Logger.sendMessage('player register');
 			Logger.sendMessage('player playerId:'+WebosSettings.value("PlayerSettings/playerId", ""));
 			Logger.sendMessage('player custormerId:'+WebosSettings.value("Customer/id", ""));
@@ -77,7 +108,7 @@ window.onload = function () {
 		} else {
 			Logger.sendMessage('player register degil');
 			CreateIframeElement("Login/login.html", "login");
-			Keyboard_Control.startListen();
+			//Keyboard_Control.startListen();
 		}
 
 	});
@@ -430,7 +461,7 @@ function checkPublishment() {
 
 function sendSystemInfo() {
 
-	setTimeout(function() {
+	setInterval(function() {
 		
 		var systemInfData = {
 			privateKey: webOsMacAdress,
@@ -447,13 +478,13 @@ function sendSystemInfo() {
 			playerDeviceType: 'Webos',
 			serialNo: webOsSerialNumber,
 			playerId: WebosSettings.value("PlayerSettings/playerId", ""),
-			appVersion: '1.0.2',
+			appVersion: '1.0.5',
 			customerId: WebosSettings.value("Customer/id", "")
 	
 		}
 		sendSignal(commandMessage.Sys_Info, systemInfData);
 
-	}, 5000);
+	}, 60000);
 
 
 }

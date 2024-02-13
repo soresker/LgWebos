@@ -488,21 +488,25 @@ Play_Frame.prototype.playNextContent = function(isComeFromEndOfAContent) {
         //this.currentContent = new Content_Image(contentInfo, this);
 
         if (this.currentContent) {
-            console.log(" this.currentContent.showContent : "+ JSON.stringify(contentInfo))
+            console.log("this.currentContent.showContent : "+ JSON.stringify(contentInfo))
+            console.log("WEBOS VERSION : "+ webOsHardwareVersion)
 
             var this_ = this;
-            if (this.previousContent)
+            if (this.previousContent && webOsHardwareVersion <= "2.0")
             {
                 this_.deletePreviousContent();
 
                 this.currentContent.showContent(function() {
-                    /*
-                    setTimeout(function()  {
+    
+            });
+            }else if (this.previousContent && webOsHardwareVersion >= "3.0")
+            {
+                this.currentContent.showContent(function() {
+                    setTimeout(() => {
+                        this_.deletePreviousContent();
                     }, 1000);
-                    */
                 });
-            }
-            
+            }            
             else {
                 console.log("else this.currentContent.showContent : "+ contentInfo)
                 this.currentContent.showContent();

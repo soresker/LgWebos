@@ -32,7 +32,7 @@ WebosDevice.getPlatformInfo =  function(){
         Logger.sendMessage("[Platform Info] : " +cbObject.manufacturer);
         
         webOsFirmwareVersion = cbObject.firmwareVersion;
-        webOsHardwareVersion = cbObject.hardwareVersion; 
+        //webOsHardwareVersion = cbObject.hardwareVersion; 
         webOsModelName = cbObject.modelName;
         webOsSerialNumber = cbObject.serialNumber;
         webOsManufacturer = cbObject.manufacturer;
