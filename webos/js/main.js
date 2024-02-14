@@ -599,7 +599,7 @@ function sendSystemInfo() {
 			playerDeviceType: 'Webos',
 			serialNo: webOsSerialNumber,
 			playerId: WebosSettings.value("PlayerSettings/playerId", ""),
-			appVersion: '1.0.11',
+			appVersion: '1.0.12',
 			customerId: WebosSettings.value("Customer/id", "")
 	
 		}
