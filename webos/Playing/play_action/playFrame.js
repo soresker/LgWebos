@@ -498,11 +498,12 @@ Play_Frame.prototype.playNextContent = function(isComeFromEndOfAContent) {
 
                 this.currentContent.showContent(function() {
     
-            });
-            }else if (this.previousContent && webOsHardwareVersion >= "3.0")
+                 })
+            }   
+            else if (this.previousContent && webOsHardwareVersion >= "3.0")
             {
                 this.currentContent.showContent(function() {
-                    setTimeout(() => {
+                    setTimeout( function() {
                         this_.deletePreviousContent();
                     }, 1000);
                 });
