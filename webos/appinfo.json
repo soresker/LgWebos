@@ -8,5 +8,6 @@
   "icon": "icon.png",
   "largeIcon": "largeIcon.png", 
   "inspectable": true,
+  "useVirtualKeyboard":true,
   "uiRevision": 2
 }

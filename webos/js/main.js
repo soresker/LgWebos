@@ -7,6 +7,7 @@ var connection = null;
 var urlArray;
 var currentIndex = -1
 var globalPublishment = "";
+//var keyboardControl = new Keyboard_Control();
 
 function listener(event) {
 	Logger.sendMessage("Html message coming brooo", event.data);
@@ -60,6 +61,113 @@ function getWebOSVersion(){
 
 }
 
+window.onkeydown = function (event) {
+
+	console.log("window.event : " +event);
+
+	var iframe = document.getElementById('login').getElementsByTagName('iframe')[0];
+	var keyCode = event.keyCode || event.which;
+
+	var iframeDocument = iframe.contentDocument || iframe.contentWindow.document;
+
+	Logger.sendMessage("window.keyCode : " +keyCode);
+	Logger.sendMessage("window.onkeydown : " +JSON.stringify(iframe));
+	/*
+	if (keyCode === 37) {
+		// Input alanlarını kontrol et
+		var focusedElement = iframeDocument.activeElement;
+		Logger.sendMessage("window.focusedElement : " +JSON.stringify(focusedElement));
+		Logger.sendMessage("window.tagName : " +focusedElement.tagName);
+
+		if (focusedElement && focusedElement.tagName === 'INPUT') {
+			// Input alanı birinci input değilse bir önceki inputa odaklan
+			if (focusedElement.id === 'playerId') {
+				iframeDocument.getElementById('playerId').focus();
+			} else if (focusedElement.id === 'customerId') {
+				iframeDocument.getElementById('playerId').focus();
+			}
+		} else {
+			// Buttona odaklan
+			iframeDocument.getElementById('register').focus();
+		}
+	}
+	// Sağ (Right) tuşuna basıldığında
+	else if (keyCode === 39) {
+		// Input alanlarını kontrol et
+		var focusedElement = iframeDocument.activeElement;
+		if (focusedElement && focusedElement.tagName === 'INPUT') {
+			// Input alanı sonuncu input değilse bir sonraki inputa odaklan
+			if (focusedElement.id === 'playerId') {
+				iframeDocument.getElementById('customerId').focus();
+			} else if (focusedElement.id === 'customerId') {
+				iframeDocument.getElementById('register').focus();
+			}
+		} else {
+			// Input alanına odaklan
+			iframeDocument.getElementById('playerId').focus();
+		}
+	}
+	else if (keyCode === 40) {
+		// Input alanlarını kontrol et
+		var focusedElement = iframeDocument.activeElement;
+		if (focusedElement && focusedElement.tagName === 'INPUT') {
+			// Input alanı sonuncu input değilse bir sonraki inputa odaklan
+			if (focusedElement.id === 'playerId') {
+				iframeDocument.getElementById('customerId').focus();
+			} else if (focusedElement.id === 'customerId') {
+				iframeDocument.getElementById('register').focus();
+			}
+		} else {
+			// Input alanına odaklan
+			iframeDocument.getElementById('playerId').focus();
+		}
+	}
+	else if (keyCode === 38) {
+		// Input alanlarını kontrol et
+		var focusedElement = iframeDocument.activeElement;
+		Logger.sendMessage("window.focusedElement : " +JSON.stringify(focusedElement));
+		Logger.sendMessage("window.tagName : " +focusedElement.tagName);
+
+		if (focusedElement && focusedElement.tagName === 'INPUT') {
+			// Input alanı birinci input değilse bir önceki inputa odaklan
+			if (focusedElement.id === 'playerId') {
+				iframeDocument.getElementById('playerId').focus();
+			} else if (focusedElement.id === 'customerId') {
+				iframeDocument.getElementById('playerId').focus();
+			}
+		} else {
+			// Buttona odaklan
+			iframeDocument.getElementById('register').focus();
+		}
+	}
+	// Rakam tuşlarına basıldığında
+	else if (keyCode >= 48 && keyCode <= 57) {
+		// Input alanlarından biri odaklıysa değeri ekle
+		var focusedElement = iframeDocument.activeElement;
+		if (focusedElement && focusedElement.tagName === 'INPUT') {
+			focusedElement.value += String.fromCharCode(keyCode);
+		}
+	}*/
+	// Enter tuşuna basıldığında
+	if (keyCode === 13) {
+		// Butona tıklama işlemi gerçekleştir
+		iframeDocument.getElementById('playerId').focus();
+
+		if(iframeDocument.getElementById('customerId').length > 0 && iframeDocument.getElementById('playerId').length > 0)
+		{
+			iframeDocument.getElementById('register').click();
+		}else
+		{
+			if(iframeDocument.getElementById('customerId').value == "")
+				iframeDocument.getElementById('customerId').focus();
+			else
+				iframeDocument.getElementById('playerId').focus();
+
+		}
+	}
+
+};
+
 window.onload = function () {
 
 	/*
@@ -99,7 +207,7 @@ window.onload = function () {
 		if (result) {
 
 			//Player is registered
-			//Keyboard_Control.startListen(); //sonradan kapatilabilir
+			//keyboardControl.startListen();
 
 			Logger.sendMessage('player register');
 			Logger.sendMessage('player playerId:'+WebosSettings.value("PlayerSettings/playerId", ""));
@@ -153,8 +261,14 @@ function readfile(fileName) {
 	fs.readFile(path, function (error, data) {
 		Logger.sendMessage('readfile3:', data);
 		var initPlayer = JSON.stringify({ "MessageType": "initPlayer", "Data": { "filePath": "./content/contents/", "videoMode": "0" } });
-		Start_Handler.receiveMessage(initPlayer);
-		Start_Handler.receiveMessage(data);
+		
+		var playerStatus = WebosSettings.value("PlayerSettings/status", "");
+
+		if (playerStatus == true) {
+			Start_Handler.receiveMessage(initPlayer);
+			Start_Handler.receiveMessage(data);
+		}
+	
 	});
 }
 
@@ -370,11 +484,18 @@ function showPlayer() {
 
 	var Data = globalPublishment;
 	var initPlayer = JSON.stringify({ "MessageType": "initPlayer", "Data": { "filePath": "./content/contents/", "videoMode": "0" } })
-	Start_Handler.receiveMessage(initPlayer);
+	
+	var playerStatus = WebosSettings.value("PlayerSettings/status", "");
 
-	Start_Handler.receiveMessage(JSON.stringify({
-		"MessageType": "startPublishment","Data":Data
-	}));
+	if (playerStatus == true) {
+	
+		Start_Handler.receiveMessage(initPlayer);
+
+		Start_Handler.receiveMessage(JSON.stringify({
+			"MessageType": "startPublishment","Data":Data
+		}));
+
+	}
 
 }
 
@@ -478,7 +599,7 @@ function sendSystemInfo() {
 			playerDeviceType: 'Webos',
 			serialNo: webOsSerialNumber,
 			playerId: WebosSettings.value("PlayerSettings/playerId", ""),
-			appVersion: '1.0.5',
+			appVersion: '1.0.11',
 			customerId: WebosSettings.value("Customer/id", "")
 	
 		}

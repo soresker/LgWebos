@@ -1,5 +1,5 @@
 var connection = new signalR.HubConnectionBuilder()
-    .withUrl("http://device.apiteknoloji.com.tr/playerHub")
+    .withUrl("http://dev-01.api.ist/playerHub")
     .configureLogging(signalR.LogLevel.Information)
     .withAutomaticReconnect()
     .build();
