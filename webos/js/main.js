@@ -96,7 +96,7 @@ window.onkeydown = function (event) {
 
 			}, 15000);
 		}
-		}
+	}
 };
 
 window.onload = function () {
