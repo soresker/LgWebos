@@ -72,100 +72,31 @@ window.onkeydown = function (event) {
 
 	Logger.sendMessage("window.keyCode : " +keyCode);
 	Logger.sendMessage("window.onkeydown : " +JSON.stringify(iframe));
-	/*
-	if (keyCode === 37) {
-		// Input alanlarını kontrol et
-		var focusedElement = iframeDocument.activeElement;
-		Logger.sendMessage("window.focusedElement : " +JSON.stringify(focusedElement));
-		Logger.sendMessage("window.tagName : " +focusedElement.tagName);
-
-		if (focusedElement && focusedElement.tagName === 'INPUT') {
-			// Input alanı birinci input değilse bir önceki inputa odaklan
-			if (focusedElement.id === 'playerId') {
-				iframeDocument.getElementById('playerId').focus();
-			} else if (focusedElement.id === 'customerId') {
-				iframeDocument.getElementById('playerId').focus();
-			}
-		} else {
-			// Buttona odaklan
-			iframeDocument.getElementById('register').focus();
-		}
-	}
-	// Sağ (Right) tuşuna basıldığında
-	else if (keyCode === 39) {
-		// Input alanlarını kontrol et
-		var focusedElement = iframeDocument.activeElement;
-		if (focusedElement && focusedElement.tagName === 'INPUT') {
-			// Input alanı sonuncu input değilse bir sonraki inputa odaklan
-			if (focusedElement.id === 'playerId') {
-				iframeDocument.getElementById('customerId').focus();
-			} else if (focusedElement.id === 'customerId') {
-				iframeDocument.getElementById('register').focus();
-			}
-		} else {
-			// Input alanına odaklan
-			iframeDocument.getElementById('playerId').focus();
-		}
-	}
-	else if (keyCode === 40) {
-		// Input alanlarını kontrol et
-		var focusedElement = iframeDocument.activeElement;
-		if (focusedElement && focusedElement.tagName === 'INPUT') {
-			// Input alanı sonuncu input değilse bir sonraki inputa odaklan
-			if (focusedElement.id === 'playerId') {
-				iframeDocument.getElementById('customerId').focus();
-			} else if (focusedElement.id === 'customerId') {
-				iframeDocument.getElementById('register').focus();
-			}
-		} else {
-			// Input alanına odaklan
-			iframeDocument.getElementById('playerId').focus();
-		}
-	}
-	else if (keyCode === 38) {
-		// Input alanlarını kontrol et
-		var focusedElement = iframeDocument.activeElement;
-		Logger.sendMessage("window.focusedElement : " +JSON.stringify(focusedElement));
-		Logger.sendMessage("window.tagName : " +focusedElement.tagName);
-
-		if (focusedElement && focusedElement.tagName === 'INPUT') {
-			// Input alanı birinci input değilse bir önceki inputa odaklan
-			if (focusedElement.id === 'playerId') {
-				iframeDocument.getElementById('playerId').focus();
-			} else if (focusedElement.id === 'customerId') {
-				iframeDocument.getElementById('playerId').focus();
-			}
-		} else {
-			// Buttona odaklan
-			iframeDocument.getElementById('register').focus();
-		}
-	}
-	// Rakam tuşlarına basıldığında
-	else if (keyCode >= 48 && keyCode <= 57) {
-		// Input alanlarından biri odaklıysa değeri ekle
-		var focusedElement = iframeDocument.activeElement;
-		if (focusedElement && focusedElement.tagName === 'INPUT') {
-			focusedElement.value += String.fromCharCode(keyCode);
-		}
-	}*/
+	
 	// Enter tuşuna basıldığında
 	if (keyCode === 13) {
-		// Butona tıklama işlemi gerçekleştir
-		iframeDocument.getElementById('playerId').focus();
 
-		if(iframeDocument.getElementById('customerId').length > 0 && iframeDocument.getElementById('playerId').length > 0)
+		if(iframeDocument.getElementById('playerId').value == "")
 		{
-			iframeDocument.getElementById('register').click();
-		}else
-		{
-			if(iframeDocument.getElementById('customerId').value == "")
+			iframeDocument.getElementById('playerId').focus();
+
+			setTimeout(function () {
+				iframeDocument.getElementById("playerId").disabled = true;
+				iframeDocument.getElementById("playerId").disabled = false;
 				iframeDocument.getElementById('customerId').focus();
-			else
-				iframeDocument.getElementById('playerId').focus();
+				
+				setTimeout(function() {
+					
+					iframeDocument.getElementById("customerId").disabled = true;
+					iframeDocument.getElementById("customerId").disabled = false;
+					iframeDocument.getElementById('register').focus();
+					iframeDocument.getElementById('register').click();
 
+				}, 15000);
+
+			}, 15000);
 		}
-	}
-
+		}
 };
 
 window.onload = function () {
