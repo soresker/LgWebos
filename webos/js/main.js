@@ -96,16 +96,12 @@ window.onkeydown = function (event) {
 
 			}, 15000);
 		}
+		//event.stopPropagation();
 	}
 };
 
 window.onload = function () {
 
-	/*
-	var script = document.createElement('script');
-    script.src = "./js/cordova-cd/1.5/power.js";
-    document.head.appendChild(script);
-	*/
 	this.getWebOSVersion();
 	WebosDevice.getPlatformInfo();
 	WebosDevice.getNetworkInfo();
@@ -129,16 +125,12 @@ window.onload = function () {
 
 	Logger.sendMessage('onload init');
 	checkPublishment();
-	//localStorage.clear();
 
 	StartPlayer.playerIsRegister(function (result) {
 
 		Logger.sendMessage('StartPlayer.playerIsRegister');
 
 		if (result) {
-
-			//Player is registered
-			//keyboardControl.startListen();
 
 			Logger.sendMessage('player register');
 			Logger.sendMessage('player playerId:'+WebosSettings.value("PlayerSettings/playerId", ""));
@@ -306,8 +298,8 @@ function playerRegister(data) {
 
 	var isRegisterData = {
 		playerCode: "",
-		privateKey: webOsSerialNumber,
-		publicKey: webOsSerialNumber,
+		privateKey: webOsMacAdress,
+		publicKey: webOsMacAdress,
 		playerId: data.playerId,
 		playerName: webOsModelName,
 		customerId: data.customerId
