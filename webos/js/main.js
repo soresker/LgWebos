@@ -70,9 +70,6 @@ window.onkeydown = function (event) {
 
 	var iframeDocument = iframe.contentDocument || iframe.contentWindow.document;
 
-	Logger.sendMessage("window.keyCode : " +keyCode);
-	Logger.sendMessage("window.onkeydown : " +JSON.stringify(iframe));
-	
 	// Enter tuşuna basıldığında
 	if (keyCode === 13) {
 
@@ -80,23 +77,26 @@ window.onkeydown = function (event) {
 		{
 			iframeDocument.getElementById('playerId').focus();
 
+			iframeDocument.getElementById('register').value = "Player Id Girmek icin 15 sn var ";
+
 			setTimeout(function () {
+
 				iframeDocument.getElementById("playerId").disabled = true;
 				iframeDocument.getElementById("playerId").disabled = false;
 				iframeDocument.getElementById('customerId').focus();
-				
+				iframeDocument.getElementById('register').value = "CustomerId Id Girmek icin 15 sn var ";
+
 				setTimeout(function() {
 					
 					iframeDocument.getElementById("customerId").disabled = true;
 					iframeDocument.getElementById("customerId").disabled = false;
 					iframeDocument.getElementById('register').focus();
 					iframeDocument.getElementById('register').click();
-
+					iframeDocument.getElementById('register').value = "Eger Register Olamadiysan Cihazi Restart Et";
 				}, 15000);
 
 			}, 15000);
 		}
-		//event.stopPropagation();
 	}
 };
 

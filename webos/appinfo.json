@@ -4,10 +4,10 @@
   "vendor": "FastApi",
   "type": "web",
   "main": "index.html",
-  "title": "ApiWebOs4",
+  "title": "ApiWebOs",
   "icon": "icon.png",
   "largeIcon": "largeIcon.png", 
   "inspectable": true,
-  "useVirtualKeyboard":true,
+  "useVirtualKeyboard":false,
   "uiRevision": 2
 }
