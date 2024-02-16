@@ -49,9 +49,14 @@ connection.on("receiveSignal", function (data) {
 });
 
 function getConnectionState() {
-    if (connection && connection.state) {
-        return connection.state;
-    } else {
+
+    Logger.sendMessage("getConnectionState connectionstate:"+connection.state);
+
+    Logger.sendMessage("getConnectionState signalR.HubConnectionState.Connected:"+signalR.HubConnectionState.Connected);
+
+    if (connection.state == "Disconnected") {
         return false;
+    } else {
+        return true;
     }
 }
