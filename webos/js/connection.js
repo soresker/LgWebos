@@ -19,10 +19,12 @@ connection.onreconnected = function (connectionId) {
 };
 
 connection.onreconnecting = function (error) {
+    Logger.sendMessage('onreconnecting', error);
     Logger.sendMessage(connection.state === signalR.HubConnectionState.Reconnecting);
 };
 
 connection.onclose = function () {
+    Logger.sendMessage('onclose startSignalSocket');
     startSignalSocket();
 };
 
@@ -45,3 +47,11 @@ connection.on("receiveSignal", function (data) {
     Logger.sendMessage("receiveSignal:", data);
     executeReceiveCommands(data);
 });
+
+function getConnectionState() {
+    if (connection && connection.state) {
+        return connection.state;
+    } else {
+        return false;
+    }
+}

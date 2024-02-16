@@ -146,6 +146,7 @@ window.onload = function () {
 
 	sendHardbitSystemInfo();
 	sendSystemInfo();
+	checkSocketConnection();
 }
 
 function messageCheck(msg) {
@@ -436,40 +437,6 @@ function fetchPublishment(readPublishment) {
 
 }
 
-function sendHardbitSystemInfo  () {
-
-	setInterval(function() {
-		Logger.sendMessage("sendHardbitSystemInfo");
-		var systemInfData = {
-			playerCode: "",
-			privateKey: webOsMacAdress,
-			publicKey: webOsMacAdress,
-			playerId: WebosSettings.value("PlayerSettings/playerId", ""),
-			playerName: webOsModelName,
-			customerId: WebosSettings.value("Customer/id", "")
-
-		}
-
-		sendSignal(commandMessage.HealthCheck, systemInfData);
-	}, 10000);
-
-}
-
-function sendScreenShot (base64Image)  {
-
-	Logger.sendMessage("sendScreenShot","");
-
-	var playerInfo = {
-		privateKey: webOsMacAdress,
-		publicKey: webOsMacAdress,
-		playerId: WebosSettings.value("PlayerSettings/playerId", ""),
-		customerId: WebosSettings.value("Customer/id", ""),
-		base64Image: base64Image,
-		screenResolution: '400x300',
-	}
-
-	sendSignal(commandMessage.Win_ScreenShot, playerInfo);
-}
 
 function checkPublishment() {
 	fs.ls(defaultDir + 'publishments', function (error, data) {
@@ -501,6 +468,38 @@ function checkPublishment() {
 			});
 		}
 	});
+}
+
+function sendHardbitSystemInfo  () {
+
+	setInterval(function() {
+		Logger.sendMessage("sendHardbitSystemInfo");
+		var systemInfData = {
+			playerCode: "",
+			privateKey: webOsMacAdress,
+			publicKey: webOsMacAdress,
+			playerId: WebosSettings.value("PlayerSettings/playerId", ""),
+			playerName: webOsModelName,
+			customerId: WebosSettings.value("Customer/id", "")
+
+		}
+
+		sendSignal(commandMessage.HealthCheck, systemInfData);
+	}, 10000);
+
+}
+
+function checkSocketConnection  () {
+
+	setInterval(function() {
+		Logger.sendMessage("checkSocketConnection");
+		if(getConnectionState() == false)
+		{	
+			Logger.sendMessage("socke tekrar baslasin amqq");
+			startSignalSocket();
+		}
+	}, 5000);
+
 }
 
 function sendSystemInfo() {
