@@ -147,6 +147,7 @@ window.onload = function () {
 	sendHardbitSystemInfo();
 	sendSystemInfo();
 	checkSocketConnection();
+	
 }
 
 function messageCheck(msg) {
@@ -360,7 +361,7 @@ function executeReceiveCommands(commands) {
 
 	} else if (commands.command === commandMessage.WinScreenShotRequest) {
 		Logger.sendMessage("WinScreenShotRequest");
-		WebosDevice.screenShot();    
+		WebosDevice.screenShot(false,true);    
 	}
 	else if (commands.command === commandMessage.Player_Restart) {
 		Logger.sendMessage("Player_Restart");

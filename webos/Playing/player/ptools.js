@@ -69,12 +69,12 @@ Tools.isEmptyObject = function (obj) {
 
 Tools.showImage = function () {
     console.log("showImage:", 'Info');
-    $('#player-image').show();
+    //$('#player-image').show();
     console.log("showImage End", 'Info');
 };
 
 Tools.hideImage = function () {
-    $('#player-image').hide();
+    //$('#player-image').hide();
 };
 
 Tools.getDateTimeNow = function () {

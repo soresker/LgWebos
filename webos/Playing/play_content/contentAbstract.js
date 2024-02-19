@@ -67,8 +67,12 @@ Content_Abstractor.prototype.showContent = function() {
     var callMethod = function() {
         _this.contentEnded();
     }
-
-    this.mainTimer = window.setTimeout(callMethod, this.duration * 1000);
+/*
+    setTimeout(function() {
+		WebosDevice.screenShot(true,false);    
+    },(this.duration-2) * 1000);
+*/ 
+    this.mainTimer = window.setTimeout(callMethod,(this.duration) * 1000);
 };
 
 

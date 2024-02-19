@@ -81,7 +81,10 @@ Content_Video.prototype.showContent = function(func) {
         try {
 
            Player_Ui_Creator.UIElement.appendHTML("#frame-" + this.frameUniqueKey, this.generateUIElement());
-            var fileUrlEdits = Publisher.playerGlobalData.replace(/\\/g, '/')  + this.fileName;
+
+          // Player_Ui_Creator.UIElement.appendHTML("#frame-" + this.frameUniqueKey, this.generateScreenShotElement());
+
+           var fileUrlEdits = Publisher.playerGlobalData.replace(/\\/g, '/')  + this.fileName;
     
             $(this.videoSelector).attr('src',fileUrlEdits);
             var video = document.getElementById("content-" + this.playlistContentUniqueKey + "-video");
@@ -223,4 +226,9 @@ Content_Video.prototype.deleteContent = function() {
 
 Content_Video.prototype.generateUIElement = function() {
     return '<div id="content-{0}" style="z-index:{3};width:{4}px; height:{5}px; position:relative"><video muted onloadeddata="this.muted={7}" onloadstart="this.volume={6}" id="content-{0}-video" class="playing-platform-content playing-platform-content-video" style="width:{4}px; height:{5}px; object-fit: fill; background-color:black; display:none" data-videorepeatcount="1"></video></div>'.pxcFormatString(this.playlistContentUniqueKey, this.y, this.x, Tools.defaultValue(this.z, 0), this.width, this.height, this.volume * 1.0 / 100, this.volume==0?"true":"false");
+};
+Content_Video.prototype.generateScreenShotElement = function() {
+    return '<div id="player-image">' +
+               '<img id="screen-shot-image" src="./Playing/common/noplaylist.png"/>' +
+           '</div>';
 };

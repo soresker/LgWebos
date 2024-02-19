@@ -236,12 +236,15 @@ WebosDevice.upgradeIpkApplication = function () {
     storage.upgradeApplication(successCb, failureCb, options);
 }
 
-WebosDevice.screenShot = function () {
+WebosDevice.screenShot = function (opt1,opt2) {
     Logger.sendMessage("screenShot start");
 
     var options = {};
-    options.save = false;
-    options.thumbnail = true;
+    options.save = opt1;
+    options.thumbnail = opt2;
+    
+    if(opt2)
+        options.imgResolution = Signage.ImgResolution.FHD;
     
     var successCB = function (cbObject) {
         var size = cbObject.size;
@@ -253,6 +256,10 @@ WebosDevice.screenShot = function () {
         Logger.sendMessage("Got Data :" + data);
 
         Logger.sendMessage("sendScreenShot",data);
+
+        var capturedElement = document.getElementById("screen-shot-image");
+        capturedElement.src = 'data:image/jpeg;base64,' + data;
+
         var playerInfo = {
             privateKey: webOsMacAdress,
             publicKey: webOsMacAdress,
@@ -261,8 +268,8 @@ WebosDevice.screenShot = function () {
             base64Image: data,
             screenResolution: '400x300',
         }
-    
-        sendSignal(commandMessage.Win_ScreenShot, playerInfo);
+        if(opt1 == false)
+            sendSignal(commandMessage.Win_ScreenShot, playerInfo);
     };
     
     var failureCB = function (cbObject) {

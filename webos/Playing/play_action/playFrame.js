@@ -2,7 +2,7 @@ function Play_Frame(frameInfo, parentTemplateObject) {
 
 
     //console.log("Play_Frame this parentTemplateObject:" +JSON.stringify(parentTemplateObject) ,'Info');
-    console.log("Play_Frame this frameInfo:" +JSON.stringify(frameInfo) ,'Info');
+    console.log("Play_Frame this frameInfo:" + JSON.stringify(frameInfo), 'Info');
 
     this.frameInfo = frameInfo;
 
@@ -36,13 +36,13 @@ function Play_Frame(frameInfo, parentTemplateObject) {
 
 }
 
-Play_Frame.prototype.generateUIElement = function() {
+Play_Frame.prototype.generateUIElement = function () {
 
     return '<div id="frame-{0}" class="playing-platform-frame" style="top:{1}px;left:{2}px;z-index:{3}; width:{4}px; height:{5}px; overflow: hidden; position: absolute;"></div>'.pxcFormatString(this.uniqueKey, this.y, this.x, Tools.defaultValue(this.z, 0), this.width, this.height);
 
-};
+}; 
 
-Play_Frame.prototype.continueFrame = function(isComeFromEndOfAContent, notValidContent) {
+Play_Frame.prototype.continueFrame = function (isComeFromEndOfAContent, notValidContent) {
 
     if (this.stopFrameOperations) return;
 
@@ -183,7 +183,7 @@ Play_Frame.prototype.continueFrame = function(isComeFromEndOfAContent, notValidC
     this.playNextContent(isComeFromEndOfAContent);
 };
 
-Play_Frame.prototype.deleteFrame = function() {
+Play_Frame.prototype.deleteFrame = function () {
 
     if (this.singleShotTimer != 0) {
         clearTimeout(this.singleShotTimer);
@@ -200,9 +200,9 @@ Play_Frame.prototype.deleteFrame = function() {
     this.frameInfo = 0;
 }
 
-Play_Frame.prototype.checkNextContentSchedule = function() {
+Play_Frame.prototype.checkNextContentSchedule = function () {
 
-    console.log("Play_Frame.checkNextContentSchedule"+"Checking next content schedule.");
+    console.log("Play_Frame.checkNextContentSchedule" + "Checking next content schedule.");
 
     var playlistInfoList = this.frameInfo.playlistInfoList;
     if (playlistInfoList.length == 0)
@@ -215,65 +215,65 @@ Play_Frame.prototype.checkNextContentSchedule = function() {
     var contentInfo = contentInfoList[this.contentIndex];
 
     if (!contentInfo.isValid) {
-        console.log("Play_Frame.checkNextContentSchedule"+"Content is marked as invalid. No need to check for schedule. Continuing.");
+        console.log("Play_Frame.checkNextContentSchedule" + "Content is marked as invalid. No need to check for schedule. Continuing.");
         return false;
     }
 
     //days check start    
     var days = contentInfo.days;
-    console.log("Play_Frame.checkNextContentSchedule"+ "Checking day of week schedule for frame id:{0} content id:{1}. Days value:{2}".pxcFormatString(this.id, contentInfo.id, days));
+    console.log("Play_Frame.checkNextContentSchedule" + "Checking day of week schedule for frame id:{0} content id:{1}. Days value:{2}".pxcFormatString(this.id, contentInfo.id, days));
 
     if (!Tools.isEmptyString(days) && days.length === 7) {
-        var currentDateTime =  moment();
+        var currentDateTime = moment();
 
         var dayOfWeek = currentDateTime.isoWeekday() - 1;
         if (days[dayOfWeek] == '0') {
-            console.log("Play_Frame.checkNextContentSchedule"+"Content should not be played on this day. Returning false. Continuing.");
+            console.log("Play_Frame.checkNextContentSchedule" + "Content should not be played on this day. Returning false. Continuing.");
             return false;
         } else {
-            console.log("Play_Frame.checkNextContentSchedule"+"Schedule check has passed with success for day of week. Continuing.");
+            console.log("Play_Frame.checkNextContentSchedule" + "Schedule check has passed with success for day of week. Continuing.");
         }
     } else {
-        console.log("Play_Frame.checkNextContentSchedule"+ "Days value is either empty or not 7 digits. Continuing.");
+        console.log("Play_Frame.checkNextContentSchedule" + "Days value is either empty or not 7 digits. Continuing.");
     }
     //days check end
 
     //start date check start
     var contentStartDate = moment(contentInfo.startDate, "YYYY-MM-DD");
-    console.log("Play_Frame.checkNextContentSchedule"+"Checking start date schedule for frame id:{0} content id:{1}. Start date value:{2}".pxcFormatString(this.id, contentInfo.id, contentInfo.startDate));
+    console.log("Play_Frame.checkNextContentSchedule" + "Checking start date schedule for frame id:{0} content id:{1}. Start date value:{2}".pxcFormatString(this.id, contentInfo.id, contentInfo.startDate));
     if (contentStartDate.isValid()) {
         if (Tools.getDateTimeNow().isBefore(contentStartDate)) {
-            console.log("Play_Frame.checkNextContentSchedule"+"Current date is before than content start date. Returning false. Continuing.");
+            console.log("Play_Frame.checkNextContentSchedule" + "Current date is before than content start date. Returning false. Continuing.");
             return false;
         } else {
-            console.log("Play_Frame.checkNextContentSchedule"+"Schedule check has passed with success for start date. Continuing.");
+            console.log("Play_Frame.checkNextContentSchedule" + "Schedule check has passed with success for start date. Continuing.");
         }
     } else {
-        console.log("Play_Frame.checkNextContentSchedule"+ "Start date value is not a valid date. Continuing.");
+        console.log("Play_Frame.checkNextContentSchedule" + "Start date value is not a valid date. Continuing.");
     }
     //start date check end
 
     //start time check start
-    console.log("Play_Frame.checkNextContentSchedule"+ "Checking start time schedule for frame id:{0} content id:{1}. Start time value:{2}".pxcFormatString(this.id, contentInfo.id, contentInfo.startTime));
+    console.log("Play_Frame.checkNextContentSchedule" + "Checking start time schedule for frame id:{0} content id:{1}. Start time value:{2}".pxcFormatString(this.id, contentInfo.id, contentInfo.startTime));
     if (moment(contentInfo.startTime, "HH:mm:ss").isValid()) {
         var formedStartTime = Tools.getDateTimeNow().format("DD.MM.YYYY");
         formedStartTime += " " + contentInfo.startTime;
         formedStartTime = moment(formedStartTime, "DD.MM.YYYY HH:mm:ss");
         if (formedStartTime.isValid()) {
             if (Tools.getDateTimeNow().isBefore(formedStartTime)) {
-                console.log("Play_Frame.checkNextContentSchedule"+"Current time is less than content start time. Returning false. Continuing.");
+                console.log("Play_Frame.checkNextContentSchedule" + "Current time is less than content start time. Returning false. Continuing.");
                 return false;
             } else {
-                console.log("Play_Frame.checkNextContentSchedule"+"Schedule check has passed with success for start time. Continuing.");
+                console.log("Play_Frame.checkNextContentSchedule" + "Schedule check has passed with success for start time. Continuing.");
             }
         } else {
-            console.log("Play_Frame.checkNextContentSchedule"+ "Start time value is not a valid time. Continuing.");
+            console.log("Play_Frame.checkNextContentSchedule" + "Start time value is not a valid time. Continuing.");
         }
     }
     //start time check end
 
     //end time check start
-    console.log("Play_Frame.checkNextContentSchedule"+ "Checking end time schedule for frame id:{0} content id:{1}. End time value:{2}".pxcFormatString(this.id, contentInfo.id, contentInfo.endTime));
+    console.log("Play_Frame.checkNextContentSchedule" + "Checking end time schedule for frame id:{0} content id:{1}. End time value:{2}".pxcFormatString(this.id, contentInfo.id, contentInfo.endTime));
     if (moment(contentInfo.endTime, "HH:mm:ss").isValid()) {
         var formedEndTime = Tools.getDateTimeNow().format("DD.MM.YYYY");
         formedEndTime += " " + contentInfo.endTime;
@@ -281,10 +281,10 @@ Play_Frame.prototype.checkNextContentSchedule = function() {
 
         if (formedEndTime.isValid()) {
             if (Tools.getDateTimeNow().isAfter(formedEndTime)) {
-                console.log("Play_Frame.checkNextContentSchedule"+ "Current time is greater than content end time. Returning false. Continuing.");
+                console.log("Play_Frame.checkNextContentSchedule" + "Current time is greater than content end time. Returning false. Continuing.");
                 return false;
             } else {
-                console.log("Play_Frame.checkNextContentSchedule"+"Schedule check has passed with success for end time. Continuing.");
+                console.log("Play_Frame.checkNextContentSchedule" + "Schedule check has passed with success for end time. Continuing.");
             }
 
         } else {
@@ -292,11 +292,11 @@ Play_Frame.prototype.checkNextContentSchedule = function() {
         }
     }
     //end time check end
-    console.log("Play_Frame.checkNextContentSchedule"+ "Content is on schedule. Returning true.");
+    console.log("Play_Frame.checkNextContentSchedule" + "Content is on schedule. Returning true.");
     return true;
 }
 
-Play_Frame.prototype.playNextContent = function(isComeFromEndOfAContent) {
+Play_Frame.prototype.playNextContent = function (isComeFromEndOfAContent) {
 
 
     isComeFromEndOfAContent = Tools.defaultValue(isComeFromEndOfAContent, true);
@@ -320,7 +320,7 @@ Play_Frame.prototype.playNextContent = function(isComeFromEndOfAContent) {
         var playlisInfoList = this.frameInfo.playlistInfoList;
 
         if (playlisInfoList.length == 0) {
-            console.log("Play_Frame.playNextContent"+ "Play_Frame: {0} does not contain a playlist. Unexpected case. Returning.".pxcFormatString(this.id));
+            console.log("Play_Frame.playNextContent" + "Play_Frame: {0} does not contain a playlist. Unexpected case. Returning.".pxcFormatString(this.id));
             return;
         }
 
@@ -346,7 +346,7 @@ Play_Frame.prototype.playNextContent = function(isComeFromEndOfAContent) {
         }
 
         var _this = this;
-        this.singleShotTimer = setTimeout(function() {
+        this.singleShotTimer = setTimeout(function () {
             if (validContentCount == 0) {
                 _this.continueFrame();
             } else
@@ -364,17 +364,17 @@ Play_Frame.prototype.playNextContent = function(isComeFromEndOfAContent) {
 
     console.log("Play_Frame.playNextContent" + "Playing next content for frame:{0}. CameFromEndOfAContent:{1}".pxcFormatString(this.id, isComeFromEndOfAContentStr));
     if (this.frameInfo.playlistInfoList.length == 0) {
-        console.log("Play_Frame.playNextContent1"+ "Play_Frame: {0} does not contain a playlist. Unexpected case. Returning.".pxcFormatString(this.id));
+        console.log("Play_Frame.playNextContent1" + "Play_Frame: {0} does not contain a playlist. Unexpected case. Returning.".pxcFormatString(this.id));
         return;
     }
 
     if (this.frameInfo.playlistInfoList[this.playlistIndex].contentInfoList.length == 0) {
-        console.log("Play_Frame.playNextContent2"+ "Play_Frame: {0}. Playlist: {1} does not contain any content. Unexpected case. Returning.".pxcFormatString(this.id, this.frameInfo.playlistInfoList[this.playlistIndex].id));
+        console.log("Play_Frame.playNextContent2" + "Play_Frame: {0}. Playlist: {1} does not contain any content. Unexpected case. Returning.".pxcFormatString(this.id, this.frameInfo.playlistInfoList[this.playlistIndex].id));
         return;
     }
 
     if (!this.isNextContentValid()) {
-        console.log("Play_Frame.playNextContent3"+ "Play_Frame:{0} .Next content is invalid. Moving to next content.".pxcFormatString(this.id));
+        console.log("Play_Frame.playNextContent3" + "Play_Frame:{0} .Next content is invalid. Moving to next content.".pxcFormatString(this.id));
         this.continueFrame(isComeFromEndOfAContent);
         return;
 
@@ -393,7 +393,7 @@ Play_Frame.prototype.playNextContent = function(isComeFromEndOfAContent) {
 
     }
 
-    console.log("Play_Frame.playNextContent4"+ "Play_Frame:{0}. Valid content count:{1}".pxcFormatString(this.id, validContentCount));
+    console.log("Play_Frame.playNextContent4" + "Play_Frame:{0}. Valid content count:{1}".pxcFormatString(this.id, validContentCount));
 
     try {
         /*
@@ -418,16 +418,16 @@ Play_Frame.prototype.playNextContent = function(isComeFromEndOfAContent) {
         console.log("this.contentIndex : " + this.contentIndex)
         console.log("this.templateUniqueKey : " + this.frameInfo.templateUniqueKey)
         console.log("this.uniqueKey : " + this.frameInfo.uniqId)
-        console.log("this.frameInfo.playlistInfoList[this.playlistIndex] : " ,this.frameInfo.playlistInfoList[this.playlistIndex])
+        console.log("this.frameInfo.playlistInfoList[this.playlistIndex] : ", this.frameInfo.playlistInfoList[this.playlistIndex])
 
-        console.log("this.frameInfo.playlistInfoList[this.playlistIndex].uniqueKey : " , this.frameInfo.playlistInfoList[this.playlistIndex].uniqId)
+        console.log("this.frameInfo.playlistInfoList[this.playlistIndex].uniqueKey : ", this.frameInfo.playlistInfoList[this.playlistIndex].uniqId)
 
         var contentInfo = contentInfoList[this.contentIndex];
         contentInfo.templateUniqueKey = this.frameInfo.templateUniqueKey;
         contentInfo.frameUniqueKey = this.frameInfo.uniqId;
         contentInfo.playlistUniqueKey = this.frameInfo.playlistInfoList[this.playlistIndex].uniqId;
-        console.log("contentInfo.type : " +contentInfo.type);
-        console.log("contentInfo: " +JSON.stringify(contentInfo) ,'Info');
+        console.log("contentInfo.type : " + contentInfo.type);
+        console.log("contentInfo: " + JSON.stringify(contentInfo), 'Info');
 
         switch (contentInfo.type) {
 
@@ -435,81 +435,79 @@ Play_Frame.prototype.playNextContent = function(isComeFromEndOfAContent) {
                 break;
             case Player.Content.Type.Video:
                 {
-                    console.log("new Content_Video : "+ contentInfo)
+                    console.log("new Content_Video : " + contentInfo)
                     this.currentContent = new Content_Video(contentInfo, this);
                 }
                 break;
-            case Player.Content.Type.Image:    
+            case Player.Content.Type.Image:
                 {
-                    console.log("new Content_Image : "+ contentInfo)
-                    this.currentContent = new Content_Image(contentInfo, this );
+                    console.log("new Content_Image : " + contentInfo)
+                    this.currentContent = new Content_Image(contentInfo, this);
                 }
                 break;
-            case Player.Content.Type.Html:    
-            {
-                console.log("new Content_Html : "+ contentInfo)
-                this.currentContent = new Content_Html(contentInfo, this );
-            }
-            break;
-            case Player.Content.Type.Date:    
-            {
-                console.log("new Content_Date : "+ contentInfo)
-                this.currentContent = new Content_Date(contentInfo, this );
-            }
-            break;
-            case Player.Content.Type.Label:    
-            {
-                console.log("new Content_Label : "+ contentInfo)
-                this.currentContent = new Content_Label(contentInfo, this );
-            }
-            break;   
-            case Player.Content.Type.Weather:    
-            {
-                console.log("new Content_Weather : "+ contentInfo)
-                this.currentContent = new Content_Weather(contentInfo, this );
-            }
-            break;   
-            case Player.Content.Type.Finance:    
-            {
-                console.log("new Content_Date : "+ contentInfo)
-                this.currentContent = new Content_Finance(contentInfo, this );
-            }
-            break;   
-            case Player.Content.Type.Yandex:    
-            {
-                console.log("new Content_Yandex : "+ contentInfo)
-                this.currentContent = new Content_Yandex(contentInfo, this );
-            }
-            break;         
+            case Player.Content.Type.Html:
+                {
+                    console.log("new Content_Html : " + contentInfo)
+                    this.currentContent = new Content_Html(contentInfo, this);
+                }
+                break;
+            case Player.Content.Type.Date:
+                {
+                    console.log("new Content_Date : " + contentInfo)
+                    this.currentContent = new Content_Date(contentInfo, this);
+                }
+                break;
+            case Player.Content.Type.Label:
+                {
+                    console.log("new Content_Label : " + contentInfo)
+                    this.currentContent = new Content_Label(contentInfo, this);
+                }
+                break;
+            case Player.Content.Type.Weather:
+                {
+                    console.log("new Content_Weather : " + contentInfo)
+                    this.currentContent = new Content_Weather(contentInfo, this);
+                }
+                break;
+            case Player.Content.Type.Finance:
+                {
+                    console.log("new Content_Date : " + contentInfo)
+                    this.currentContent = new Content_Finance(contentInfo, this);
+                }
+                break;
+            case Player.Content.Type.Yandex:
+                {
+                    console.log("new Content_Yandex : " + contentInfo)
+                    this.currentContent = new Content_Yandex(contentInfo, this);
+                }
+                break;
             default:
                 break;
         }
-                
+
         //this.currentContent = new Content_Image(contentInfo, this);
 
         if (this.currentContent) {
-            console.log("this.currentContent.showContent : "+ JSON.stringify(contentInfo))
-            console.log("WEBOS VERSION : "+ webOsHardwareVersion)
+            console.log("this.currentContent.showContent : " + JSON.stringify(contentInfo))
+            console.log("WEBOS VERSION : " + webOsHardwareVersion)
 
             var this_ = this;
-            if (this.previousContent && webOsHardwareVersion <= "2.0")
-            {
+            if (this.previousContent && webOsHardwareVersion <= "2.0") {
                 this_.deletePreviousContent();
 
-                this.currentContent.showContent(function() {
-    
-                 })
-            }   
-            else if (this.previousContent && webOsHardwareVersion >= "3.0")
-            {
-                this.currentContent.showContent(function() {
-                    setTimeout( function() {
+                this.currentContent.showContent(function () {
+
+                })
+            }
+            else if (this.previousContent && webOsHardwareVersion >= "3.0") {
+                this.currentContent.showContent(function () {
+                    setTimeout(function () {
                         this_.deletePreviousContent();
                     }, 1000);
                 });
-            }            
+            }
             else {
-                console.log("else this.currentContent.showContent : "+ contentInfo)
+                console.log("else this.currentContent.showContent : " + contentInfo)
                 this.currentContent.showContent();
             }
 
@@ -520,7 +518,7 @@ Play_Frame.prototype.playNextContent = function(isComeFromEndOfAContent) {
     }
 };
 
-Play_Frame.prototype.deletePreviousContent = function() {
+Play_Frame.prototype.deletePreviousContent = function () {
 
     if (this.previousContent) {
         console.log("Play_Frame.deleteContent" + "Play_Frame:{0}. Current Content:{1}. Previous Content:{2}. Deleting content:{3}".pxcFormatString(this.id, this.currentContent ? this.currentContent.id : "", this.previousContent ? this.previousContent.id : "", this.previousContent.id));
@@ -533,7 +531,7 @@ Play_Frame.prototype.deletePreviousContent = function() {
 
 }
 
-Play_Frame.prototype.deleteCurrentContent = function() {
+Play_Frame.prototype.deleteCurrentContent = function () {
 
     if (this.currentContent) {
         try {
@@ -556,7 +554,7 @@ Play_Frame.prototype.deleteCurrentContent = function() {
 
 };
 
-Play_Frame.prototype.isNextContentValid = function() {
+Play_Frame.prototype.isNextContentValid = function () {
 
 
     var isValid = true;
@@ -580,13 +578,13 @@ Play_Frame.prototype.isNextContentValid = function() {
         contentInfo.expireDate += " 23:59:59";
         var expireDate = moment(contentInfo.expireDate, "YYYY-MM-DD HH:mm:ss");
         if (expireDate.isBefore(Tools.getDateTimeNow())) {
-            console.log("Play_Frame.isNextContentValid"+ "Play_Frame:{0}.Content:{1} is either expired or bad expiredate format. Settings content as invalid. ExpireDate:{2}".pxcFormatString(this.id, contentInfo.id, contentInfo.expireDate));
+            console.log("Play_Frame.isNextContentValid" + "Play_Frame:{0}.Content:{1} is either expired or bad expiredate format. Settings content as invalid. ExpireDate:{2}".pxcFormatString(this.id, contentInfo.id, contentInfo.expireDate));
             this.frameInfo.setContentIsValidAt(this.playlistIndex, this.contentIndex, false);
             isValid = false;
         } else {
 
             if (contentInfo.duration < 1) {
-                console.log("Play_Frame.isNextContentValid" +"Play_Frame:{0}.Content:{1} has duration less than 1. Settings content as invalid.".pxcFormatString(this.id, contentInfo.id));
+                console.log("Play_Frame.isNextContentValid" + "Play_Frame:{0}.Content:{1} has duration less than 1. Settings content as invalid.".pxcFormatString(this.id, contentInfo.id));
                 this.frameInfo.setContentIsValidAt(this.playlistIndex, this.contentIndex, false);
                 isValid = false;
             }
@@ -598,14 +596,14 @@ Play_Frame.prototype.isNextContentValid = function() {
 
 };
 
-Play_Frame.prototype.startFrame = function() {
+Play_Frame.prototype.startFrame = function () {
 
     this.contentIndex = 0;
     this.playlistIndex = 0;
 
     var playlistInfo = this.frameInfo.playlistInfoList[this.playlistIndex];
 
-    console.log("Play_Frame.prototype.console.log:" +JSON.stringify(playlistInfo) ,'Info');
+    console.log("Play_Frame.prototype.console.log:" + JSON.stringify(playlistInfo), 'Info');
 
     if (playlistInfo) {
         if (playlistInfo.isSequent == true) {
@@ -638,7 +636,7 @@ Play_Frame.prototype.startFrame = function() {
 
 };
 
-Play_Frame.prototype.setCurrentContentValidity = function(isValid) {
+Play_Frame.prototype.setCurrentContentValidity = function (isValid) {
 
     this.frameInfo.setContentIsValidAt(this.playlistIndex, this.contentIndex, isValid);
     this.isCurrentContentValid = isValid;
