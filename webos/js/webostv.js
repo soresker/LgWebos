@@ -43,7 +43,7 @@ WebosDevice.getPlatformInfo =  function(){
         var errorCode = cbObject.errorCode;
         var errorText = cbObject.errorText;
         
-        Logger.sendMessage("Error Code [" + errorCode + "]: " + errorText);
+        Logger.sendMessage("getPlatformInfo Error Code [" + errorCode + "]: " + errorText);
     }
 
     var deviceInfo = new DeviceInfo();   
@@ -68,7 +68,7 @@ function failureCb(cbObject) {
     var errorCode = cbObject.errorCode;
     var errorText = cbObject.errorText;
 
-    Logger.sendMessage("Error Code [" + errorCode + "]: " + errorText);
+    Logger.sendMessage("getNetworkMacInfo Error Code [" + errorCode + "]: " + errorText);
 }
     var deviceInfo = new DeviceInfo();
     deviceInfo.getNetworkMacInfo(successCb, failureCb);
@@ -85,7 +85,7 @@ WebosDevice.getNetworkInfo = function() {
         var errorCode = cbObject.errorCode;
         var errorText = cbObject.errorText;
     
-        Logger.sendMessage("Error Code [" + errorCode + "]: " + errorText);
+        Logger.sendMessage("getNetworkInfoError Code [" + errorCode + "]: " + errorText);
     };
 
     var deviceInfo = new DeviceInfo();
@@ -108,7 +108,7 @@ WebosDevice.deviceRestart = function () {
         var errorCode = cbObject.errorCode;
         var errorText = cbObject.errorText;
     
-        Logger.sendMessage("Error Code [" + errorCode + "]: " + errorText);
+        Logger.sendMessage("deviceRestart Error Code [" + errorCode + "]: " + errorText);
     }
     
     var power = new Power();
@@ -129,7 +129,7 @@ WebosDevice.deviceShutDown = function () {
         var errorCode = cbObject.errorCode;
         var errorText = cbObject.errorText;
     
-        Logger.sendMessage("Error Code [" + errorCode + "]: " + errorText);
+        Logger.sendMessage("deviceShutDown Error Code [" + errorCode + "]: " + errorText);
     }
     
     var power = new Power();
@@ -150,7 +150,7 @@ WebosDevice.deviceScreenOn = function () {
         var errorCode = cbObject.errorCode;
         var errorText = cbObject.errorText;
     
-        Logger.sendMessage("Error Code [" + errorCode + "]: " + errorText);
+        Logger.sendMessage("deviceScreenOn Error Code [" + errorCode + "]: " + errorText);
     }
     
     var power = new Power();
@@ -171,7 +171,7 @@ WebosDevice.deviceScreenOff = function () {
         var errorCode = cbObject.errorCode;
         var errorText = cbObject.errorText;
     
-        Logger.sendMessage("Error Code [" + errorCode + "]: " + errorText);
+        Logger.sendMessage("deviceScreenOff Error Code [" + errorCode + "]: " + errorText);
     }
     
     var power = new Power();
@@ -188,7 +188,7 @@ WebosDevice.restartApplication = function () {
         var errorCode = cbObject.errorCode;
         var errorText = cbObject.errorText;
     
-        Logger.sendMessage("Error Code [" + errorCode + "]: " + errorText);
+        Logger.sendMessage("restartApplication Error Code [" + errorCode + "]: " + errorText);
     }
     var configuration = new Configuration();
     configuration.restartApplication(successCb, failureCb);
@@ -206,7 +206,7 @@ WebosDevice.setPortraitMode = function () {
     var failureCb = function (cbObject) {
         var errorCode = cbObject.errorCode;
         var errorText = cbObject.errorText;
-        Logger.sendMessage(" Error Code [" + errorCode + "]: " + errorText);
+        Logger.sendMessage("setPortraitMode Error Code [" + errorCode + "]: " + errorText);
     };
     
     var signage = new Signage();
@@ -224,7 +224,7 @@ WebosDevice.upgradeIpkApplication = function () {
     var failureCb = function (cbObject) {
         var errorCode = cbObject.errorCode;
         var errorText = cbObject.errorText;
-        Logger.sendMessage(" Error Code [" + errorCode + "]: " + errorText);
+        Logger.sendMessage("upgradeIpkApplication Error Code [" + errorCode + "]: " + errorText);
     };
     
     var options = {
@@ -276,7 +276,7 @@ WebosDevice.screenShot = function (opt1,opt2) {
         var errorCode = cbObject.errorCode;
         var errorText = cbObject.errorText;
     
-        Logger.sendMessage("Error Code [" + errorCode + "]: " + errorText);
+        Logger.sendMessage("screenShot Error Code [" + errorCode + "]: " + errorText);
     }
     
     var signage = new Signage();
@@ -328,7 +328,7 @@ WebosDevice.getSystemUsageInfo = function() {
     function failureCb(cbObject) {
         var errorCode = cbObject.errorCode;
         var errorText = cbObject.errorText;
-       Logger.sendMessage("Error Code [" + errorCode + "]: " + errorText);
+       Logger.sendMessage("getSystemUsageInfo Error Code [" + errorCode + "]: " + errorText);
     }
     
     var options = {
