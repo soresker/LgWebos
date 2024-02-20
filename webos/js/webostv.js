@@ -189,7 +189,7 @@ WebosDevice.restartApplication = function () {
         var errorText = cbObject.errorText;
     
         Logger.sendMessage("restartApplication Error Code [" + errorCode + "]: " + errorText);
-    }
+    }                
     var configuration = new Configuration();
     configuration.restartApplication(successCb, failureCb);
 }
@@ -250,6 +250,7 @@ WebosDevice.screenShot = function (opt1,opt2) {
         var size = cbObject.size;
         var encoding = cbObject.encoding;
         var data = cbObject.data;
+        var capturedElement = "";
     
         Logger.sendMessage("Got Data size:" + size);
         Logger.sendMessage("Got Data encoding :" + encoding);
@@ -257,9 +258,12 @@ WebosDevice.screenShot = function (opt1,opt2) {
 
         Logger.sendMessage("sendScreenShot",data);
 
-        var capturedElement = document.getElementById("screen-shot-image");
-        capturedElement.src = 'data:image/jpeg;base64,' + data;
-
+        if(opt1 == true)
+        {
+            capturedElement = document.getElementById("screen-shot-image");
+            capturedElement.src = 'data:image/jpeg;base64,' + data;
+        }
+     
         var playerInfo = {
             privateKey: webOsMacAdress,
             publicKey: webOsMacAdress,
@@ -268,6 +272,7 @@ WebosDevice.screenShot = function (opt1,opt2) {
             base64Image: data,
             screenResolution: '400x300',
         }
+
         if(opt1 == false)
             sendSignal(commandMessage.Win_ScreenShot, playerInfo);
     };
