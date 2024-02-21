@@ -3,6 +3,7 @@ var fs;
 var defaultDir = 'file://internal/';
 var publishmentsDir = defaultDir + 'publishments/';
 var contentsDir = defaultDir + 'contents/';
+var contentsDirReq = './content/publishments/';
 var connection = null;
 var urlArray;
 var currentIndex = -1
@@ -72,8 +73,13 @@ function getWebOSVersion(){
 
 window.onkeydown = function (event) {
 
-	console.log("window.event : " +event);
+	var playerStatus = WebosSettings.value("PlayerSettings/status", "");
 
+	if (playerStatus == true) 
+		return;
+
+	console.log("window.event : " +event);
+	
 	var iframe = document.getElementById('login').getElementsByTagName('iframe')[0];
 	var keyCode = event.keyCode || event.which;
 
@@ -111,6 +117,9 @@ window.onkeydown = function (event) {
 
 window.onload = function () {
 
+	fs = new Filesystem();
+	fs.init();	
+
 	this.getWebOSVersion();
 
 	setTimeout(function() {
@@ -118,14 +127,11 @@ window.onload = function () {
 		WebosDevice.getNetworkInfo();
 		WebosDevice.getNetworkMacInfo();
 		WebosDevice.getSystemUsageInfo()
-		WebosDevice.setUiTile(false);
+		WebosDevice.setUiTile(false);	
 	}, 400);
 
 	startSignalSocket();
-
 	downloader = new Downloader();
-	fs = new Filesystem();
-	fs.init();
 
 	if (window.addEventListener) {
 		Logger.sendMessage("message")
@@ -151,7 +157,6 @@ window.onload = function () {
 		} else {
 			Logger.sendMessage('player register degil');
 			CreateIframeElement("Login/login.html", "login");
-			//Keyboard_Control.startListen();
 		}
 
 	});
@@ -160,6 +165,19 @@ window.onload = function () {
 	sendSystemInfo();
 	checkSocketConnection();
 	
+}
+
+function readedPublishThenStart(readPublishData) {
+	
+	Logger.sendMessage('readedPublishThenStart:'+readPublishData);
+	
+	var initPlayer = JSON.stringify({ "MessageType": "initPlayer", "Data": { "filePath": "./content/contents/", "videoMode": "0" } });
+	var playerStatus = WebosSettings.value("PlayerSettings/status", "");
+
+	if (playerStatus == true) {
+		Start_Handler.receiveMessage(initPlayer);
+		Start_Handler.receiveMessage(readPublishData);
+	 }
 }
 
 function messageCheck(msg) {
@@ -179,9 +197,10 @@ function messageCheck(msg) {
 			break;
 
 		case commandMessage.PlayerReady:
-			var publishment = WebosSettings.value("Publishment/NewVersion", "");
-			Logger.sendMessage('publishment:', publishment);
-			this.readfile(publishment);
+			var fileName = WebosSettings.value("Publishment/NewVersion", "");
+			var path = fileName + ".json";
+			Logger.sendMessage('read file:'+ path);
+			this.readPulishmentFile(path);
 			break;
 
 		default:
@@ -189,29 +208,30 @@ function messageCheck(msg) {
 	}
 }
 
-function readfile(fileName) {
+function readPulishmentFile(fileName) {
 
-	Logger.sendMessage("readfile","");
-
-	var path = publishmentsDir + fileName + ".json";
-	Logger.sendMessage('read file path:', path);
+	var path = publishmentsDir + fileName;;
+	Logger.sendMessage('read file path:'+ path);
 	fs.readFile(path, function (error, data) {
 		Logger.sendMessage('readfile3:'+data);
 		var initPlayer = JSON.stringify({ "MessageType": "initPlayer", "Data": { "filePath": "./content/contents/", "videoMode": "0" } });
-		
+		if(error)
+		{
+			Logger.sendMessage('READ FILE PROBLEMO:'+error);
+		}
 		var playerStatus = WebosSettings.value("PlayerSettings/status", "");
 
 		if (playerStatus == true) {
 			Start_Handler.receiveMessage(initPlayer);
 			Start_Handler.receiveMessage(data);
-		}
+		 }
 	
 	});
 }
 
 function writefile(fileName, data) {
-	Logger.sendMessage('writefile path:', fileName);
-	Logger.sendMessage("data", data)
+	Logger.sendMessage('writefile path:'+ fileName);
+	Logger.sendMessage("data"+ data)
 
 	var path = publishmentsDir + fileName + ".json";
 	Logger.sendMessage('writefile path:', path);
@@ -221,9 +241,9 @@ function writefile(fileName, data) {
 	};
 	fs.writeFile(path, JSON.stringify(jsonData), function (error) {
 		if (error)
-			return Logger.sendMessage('error', error);
+			return Logger.sendMessage('error write json:'+ error);
 		else
-			Logger.sendMessage('write json data:', data);
+			Logger.sendMessage('write json data:'+ data);
 	})
 }
 function download(url, callback) {
@@ -288,12 +308,11 @@ function fileExists(files, callback) {
 
 function listDir(dir) {
 	var path = dir;
-	Logger.sendMessage('listdir path', path);
+	Logger.sendMessage('listdir path'+ path);
 	fs.ls(path, function (error, data) {
 		if (error)
 			return Logger.sendMessage('error', error);
-		Logger.sendMessage('data', data);
-		Logger.sendMessage("List Contents"+data,"");
+		Logger.sendMessage("List Contents:"+JSON.stringify(data),"");
 		return data;
 	})
 }
@@ -356,7 +375,7 @@ function executeReceiveCommands(commands) {
 			Logger.sendMessage("Player ilk kez ayaga kalkiyor ve yayini indirmeli:", commands);
 			WebosSettings.setValue("Publishment/NewVersion", commands.jsonData.publishmentName);
 			WebosSettings.setValue("Publishment/OldVersion", commands.jsonData.publishmentName);
-			writefile(commands.jsonData.publishmentName, commands.jsonData.publishmentData);
+			this.writefile(commands.jsonData.publishmentName, commands.jsonData.publishmentData);
 			fetchPublishment(commands.jsonData.publishmentData);
 			Logger.sendMessage("burayageldik mi :", commands.jsonData);
 
@@ -364,8 +383,9 @@ function executeReceiveCommands(commands) {
 
 		if (temp != commands.jsonData.publishmentName && playerStatus == true) {
 			Logger.sendMessage("Publisment dosyasi indiriliyor:", commands);
-			writefile(commands.jsonData.publishmentName, commands.jsonData.publishmentData);
+			this.writefile(commands.jsonData.publishmentName, commands.jsonData.publishmentData);
 			WebosSettings.setValue("Publishment/NewVersion", commands.jsonData.publishmentName);
+			WebosSettings.setValue("Publishment/OldVersion", commands.jsonData.publishmentName);			
 			fetchPublishment(commands.jsonData.publishmentData);
 		} else {
 			Logger.sendMessage("Devamke :)");
@@ -436,7 +456,6 @@ function showPlayer() {
 
 }
 
-
 function fetchPublishment(readPublishment) {
 
 	Logger.sendMessage("start download","");
@@ -449,7 +468,6 @@ function fetchPublishment(readPublishment) {
 	Logger.sendMessage("fetchPublishment download sonrasi:)");
 
 }
-
 
 function checkPublishment() {
 	fs.ls(defaultDir + 'publishments', function (error, data) {
@@ -534,7 +552,7 @@ function sendSystemInfo() {
 			playerDeviceType: 'Webos',
 			serialNo: webOsSerialNumber,
 			playerId: WebosSettings.value("PlayerSettings/playerId", ""),
-			appVersion: '1.0.12',
+			appVersion: '1.0.23',
 			customerId: WebosSettings.value("Customer/id", "")
 	
 		}

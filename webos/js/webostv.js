@@ -2,8 +2,6 @@
 //var power = new Power();
 //var signage = new Signage();
 //var configuration = new Configuration();
-//var storage = new Storage();
-
 
 var webOsModelName = "";
 var webOsSerialNumber = ""; 
@@ -372,3 +370,5 @@ WebosDevice.setUiTile = function(data) {
     signage.setTileInfo(successCb, failureCb, options);
     
 }
+
+    

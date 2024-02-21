@@ -78,14 +78,14 @@
         document.onreadystatechange = function () {
             if (document.readyState === 'complete') {
                 Logger.sendMessage("Document ready");
+                var responseIframe = {};
+                responseIframe.MessageType = "playerReady";
+                window.parent.postMessage(JSON.stringify(responseIframe), '*');
             }
         }
 
         if (loaded) {
             console.log("Loaded All JS File Successfully!");
-            var responseIframe = {};
-            responseIframe.MessageType = "playerReady";
-            window.parent.postMessage(JSON.stringify(responseIframe), '*');
         }
         else {
             console.log("NOT Loaded JS File Successfully!");
