@@ -76,11 +76,6 @@ function getWebOSVersion(){
 
 window.onkeydown = function (event) {
 
-	var playerStatus = WebosSettings.value("PlayerSettings/status", "");
-
-	if (playerStatus == true) 
-		return;
-
 	console.log("window.event : " +event);
 	
 	var iframe = document.getElementById('login').getElementsByTagName('iframe')[0];
