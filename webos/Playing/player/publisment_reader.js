@@ -19,7 +19,8 @@ Publishment_Reader.parseLatestPublishment = function (data) {
         (!currentPublishment.calendar || currentPublishment.calendar.length == 0) &&
         (!currentPublishment.templates || currentPublishment.templates.length == 0)
     ) {
-        console.log("Publishment_Reader:showImage:", "Info");
+        console.log("Publishmentta SORUN VAR calendar:"+currentPublishment.calendar);
+        console.log("Publishmentta SORUN VAR templates: "+currentPublishment.templates);
         Tools.showImage(); //error durumu aslinda
     } else {
         console.log("Publishment_Reader:Hide Image:", "Info");

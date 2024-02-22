@@ -31,5 +31,7 @@ var commandMessage = {
     WorkerLoging: 'workerLoging',
     ScreenLoging: 'screenLoging',
     ConsoleLogging: "consoleLogging",
-    PlayerSettingsHere: "playerSettingsHere"
+    PlayerSettingsHere: "playerSettingsHere",
+    Get_Publishment: "getPublishment"
+
 };

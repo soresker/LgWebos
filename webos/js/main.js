@@ -8,6 +8,9 @@ var connection = null;
 var urlArray;
 var currentIndex = -1
 var globalPublishment = "";
+var downloadDir = ""; 
+var downloadName = "";
+
 //var keyboardControl = new Keyboard_Control();
 
 function listener(event) {
@@ -167,19 +170,6 @@ window.onload = function () {
 	
 }
 
-function readedPublishThenStart(readPublishData) {
-	
-	Logger.sendMessage('readedPublishThenStart:'+readPublishData);
-	
-	var initPlayer = JSON.stringify({ "MessageType": "initPlayer", "Data": { "filePath": "./content/contents/", "videoMode": "0" } });
-	var playerStatus = WebosSettings.value("PlayerSettings/status", "");
-
-	if (playerStatus == true) {
-		Start_Handler.receiveMessage(initPlayer);
-		Start_Handler.receiveMessage(readPublishData);
-	 }
-}
-
 function messageCheck(msg) {
 
 	msg = JSON.parse(msg);
@@ -189,7 +179,7 @@ function messageCheck(msg) {
 	switch (msg.MessageType) {
 
 		case commandMessage.Player_Register:
-			Logger.sendMessage("Player_Register yapacaz", msg);
+			Logger.sendMessage("Player_Register yapacaz"+ msg);
 			playerRegister(msg);
 			break;
 
@@ -197,36 +187,23 @@ function messageCheck(msg) {
 			break;
 
 		case commandMessage.PlayerReady:
+			
 			var fileName = WebosSettings.value("Publishment/NewVersion", "");
 			var path = fileName + ".json";
+			
 			Logger.sendMessage('read file:'+ path);
-			this.readPulishmentFile(path);
+			
+			this.readPulishmentFile(path).then(function (publishmentContent) {
+				globalPublishment = publishmentContent;
+				Logger.sendMessage("publishmentContent"+ publishmentContent);
+				showPlayer();
+			})
+
 			break;
 
 		default:
 			break;
 	}
-}
-
-function readPulishmentFile(fileName) {
-
-	var path = publishmentsDir + fileName;;
-	Logger.sendMessage('read file path:'+ path);
-	fs.readFile(path, function (error, data) {
-		Logger.sendMessage('readfile3:'+data);
-		var initPlayer = JSON.stringify({ "MessageType": "initPlayer", "Data": { "filePath": "./content/contents/", "videoMode": "0" } });
-		if(error)
-		{
-			Logger.sendMessage('READ FILE PROBLEMO:'+error);
-		}
-		var playerStatus = WebosSettings.value("PlayerSettings/status", "");
-
-		if (playerStatus == true) {
-			Start_Handler.receiveMessage(initPlayer);
-			Start_Handler.receiveMessage(data);
-		 }
-	
-	});
 }
 
 function writefile(fileName, data) {
@@ -249,7 +226,8 @@ function writefile(fileName, data) {
 function download(url, callback) {
 	downloader.start({
 		url: url,
-		path: contentsDir,
+		path: downloadDir,
+		filename : downloadName
 	}, function (error, data) {
 		callback(error, data)
 	});
@@ -259,18 +237,19 @@ function downloadNext() {
 	currentIndex = currentIndex + 1
 	if (currentIndex < urlArray.length) {
 		var currentUrl = urlArray[currentIndex];
-		Logger.sendMessage('download start:', 'download status:' + (currentIndex + 1) + '/' + urlArray.length)
-		Logger.sendMessage('download file url:', currentUrl)
+		Logger.sendMessage('download start:'+ 'download status:' + (currentIndex + 1) + '/' + urlArray.length)
+		Logger.sendMessage('download file url:'+ currentUrl)
 		var fileName = currentUrl.split('/').pop();
-		fileExists(contentsDir + fileName, function (error, data) {
+		fileExists(downloadDir + fileName, function (error, data) {
 			if (data != null && data == false) {
 				download(currentUrl, function (err, data) {
 					if (err) {
 						Logger.sendMessage("download failed: " + (currentIndex + 1) + '/' + urlArray.length);
-						Logger.sendMessage("download failed:"  + (currentIndex + 1),"");
+						Logger.sendMessage("download failed:"  + (currentIndex + 1)+"");
+						Logger.sendMessage("download failed error:"  + JSON.stringify(err));						
 					} else {
 						Logger.sendMessage('download complete: ' + (currentIndex + 1) + '/' + urlArray.length + ' 😃');
-						Logger.sendMessage("download complete: " + (currentIndex + 1) + "/" + urlArray.length ,"");
+						Logger.sendMessage("download complete: " + (currentIndex + 1) + "/" + urlArray.length +"");
 					}
 					downloadNext()
 				})
@@ -284,8 +263,17 @@ function downloadNext() {
 	else {
 		currentIndex = -1;
 		Logger.sendMessage("download complated all files ✅");
-		Logger.sendMessage("download complated all files ✅","");
-		showPlayer();
+
+		if(downloadDir == publishmentsDir)
+		{
+			Logger.sendMessage("SHOWWW PLAYERE✅");
+			showPlayer();
+		}else{
+			this.getPublishment();
+		}
+
+		listDir(publishmentsDir);
+		listDir(contentsDir);
 	}
 }
 
@@ -312,18 +300,26 @@ function listDir(dir) {
 	fs.ls(path, function (error, data) {
 		if (error)
 			return Logger.sendMessage('error', error);
-		Logger.sendMessage("List Contents:"+JSON.stringify(data),"");
+		Logger.sendMessage("List Contents:"+JSON.stringify(data));
 		return data;
 	})
 }
 
 function removeDir() {
 	var path = defaultDir;
-	Logger.sendMessage('rmdir path', path);
+	Logger.sendMessage('rmdir path'+ path);
 	fs.rmdir(path, { recursive: true }, function (error, data) {
 		if (error)
 			return Logger.sendMessage('error', error);
-		Logger.sendMessage('data', data);
+		Logger.sendMessage('data'+ data);
+	})
+
+	var path = publishmentsDir;
+	Logger.sendMessage('rmdir path'+ path);
+	fs.rmdir(path, { recursive: true }, function (error, data) {
+		if (error)
+			return Logger.sendMessage('error', error);
+		Logger.sendMessage('data'+ data);
 	})
 }
 
@@ -375,7 +371,7 @@ function executeReceiveCommands(commands) {
 			Logger.sendMessage("Player ilk kez ayaga kalkiyor ve yayini indirmeli:", commands);
 			WebosSettings.setValue("Publishment/NewVersion", commands.jsonData.publishmentName);
 			WebosSettings.setValue("Publishment/OldVersion", commands.jsonData.publishmentName);
-			this.writefile(commands.jsonData.publishmentName, commands.jsonData.publishmentData);
+			//this.writefile(commands.jsonData.publishmentName, commands.jsonData.publishmentData);
 			fetchPublishment(commands.jsonData.publishmentData);
 			Logger.sendMessage("burayageldik mi :", commands.jsonData);
 
@@ -383,12 +379,12 @@ function executeReceiveCommands(commands) {
 
 		if (temp != commands.jsonData.publishmentName && playerStatus == true) {
 			Logger.sendMessage("Publisment dosyasi indiriliyor:", commands);
-			this.writefile(commands.jsonData.publishmentName, commands.jsonData.publishmentData);
+			//this.writefile(commands.jsonData.publishmentName, commands.jsonData.publishmentData);
 			WebosSettings.setValue("Publishment/NewVersion", commands.jsonData.publishmentName);
 			WebosSettings.setValue("Publishment/OldVersion", commands.jsonData.publishmentName);			
 			fetchPublishment(commands.jsonData.publishmentData);
 		} else {
-			Logger.sendMessage("Devamke :)");
+			Logger.sendMessage("DEVAMKEEEE :)");
 		}
 
 	} else if (commands.command === commandMessage.WinScreenShotRequest) {
@@ -430,6 +426,15 @@ function executeReceiveCommands(commands) {
 	else if (commands.command === commandMessage.Sys_Info) {
 		Logger.sendMessage(" Receive commandMessage.Sys_Info",commands);
 	}
+	else if (commands.command === commandMessage.Get_Publishment) {
+		Logger.sendMessage(" Receive GetPublishment",commands);
+		receive_Publishment(commands);
+	}
+	else if (commands.command === commandMessage.PublishmentDelete) {
+		Logger.sendMessage(" Receive PublishmentDelete",commands);
+		removeDir();
+	}
+
 	else {
 		Logger.sendMessage("UNKNOWN Command");
 	}
@@ -440,29 +445,32 @@ function showPlayer() {
 	Logger.sendMessage("showPlayer :)");
 
 	var Data = globalPublishment;
-	var initPlayer = JSON.stringify({ "MessageType": "initPlayer", "Data": { "filePath": "./content/contents/", "videoMode": "0" } })
+	var initPlayer = { "MessageType": "initPlayer", "Data": { "filePath": "./content/contents/", "videoMode": "0" } }
 	
 	var playerStatus = WebosSettings.value("PlayerSettings/status", "");
 
-	if (playerStatus == true) {
+	 if (playerStatus == true ) {
 	
 		Start_Handler.receiveMessage(initPlayer);
+		var jsonData = {
+			"MessageType": "startPublishment", "Data":Data
+		};
+		Start_Handler.receiveMessage(jsonData);;
+	}else{
 
-		Start_Handler.receiveMessage(JSON.stringify({
-			"MessageType": "startPublishment","Data":Data
-		}));
+		Logger.sendMessage("showPlayer sikinti :)");
 
 	}
-
 }
 
 function fetchPublishment(readPublishment) {
 
-	Logger.sendMessage("start download","");
-	listDir(publishmentsDir)
+	Logger.sendMessage("received publishment:"+JSON.stringify(readPublishment));
+	//listDir(publishmentsDir)
 	globalPublishment = readPublishment;
 	urlArray = readPublishment.urlArray;
-
+	downloadDir = contentsDir;
+	downloadName = "";
 	downloadNext();
 
 	Logger.sendMessage("fetchPublishment download sonrasi:)");
@@ -561,4 +569,57 @@ function sendSystemInfo() {
 	}, 60000);
 
 
+}
+
+function getPublishment() {
+	
+	var isGetPublishment = {
+		playerCode: "",
+		privateKey: webOsMacAdress,
+		publicKey: webOsMacAdress,
+		playerId: WebosSettings.value("PlayerSettings/playerId", ""),
+		playerName: webOsModelName,
+		customerId: WebosSettings.value("Customer/id", "")
+	}
+	sendSignal(commandMessage.Get_Publishment, isGetPublishment);
+}
+
+function receive_Publishment(publishment) {
+
+	Logger.sendMessage("BURASI ONEMLI receive_Publishment: "+JSON.stringify(publishment));
+	var temp = [];
+	temp [0] = publishment.jsonData.publishmentUrl;
+	urlArray = temp; //guncelle
+	Logger.sendMessage("BURASI ONEMLI receive_Publishment URLLLLL "+urlArray);
+
+	downloadDir = publishmentsDir;
+	downloadName = publishment.jsonData.publishmentName+".json";
+	downloadNext();
+}
+
+function readPulishmentFile(fileName) {
+    return new Promise(function(resolve, reject) {
+        listDir(publishmentsDir);
+
+        var rawFile = new XMLHttpRequest();
+        rawFile.open("GET", "./content/publishments/" + fileName, false);
+		rawFile.overrideMimeType('text/plain; charset=utf-8');
+
+        rawFile.onreadystatechange = function () {
+            if (rawFile.readyState === 4) {
+                Logger.sendMessage("rawFile.readyState 4 " + rawFile.readyState,"");
+                if (rawFile.status === 200 || rawFile.status == 0) {
+                    var allText = rawFile.responseText;
+                    Logger.sendMessage("allText " + allText, ""); //sonra kapat
+                    resolve(allText);
+                } else {
+                    reject(new Error("Failed to fetch file. Status code: " + rawFile.status));
+                }
+            }
+            else {
+                Logger.sendMessage("readFile Error" + rawFile.responseText,"");
+            }
+        }
+        rawFile.send(null);
+    });
 }
