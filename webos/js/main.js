@@ -415,18 +415,23 @@ function executeReceiveCommands(commands) {
 		WebosDevice.restartApplication();    
 	}
 	else if (commands.command === commandMessage.PlayerSettingsHere) {
-		Logger.sendMessage("PlayerSettingsHere");
-		WebosDevice.setUiTile(false);      
+		Logger.sendMessage("PlayerSettingsHere:"+JSON.stringify(commands));
+		if(webOsHardwareVersion >= "3.0")
+		{
+			Logger.sendMessage("Rotate Setleniyor:"+JSON.stringify(commands));
+			WebosDevice.setRotate(commands.jsonData.rotation);
+		}
+		//WebosDevice.setUiTile(false); //sonra acilabilir.      
 	}
 	else if (commands.command === commandMessage.Sys_Info) {
-		Logger.sendMessage(" Receive commandMessage.Sys_Info",commands);
+		Logger.sendMessage(" Receive commandMessage.Sys_Info",JSON.stringify(commands));
 	}
 	else if (commands.command === commandMessage.Get_Publishment) {
-		Logger.sendMessage(" Receive GetPublishment",commands);
+		Logger.sendMessage(" Receive GetPublishment",JSON.stringify(commands));
 		receive_Publishment(commands);
 	}
 	else if (commands.command === commandMessage.PublishmentDelete) {
-		Logger.sendMessage(" Receive PublishmentDelete",commands);
+		Logger.sendMessage(" Receive PublishmentDelete",JSON.stringify(commands));
 		removeDir();
 	}
 

@@ -19,6 +19,29 @@ function WebosDevice ()  {
                      
 }
 
+WebosDevice.setRotate =  function(rotate){
+
+    function successCb(cbObject) {
+       
+        Logger.sendMessage("setRotate edildi cbObject : " + JSON.stringify(cbObject));
+
+    }
+        
+    function failureCb(cbObject) {
+        var errorCode = cbObject.errorCode;
+        var errorText = cbObject.errorText;
+        
+        Logger.sendMessage("setRotate Error Code [" + errorCode + "]: " + errorText);
+    }
+
+    var options = {};
+    var temp = rotate.toString();
+    options.nativePortrait = temp;     
+    var custom = new Custom();
+    custom.Configuration.setNativePortraitMode(successCb, failureCb, options);
+    
+} 
+
 WebosDevice.getPlatformInfo =  function(){
 		
     function successCb(cbObject) {

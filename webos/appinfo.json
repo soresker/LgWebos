@@ -9,5 +9,11 @@
   "largeIcon": "largeIcon.png", 
   "inspectable": true,
   "useVirtualKeyboard":false,
+  "supportedOrientations": [
+    "Landscape",
+    "InvertedPortrait",
+    "InvertedLandscape",
+    "Portrait"
+  ],
   "uiRevision": 2
 }
