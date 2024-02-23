@@ -34,9 +34,24 @@ WebosDevice.setRotate =  function(rotate){
         Logger.sendMessage("setRotate Error Code [" + errorCode + "]: " + errorText);
     }
 
+    var temp = Custom.NATIVEPORTRAIT.OFF;
+    
+    if(rotate == 0)
+    {
+        temp = Custom.NATIVEPORTRAIT.OFF;
+    }else if (rotate == 90) {
+        temp = Custom.NATIVEPORTRAIT.DEGREE_90;
+    }
+    else if (rotate == 180) {
+        temp = Custom.NATIVEPORTRAIT.DEGREE_180;
+    }
+    else{
+        temp = Custom.NATIVEPORTRAIT.DEGREE_270;
+    }
+     
     var options = {};
-    var temp = rotate.toString();
     options.nativePortrait = temp;     
+
     var custom = new Custom();
     custom.Configuration.setNativePortraitMode(successCb, failureCb, options);
     
