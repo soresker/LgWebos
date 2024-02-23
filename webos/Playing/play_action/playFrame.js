@@ -498,6 +498,8 @@ Play_Frame.prototype.playNextContent = function (isComeFromEndOfAContent) {
                 this.currentContent.showContent(function () {
 
                 })
+                //this.setContentAnimations();
+
             }
             else if (this.previousContent && webOsHardwareVersion >= "3.0") {
                 this.currentContent.showContent(function () {
@@ -509,6 +511,7 @@ Play_Frame.prototype.playNextContent = function (isComeFromEndOfAContent) {
             else {
                 console.log("else this.currentContent.showContent : " + contentInfo)
                 this.currentContent.showContent();
+                //this.setContentAnimations();
             }
 
         }
@@ -641,3 +644,37 @@ Play_Frame.prototype.setCurrentContentValidity = function (isValid) {
     this.frameInfo.setContentIsValidAt(this.playlistIndex, this.contentIndex, isValid);
     this.isCurrentContentValid = isValid;
 };
+
+Play_Frame.prototype.setContentAnimations = function() {
+    console.log("setContentAnimations");
+
+    if (!this.previousContent)
+    {
+        console.log("setContentAnimations return");
+        //return;
+    }
+
+
+    var _this = this;
+    var $active = $("#content-" + this.previousContent.playlistContentUniqueKey);
+    var $next = $("#content-" + this.currentContent.playlistContentUniqueKey);
+    
+    console.log("setContentAnimations1active:"+$active);
+    console.log("setContentAnimations1next:"+$next);
+
+    $next.css('z-index', 2);
+    $active.fadeOut(2000, function() {
+        $active.css('z-index', 1).show().removeClass('active');
+        $next.css('z-index', 3).addClass('active');
+        _this.animationCompleted(_this);
+    });
+};
+
+
+
+Play_Frame.prototype.animationCompleted = function(context) {
+
+    console.log("animCompleted");
+    context.deletePreviousContent();
+
+}
