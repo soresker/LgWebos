@@ -560,7 +560,7 @@ function sendSystemInfo() {
 			playerDeviceType: 'Webos',
 			serialNo: webOsSerialNumber,
 			playerId: WebosSettings.value("PlayerSettings/playerId", ""),
-			appVersion: '1.0.60',
+			appVersion: '1.0.61',
 			customerId: WebosSettings.value("Customer/id", "")
 	
 		}
@@ -610,7 +610,7 @@ function readPulishmentFile(fileName) {
                 Logger.sendMessage("rawFile.readyState 4 " + rawFile.readyState,"");
                 if (rawFile.status === 200 || rawFile.status == 0) {
                     var allText = rawFile.responseText;
-                    Logger.sendMessage("allText " + allText, ""); //sonra kapat
+                    //Logger.sendMessage("allText " + allText, ""); //sonra kapat
                     resolve(allText);
                 } else {
                     reject(new Error("Failed to fetch file. Status code: " + rawFile.status));
