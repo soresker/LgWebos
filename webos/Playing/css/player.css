@@ -1,72 +1,124 @@
 * {
-    margin: 0;
-    padding: 0;
- }
- 
- html,body{
-     
-    margin:0;
-    overflow:hidden;
-    padding:0;
-    background-color:black;
-    font-family:sans-serif;
+  margin: 0;
+  padding: 0;
+}
 
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-    background-position: center;
-    background-size: 90% 90%;
+html,
+body {
 
-    overflow:hidden;
+  margin: 0;
+  overflow: hidden;
+  padding: 0;
+  background-color: black;
+  font-family: sans-serif;
 
-    -webkit-touch-callout: none; 
-    -webkit-user-select: none; 
-    -khtml-user-select: none; 
-      -moz-user-select: none; 
-        -ms-user-select: none;
-            user-select: none; 
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: center;
+  background-size: 90% 90%;
 
-            cursor:none;
- 
- }
+  overflow: hidden;
 
- #player-image{
-    width:100%; text-align:center; position: absolute; left:0px; top: 0; height: 100%;
- }
- 
- #player-image img{
-    width:100%;
-    height: 100%;
- }
- 
- @-webkit-keyframes sk-rotate { 100% { -webkit-transform: rotate(360deg) }}
- @keyframes sk-rotate { 100% { transform: rotate(360deg); -webkit-transform: rotate(360deg) }}
- 
- @-webkit-keyframes sk-bounce {
-   0%, 100% { -webkit-transform: scale(0.0) }
-   50% { -webkit-transform: scale(1.0) }
- }
- 
- @keyframes sk-bounce {
-   0%, 100% { 
-     transform: scale(0.0);
-     -webkit-transform: scale(0.0);
-   } 50% { 
-     transform: scale(1.0);
-     -webkit-transform: scale(1.0);
-   }
- }
- 
- @-webkit-keyframes sk-bounce {
-   0%, 100% { -webkit-transform: scale(0.0) }
-   50% { -webkit-transform: scale(1.0) }
- }
- 
- @keyframes sk-bounce {
-   0%, 100% { 
-     transform: scale(0.0);
-     -webkit-transform: scale(0.0);
-   } 50% { 
-     transform: scale(1.0);
-     -webkit-transform: scale(1.0);
-   }
- }
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+
+  cursor: none;
+
+}
+
+#player-image {
+  width: 100%;
+  text-align: center;
+  position: absolute;
+  left: 0px;
+  top: 0;
+  height: 100%;
+}
+
+#player-image img {
+  width: 100%;
+  height: 100%;
+}
+
+.download-bar {
+  display: none;
+  background-color: #e3e8ec;
+  position: absolute;
+  bottom: 0px;
+  right: 0px;
+  z-index: 9999;
+  color: black;
+  font-weight: bold !important;
+  padding: 5px;
+  border-radius: 5px;
+  border: 1px dotted black;
+}
+
+@-webkit-keyframes sk-rotate {
+  100% {
+    -webkit-transform: rotate(360deg)
+  }
+}
+
+@keyframes sk-rotate {
+  100% {
+    transform: rotate(360deg);
+    -webkit-transform: rotate(360deg)
+  }
+}
+
+@-webkit-keyframes sk-bounce {
+
+  0%,
+  100% {
+    -webkit-transform: scale(0.0)
+  }
+
+  50% {
+    -webkit-transform: scale(1.0)
+  }
+}
+
+@keyframes sk-bounce {
+
+  0%,
+  100% {
+    transform: scale(0.0);
+    -webkit-transform: scale(0.0);
+  }
+
+  50% {
+    transform: scale(1.0);
+    -webkit-transform: scale(1.0);
+  }
+}
+
+@-webkit-keyframes sk-bounce {
+
+  0%,
+  100% {
+    -webkit-transform: scale(0.0)
+  }
+
+  50% {
+    -webkit-transform: scale(1.0)
+  }
+}
+
+@keyframes sk-bounce {
+
+  0%,
+  100% {
+    transform: scale(0.0);
+    -webkit-transform: scale(0.0);
+  }
+
+  50% {
+    transform: scale(1.0);
+    -webkit-transform: scale(1.0);
+  }
+}

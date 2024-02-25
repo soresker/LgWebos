@@ -16,20 +16,29 @@
       loginIframePost["MessageType"] = "playerRegister";
       loginIframePost["playerId"] = document.getElementById("playerId").value;
       loginIframePost["customerId"] = document.getElementById("customerId").value;
-      window.parent.postMessage(JSON.stringify(loginIframePost),'*');
+      window.parent.postMessage(JSON.stringify(loginIframePost), '*');
     }
   </script>
 </head>
 
-<body>
+<body style="background-image: url('./assets/start.jpeg'); background-position: center;">
   <div class="screenlog">
-
   </div>
-
-  <div class="container">
-    <img class="apiLogo" src="./assets/start.jpeg">
+  <div class="info-bar">
+    <ul style="list-style-type: circle;">
+      <li>Player Login ekranı geldikten sonra Kumanda ile bir kez OK tuşuna basınız</li>
+      <li style="padding-top:10px;font-weight:bold !important;">Player Id Alanına Size Verilen Id bilgisini kumanda ile
+        tuşlayınız</li>
+      <li style="padding-top:10px;font-weight:bold;">Otomatik olarak Customer Id Alanına geçecektir. Tuşlama Yapınız ve
+        Bekleyiniz</li>
+      <li style="padding-top:10px;font-weight:bold;">Eğer cihaz aynı ekranda kaldı ise Player Id veya Customer Id yanlış
+        girilmiştir, Cihazı kapat aç yaparak işlemi tekrarlayınız</li>
+      <li style="padding-top:10px;font-weight:bold;">Ekran bilgiler doğru girildikten sonra cihaz yayını alacaktır</li>
+      <li style="padding-top:10px;font-weight:bold;">Dipnot : Player Login ekranı geldikten sonra Kumanda ile OK tuşuna
+        bastıktan sonra her Id girişi için 15 saniye süreniz var. 15 sn sonra otomatik olarak diğer Id bloguna geçiş
+        sağlanır</li>
+    </ul>
   </div>
-
   <div class="apiPlayer">
     <label for="playerId">Player Id : </label>
     <input type="text" name="playerId" value="" id="playerId" placeholder="" class="form-control" required>

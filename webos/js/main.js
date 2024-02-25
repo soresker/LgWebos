@@ -8,7 +8,7 @@ var connection = null;
 var urlArray;
 var currentIndex = -1
 var globalPublishment = "";
-var downloadDir = ""; 
+var downloadDir = "";
 var downloadName = "";
 
 //var keyboardControl = new Keyboard_Control();
@@ -18,7 +18,7 @@ function listener(event) {
 	messageCheck(event.data);
 }
 
-function CreateIframeElement  (source, divId) {
+function CreateIframeElement(source, divId) {
 
 	var el = document.createElement("iframe");
 
@@ -32,52 +32,51 @@ function CreateIframeElement  (source, divId) {
 
 }
 
-function RemoveIframeElement (divId) {
+function RemoveIframeElement(divId) {
 	// Remove the last child ( iframe element ) of div. 
 	document.getElementById(divId)
 		.removeChild(document
 			.getElementById(divId).lastChild);
 }
 
-function getWebOSVersion(){
+function getWebOSVersion() {
 
-    function successCallback(successObject) {
-    	Logger.sendMessage('webOS Signage version: ' + successObject.webOSVersion);
+	function successCallback(successObject) {
+		Logger.sendMessage('webOS Signage version: ' + successObject.webOSVersion);
 		webOsHardwareVersion = successObject.webOSVersion;
-		
-		if(successObject.webOSVersion <= "3.2")
-		{
+
+		if (successObject.webOSVersion <= "3.2") {
 			Logger.sendMessage('webOS 3 ve ya 3 ten kuccuk: ' + successObject.webOSVersion);
 			$('body').append('<script type="text/javascript" src="./js/cordova-cd/1.5/power.js" onload="loaded=true;"></script>');
 			$('body').append('<script type="text/javascript" src="./js/cordova-cd/1.5/signage.js" onload="loaded=true;"></script>');
 			$('body').append('<script type="text/javascript" src="./js/cordova-cd/1.5/configuration.js" onload="loaded=true;"></script>');
 			$('body').append('<script type="text/javascript" src="./js/cordova-cd/1.5/deviceInfo.js" onload="loaded=true;"></script>');
 		}
-		else{
+		else {
 			Logger.sendMessage('webOS 3 ten buyyuk: ' + successObject.webOSVersion);
 			$('body').append('<script type="text/javascript" src="./js/cordova-cd/1.5/power16.js" onload="loaded=true;"></script>');
 			$('body').append('<script type="text/javascript" src="./js/cordova-cd/1.5/signage16.js" onload="loaded=true;"></script>');
 			$('body').append('<script type="text/javascript" src="./js/cordova-cd/1.5/configuration16.js" onload="loaded=true;"></script>');
 			$('body').append('<script type="text/javascript" src="./js/cordova-cd/1.5/deviceInfo16.js" onload="loaded=true;"></script>');
 		}
-    }
-    function failureCallback(failureObject) {
+	}
+	function failureCallback(failureObject) {
 		$('body').append('<script type="text/javascript" src="./js/cordova-cd/1.5/power16.js" onload="loaded=true;"></script>');
-        $('body').append('<script type="text/javascript" src="./js/cordova-cd/1.5/signage16.js" onload="loaded=true;"></script>');
+		$('body').append('<script type="text/javascript" src="./js/cordova-cd/1.5/signage16.js" onload="loaded=true;"></script>');
 		$('body').append('<script type="text/javascript" src="./js/cordova-cd/1.5/configuration16.js" onload="loaded=true;"></script>');
 		$('body').append('<script type="text/javascript" src="./js/cordova-cd/1.5/deviceInfo16.js" onload="loaded=true;"></script>');
-		Logger.sendMessage("getWebOSVersion"+'[' + failureObject.errorCode + ']' + failureObject.errorText);
-    }
+		Logger.sendMessage("getWebOSVersion" + '[' + failureObject.errorCode + ']' + failureObject.errorText);
+	}
 	var custom = new Custom();
 
-    custom.Signage.getwebOSVersion(successCallback, failureCallback);
+	custom.Signage.getwebOSVersion(successCallback, failureCallback);
 
 }
 
 window.onkeydown = function (event) {
 
-	console.log("window.event : " +event);
-	
+	console.log("window.event : " + event);
+
 	var iframe = document.getElementById('login').getElementsByTagName('iframe')[0];
 	var keyCode = event.keyCode || event.which;
 
@@ -86,8 +85,7 @@ window.onkeydown = function (event) {
 	// Enter tuşuna basıldığında
 	if (keyCode === 13) {
 
-		if(iframeDocument.getElementById('playerId').value == "")
-		{
+		if (iframeDocument.getElementById('playerId').value == "") {
 			iframeDocument.getElementById('playerId').focus();
 
 			iframeDocument.getElementById('register').value = "Player Id Girmek icin 15 sn var ";
@@ -99,8 +97,8 @@ window.onkeydown = function (event) {
 				iframeDocument.getElementById('customerId').focus();
 				iframeDocument.getElementById('register').value = "CustomerId Id Girmek icin 15 sn var ";
 
-				setTimeout(function() {
-					
+				setTimeout(function () {
+
 					iframeDocument.getElementById("customerId").disabled = true;
 					iframeDocument.getElementById("customerId").disabled = false;
 					iframeDocument.getElementById('register').focus();
@@ -116,16 +114,16 @@ window.onkeydown = function (event) {
 window.onload = function () {
 
 	fs = new Filesystem();
-	fs.init();	
+	fs.init();
 
 	this.getWebOSVersion();
 
-	setTimeout(function() {
+	setTimeout(function () {
 		WebosDevice.getPlatformInfo();
 		WebosDevice.getNetworkInfo();
 		WebosDevice.getNetworkMacInfo();
 		WebosDevice.getSystemUsageInfo()
-		WebosDevice.setUiTile(false);	
+		WebosDevice.setUiTile(false);
 	}, 400);
 
 	startSignalSocket();
@@ -149,20 +147,22 @@ window.onload = function () {
 		if (result) {
 
 			Logger.sendMessage('player register');
-			Logger.sendMessage('player playerId:'+WebosSettings.value("PlayerSettings/playerId", ""));
-			Logger.sendMessage('player custormerId:'+WebosSettings.value("Customer/id", ""));
-
+			Logger.sendMessage('player playerId:' + WebosSettings.value("PlayerSettings/playerId", ""));
+			Logger.sendMessage('player custormerId:' + WebosSettings.value("Customer/id", ""));
+			setTimeout(function(){
+				$("#screen-shot-image").hide();
+			},2000);
 		} else {
 			Logger.sendMessage('player register degil');
 			CreateIframeElement("Login/login.html", "login");
+			$("#screen-shot-image").show();
 		}
 
 	});
 
 	sendHardbitSystemInfo();
 	sendSystemInfo();
-	checkSocketConnection();
-	
+	checkSocketConnection(); 
 }
 
 function messageCheck(msg) {
@@ -174,7 +174,7 @@ function messageCheck(msg) {
 	switch (msg.MessageType) {
 
 		case commandMessage.Player_Register:
-			Logger.sendMessage("Player_Register yapacaz"+ msg);
+			Logger.sendMessage("Player_Register yapacaz" + msg);
 			playerRegister(msg);
 			break;
 
@@ -182,15 +182,15 @@ function messageCheck(msg) {
 			break;
 
 		case commandMessage.PlayerReady:
-			
+
 			var fileName = WebosSettings.value("Publishment/NewVersion", "");
 			var path = fileName + ".json";
-			
-			Logger.sendMessage('read file:'+ path);
-			
+
+			Logger.sendMessage('read file:' + path);
+
 			this.readPulishmentFile(path).then(function (publishmentContent) {
 				globalPublishment = publishmentContent;
-				Logger.sendMessage("publishmentContent"+ publishmentContent);
+				Logger.sendMessage("publishmentContent" + publishmentContent);
 				showPlayer();
 			})
 
@@ -202,50 +202,51 @@ function messageCheck(msg) {
 }
 
 function writefile(fileName, data) {
-	Logger.sendMessage('writefile path:'+ fileName);
-	Logger.sendMessage("data"+ data)
+	Logger.sendMessage('writefile path:' + fileName);
+	Logger.sendMessage("data" + data)
 
 	var path = publishmentsDir + fileName + ".json";
 	Logger.sendMessage('writefile path:', path);
 	var Data = data;
 	var jsonData = {
-		"MessageType": "startPublishment", "Data":Data
+		"MessageType": "startPublishment", "Data": Data
 	};
 	fs.writeFile(path, JSON.stringify(jsonData), function (error) {
 		if (error)
-			return Logger.sendMessage('error write json:'+ error);
+			return Logger.sendMessage('error write json:' + error);
 		else
-			Logger.sendMessage('write json data:'+ data);
+			Logger.sendMessage('write json data:' + data);
 	})
 }
 function download(url, callback) {
 	downloader.start({
 		url: url,
 		path: downloadDir,
-		filename : downloadName
+		filename: downloadName
 	}, function (error, data) {
 		callback(error, data)
 	});
 }
 
-function downloadNext() {
+function downloadNext() { 
 	currentIndex = currentIndex + 1
 	if (currentIndex < urlArray.length) {
 		var currentUrl = urlArray[currentIndex];
-		Logger.sendMessage('download start:'+ 'download status:' + (currentIndex + 1) + '/' + urlArray.length)
-		Logger.sendMessage('download file url:'+ currentUrl)
+		Logger.sendMessage('download start:' + 'download status:' + (currentIndex + 1) + '/' + urlArray.length)
+		Logger.sendMessage('download file url:' + currentUrl)
 		var fileName = currentUrl.split('/').pop();
 		fileExists(downloadDir + fileName, function (error, data) {
 			if (data != null && data == false) {
 				download(currentUrl, function (err, data) {
 					if (err) {
 						Logger.sendMessage("download failed: " + (currentIndex + 1) + '/' + urlArray.length);
-						Logger.sendMessage("download failed:"  + (currentIndex + 1)+"");
-						Logger.sendMessage("download failed error:"  + JSON.stringify(err));						
+						Logger.sendMessage("download failed:" + (currentIndex + 1) + "");
+						Logger.sendMessage("download failed error:" + JSON.stringify(err));
 					} else {
 						Logger.sendMessage('download complete: ' + (currentIndex + 1) + '/' + urlArray.length + ' 😃');
-						Logger.sendMessage("download complete: " + (currentIndex + 1) + "/" + urlArray.length +"");
+						Logger.sendMessage("download complete: " + (currentIndex + 1) + "/" + urlArray.length);
 					}
+					$(".download-bar").html("Downloading " + (currentIndex + 1) + "/" + urlArray.length);
 					downloadNext()
 				})
 			}
@@ -258,20 +259,22 @@ function downloadNext() {
 	else {
 		currentIndex = -1;
 		Logger.sendMessage("download complated all files ✅");
+		setTimeout(function(){
+			$("#screen-shot-image").hide();
+		},2000);
 
-		if(downloadDir == publishmentsDir)
-		{
+		if (downloadDir == publishmentsDir) {
 			Logger.sendMessage("SHOWWW PLAYERE✅");
 			showPlayer();
-		}else{
+		} else {
 			this.getPublishment();
 		}
-
+		$(".download-bar").hide()
 		listDir(publishmentsDir);
 		listDir(contentsDir);
 	}
 }
-
+  
 function fileExists(files, callback) {
 	var successCb = function (cbObject) {
 		var exists = cbObject.exists;
@@ -291,30 +294,30 @@ function fileExists(files, callback) {
 
 function listDir(dir) {
 	var path = dir;
-	Logger.sendMessage('listdir path'+ path);
+	Logger.sendMessage('listdir path' + path);
 	fs.ls(path, function (error, data) {
 		if (error)
 			return Logger.sendMessage('error', error);
-		Logger.sendMessage("List Contents:"+JSON.stringify(data));
+		Logger.sendMessage("List Contents:" + JSON.stringify(data));
 		return data;
 	})
 }
 
 function removeDir() {
 	var path = defaultDir;
-	Logger.sendMessage('rmdir path'+ path);
+	Logger.sendMessage('rmdir path' + path);
 	fs.rmdir(path, { recursive: true }, function (error, data) {
 		if (error)
 			return Logger.sendMessage('error', error);
-		Logger.sendMessage('data'+ data);
+		Logger.sendMessage('data' + data);
 	})
 
 	var path = publishmentsDir;
-	Logger.sendMessage('rmdir path'+ path);
+	Logger.sendMessage('rmdir path' + path);
 	fs.rmdir(path, { recursive: true }, function (error, data) {
 		if (error)
 			return Logger.sendMessage('error', error);
-		Logger.sendMessage('data'+ data);
+		Logger.sendMessage('data' + data);
 	})
 }
 
@@ -338,7 +341,7 @@ function playerRegister(data) {
 }
 
 function executeReceiveCommands(commands) {
-	Logger.sendMessage("Receive Command:"+ commands.command,"");
+	Logger.sendMessage("Receive Command:" + commands.command, "");
 	if (commands.command === commandMessage.Player_Register) {
 		Logger.sendMessage("Receive commandMessage.Player_Register ");
 		WebosSettings.setValue("PlayerSettings/status", commands.status);
@@ -376,7 +379,7 @@ function executeReceiveCommands(commands) {
 			Logger.sendMessage("Publisment dosyasi indiriliyor:", commands);
 			//this.writefile(commands.jsonData.publishmentName, commands.jsonData.publishmentData);
 			WebosSettings.setValue("Publishment/NewVersion", commands.jsonData.publishmentName);
-			WebosSettings.setValue("Publishment/OldVersion", commands.jsonData.publishmentName);			
+			WebosSettings.setValue("Publishment/OldVersion", commands.jsonData.publishmentName);
 			fetchPublishment(commands.jsonData.publishmentData);
 		} else {
 			Logger.sendMessage("DEVAMKEEEE :)");
@@ -384,7 +387,7 @@ function executeReceiveCommands(commands) {
 
 	} else if (commands.command === commandMessage.WinScreenShotRequest) {
 		Logger.sendMessage("WinScreenShotRequest");
-		WebosDevice.screenShot(false,true);    
+		WebosDevice.screenShot(false, true);
 	}
 	else if (commands.command === commandMessage.Player_Restart) {
 		Logger.sendMessage("Player_Restart");
@@ -396,15 +399,15 @@ function executeReceiveCommands(commands) {
 	}
 	else if (commands.command === commandMessage.Check_Upgrade) {
 		Logger.sendMessage("Check_Upgrade");
-		WebosDevice.upgradeIpkApplication();  
+		WebosDevice.upgradeIpkApplication();
 	}
 	else if (commands.command === commandMessage.PlayerDeleted) {
 		Logger.sendMessage("PlayerDeleted");
 		removeDir();
 		window.localStorage.clear();
 		localStorage.clear();
-		setTimeout(function()  {
-			WebosDevice.restartApplication();    
+		setTimeout(function () {
+			WebosDevice.restartApplication();
 		}, 2000);
 	}
 	else if (commands.command === commandMessage.HealthCheck) {
@@ -412,26 +415,25 @@ function executeReceiveCommands(commands) {
 	}
 	else if (commands.command === commandMessage.AppRestart) {
 		Logger.sendMessage("AppRestart");
-		WebosDevice.restartApplication();    
+		WebosDevice.restartApplication();
 	}
 	else if (commands.command === commandMessage.PlayerSettingsHere) {
-		Logger.sendMessage("PlayerSettingsHere:"+JSON.stringify(commands));
-		if(webOsHardwareVersion >= "3.0")
-		{
-			Logger.sendMessage("Rotate Setleniyor:"+JSON.stringify(commands));
+		Logger.sendMessage("PlayerSettingsHere:" + JSON.stringify(commands));
+		if (webOsHardwareVersion >= "3.0") {
+			Logger.sendMessage("Rotate Setleniyor:" + JSON.stringify(commands));
 			WebosDevice.setRotate(commands.jsonData.rotation);
 		}
 		//WebosDevice.setUiTile(false); //sonra acilabilir.      
 	}
 	else if (commands.command === commandMessage.Sys_Info) {
-		Logger.sendMessage(" Receive commandMessage.Sys_Info",JSON.stringify(commands));
+		Logger.sendMessage(" Receive commandMessage.Sys_Info", JSON.stringify(commands));
 	}
 	else if (commands.command === commandMessage.Get_Publishment) {
-		Logger.sendMessage(" Receive GetPublishment",JSON.stringify(commands));
+		Logger.sendMessage(" Receive GetPublishment", JSON.stringify(commands));
 		receive_Publishment(commands);
 	}
 	else if (commands.command === commandMessage.PublishmentDelete) {
-		Logger.sendMessage(" Receive PublishmentDelete",JSON.stringify(commands));
+		Logger.sendMessage(" Receive PublishmentDelete", JSON.stringify(commands));
 		removeDir();
 	}
 
@@ -446,17 +448,17 @@ function showPlayer() {
 
 	var Data = globalPublishment;
 	var initPlayer = { "MessageType": "initPlayer", "Data": { "filePath": "./content/contents/", "videoMode": "0" } }
-	
+
 	var playerStatus = WebosSettings.value("PlayerSettings/status", "");
 
-	 if (playerStatus == true ) {
-	
+	if (playerStatus == true) {
+
 		Start_Handler.receiveMessage(initPlayer);
 		var jsonData = {
-			"MessageType": "startPublishment", "Data":Data
+			"MessageType": "startPublishment", "Data": Data
 		};
 		Start_Handler.receiveMessage(jsonData);;
-	}else{
+	} else {
 
 		Logger.sendMessage("showPlayer sikinti :)");
 
@@ -465,12 +467,13 @@ function showPlayer() {
 
 function fetchPublishment(readPublishment) {
 
-	Logger.sendMessage("received publishment:"+JSON.stringify(readPublishment));
+	Logger.sendMessage("received publishment:" + JSON.stringify(readPublishment));
 	//listDir(publishmentsDir)
 	globalPublishment = readPublishment;
 	urlArray = readPublishment.urlArray;
 	downloadDir = contentsDir;
 	downloadName = "";
+	$(".download-bar").show();
 	downloadNext();
 
 	Logger.sendMessage("fetchPublishment download sonrasi:)");
@@ -509,9 +512,9 @@ function checkPublishment() {
 	});
 }
 
-function sendHardbitSystemInfo  () {
+function sendHardbitSystemInfo() {
 
-	setInterval(function() {
+	setInterval(function () {
 		Logger.sendMessage("sendHardbitSystemInfo");
 		var systemInfData = {
 			playerCode: "",
@@ -528,12 +531,11 @@ function sendHardbitSystemInfo  () {
 
 }
 
-function checkSocketConnection  () {
+function checkSocketConnection() {
 
-	setInterval(function() {
+	setInterval(function () {
 		Logger.sendMessage("checkSocketConnection");
-		if(getConnectionState() == false)
-		{	
+		if (getConnectionState() == false) {
 			Logger.sendMessage("socke tekrar baslasin amqq");
 			startSignalSocket();
 		}
@@ -543,13 +545,13 @@ function checkSocketConnection  () {
 
 function sendSystemInfo() {
 
-	setInterval(function() {
-		
+	setInterval(function () {
+
 		var systemInfData = {
 			privateKey: webOsMacAdress,
 			publicKey: webOsMacAdress,
 			deviceType: webOsModelName,
-			osType: 'Lg Webos '+webOsHardwareVersion,
+			osType: 'Lg Webos ' + webOsHardwareVersion,
 			osArch: webOsFirmwareVersion,
 			totalHddSize: webOsTotalMemory,
 			currentHddSize: webOsUsedMemory,
@@ -562,7 +564,7 @@ function sendSystemInfo() {
 			playerId: WebosSettings.value("PlayerSettings/playerId", ""),
 			appVersion: '1.0.61',
 			customerId: WebosSettings.value("Customer/id", "")
-	
+
 		}
 		sendSignal(commandMessage.Sys_Info, systemInfData);
 
@@ -572,7 +574,7 @@ function sendSystemInfo() {
 }
 
 function getPublishment() {
-	
+
 	var isGetPublishment = {
 		playerCode: "",
 		privateKey: webOsMacAdress,
@@ -586,40 +588,40 @@ function getPublishment() {
 
 function receive_Publishment(publishment) {
 
-	Logger.sendMessage("BURASI ONEMLI receive_Publishment: "+JSON.stringify(publishment));
+	Logger.sendMessage("BURASI ONEMLI receive_Publishment: " + JSON.stringify(publishment));
 	var temp = [];
-	temp [0] = publishment.jsonData.publishmentUrl;
+	temp[0] = publishment.jsonData.publishmentUrl;
 	urlArray = temp; //guncelle
-	Logger.sendMessage("BURASI ONEMLI receive_Publishment URLLLLL "+urlArray);
+	Logger.sendMessage("BURASI ONEMLI receive_Publishment URLLLLL " + urlArray);
 
 	downloadDir = publishmentsDir;
-	downloadName = publishment.jsonData.publishmentName+".json";
+	downloadName = publishment.jsonData.publishmentName + ".json";
 	downloadNext();
 }
 
 function readPulishmentFile(fileName) {
-    return new Promise(function(resolve, reject) {
-        listDir(publishmentsDir);
+	return new Promise(function (resolve, reject) {
+		listDir(publishmentsDir);
 
-        var rawFile = new XMLHttpRequest();
-        rawFile.open("GET", "./content/publishments/" + fileName, false);
+		var rawFile = new XMLHttpRequest();
+		rawFile.open("GET", "./content/publishments/" + fileName, false);
 		rawFile.overrideMimeType('text/plain; charset=utf-8');
 
-        rawFile.onreadystatechange = function () {
-            if (rawFile.readyState === 4) {
-                Logger.sendMessage("rawFile.readyState 4 " + rawFile.readyState,"");
-                if (rawFile.status === 200 || rawFile.status == 0) {
-                    var allText = rawFile.responseText;
-                    //Logger.sendMessage("allText " + allText, ""); //sonra kapat
-                    resolve(allText);
-                } else {
-                    reject(new Error("Failed to fetch file. Status code: " + rawFile.status));
-                }
-            }
-            else {
-                Logger.sendMessage("readFile Error" + rawFile.responseText,"");
-            }
-        }
-        rawFile.send(null);
-    });
+		rawFile.onreadystatechange = function () {
+			if (rawFile.readyState === 4) {
+				Logger.sendMessage("rawFile.readyState 4 " + rawFile.readyState, "");
+				if (rawFile.status === 200 || rawFile.status == 0) {
+					var allText = rawFile.responseText;
+					//Logger.sendMessage("allText " + allText, ""); //sonra kapat
+					resolve(allText);
+				} else {
+					reject(new Error("Failed to fetch file. Status code: " + rawFile.status));
+				}
+			}
+			else {
+				Logger.sendMessage("readFile Error" + rawFile.responseText, "");
+			}
+		}
+		rawFile.send(null);
+	});
 }
