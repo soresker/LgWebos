@@ -79,7 +79,7 @@ function getWebOSVersion() {
 
 function addLastScript(url) {
 
-	let script = document.createElement('script')
+	var script = document.createElement('script')
 	script.setAttribute('src', url)
 	script.setAttribute('type', 'text/javascript')
 	script.setAttribute('onload', 'loaded=true;')
