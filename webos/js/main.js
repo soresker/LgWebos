@@ -10,6 +10,7 @@ var currentIndex = -1
 var globalPublishment = "";
 var downloadDir = "";
 var downloadName = "";
+var webosIsRegister = "";
 
 //var keyboardControl = new Keyboard_Control();
 
@@ -50,26 +51,48 @@ function getWebOSVersion() {
 			$('body').append('<script type="text/javascript" src="./js/cordova-cd/1.5/power.js" onload="loaded=true;"></script>');
 			$('body').append('<script type="text/javascript" src="./js/cordova-cd/1.5/signage.js" onload="loaded=true;"></script>');
 			$('body').append('<script type="text/javascript" src="./js/cordova-cd/1.5/configuration.js" onload="loaded=true;"></script>');
-			$('body').append('<script type="text/javascript" src="./js/cordova-cd/1.5/deviceInfo.js" onload="loaded=true;"></script>');
+			//$('body').append('<script type="text/javascript" src="./js/cordova-cd/1.5/deviceInfo.js" onload="loaded=true;"></script>');
+			this.addLastScript('./js/cordova-cd/1.5/deviceInfo.js')
 		}
 		else {
 			Logger.sendMessage('webOS 3 ten buyyuk: ' + successObject.webOSVersion);
 			$('body').append('<script type="text/javascript" src="./js/cordova-cd/1.5/power16.js" onload="loaded=true;"></script>');
 			$('body').append('<script type="text/javascript" src="./js/cordova-cd/1.5/signage16.js" onload="loaded=true;"></script>');
 			$('body').append('<script type="text/javascript" src="./js/cordova-cd/1.5/configuration16.js" onload="loaded=true;"></script>');
-			$('body').append('<script type="text/javascript" src="./js/cordova-cd/1.5/deviceInfo16.js" onload="loaded=true;"></script>');
+			//$('body').append('<script type="text/javascript" src="./js/cordova-cd/1.5/deviceInfo16.js" onload="loaded=true;"></script>');
+			this.addLastScript('./js/cordova-cd/1.5/deviceInfo16.js')
 		}
 	}
 	function failureCallback(failureObject) {
 		$('body').append('<script type="text/javascript" src="./js/cordova-cd/1.5/power16.js" onload="loaded=true;"></script>');
 		$('body').append('<script type="text/javascript" src="./js/cordova-cd/1.5/signage16.js" onload="loaded=true;"></script>');
 		$('body').append('<script type="text/javascript" src="./js/cordova-cd/1.5/configuration16.js" onload="loaded=true;"></script>');
-		$('body').append('<script type="text/javascript" src="./js/cordova-cd/1.5/deviceInfo16.js" onload="loaded=true;"></script>');
+		//$('body').append('<script type="text/javascript" src="./js/cordova-cd/1.5/deviceInfo16.js" onload="loaded=true;"></script>');
+		this.addLastScript('./js/cordova-cd/1.5/deviceInfo16.js')
 		Logger.sendMessage("getWebOSVersion" + '[' + failureObject.errorCode + ']' + failureObject.errorText);
 	}
 	var custom = new Custom();
 
 	custom.Signage.getwebOSVersion(successCallback, failureCallback);
+
+}
+
+function addLastScript(url) {
+
+	let script = document.createElement('script')
+	script.setAttribute('src', url)
+	script.setAttribute('type', 'text/javascript')
+	script.setAttribute('onload', 'loaded=true;')
+	Logger.sendMessage("Scriptler yükleniyor.", script)
+	script.onload = function()  {
+		Logger.sendMessage("Scriptler yüklenmiştir.")
+		WebosDevice.getNetworkMacInfo();
+		WebosDevice.getPlatformInfo();
+		WebosDevice.getNetworkInfo();
+		WebosDevice.getSystemUsageInfo()
+		WebosDevice.setUiTile(false);
+	}
+	document.body.appendChild(script)
 
 }
 
@@ -113,18 +136,10 @@ window.onkeydown = function (event) {
 
 window.onload = function () {
 
-	fs = new Filesystem();
-	fs.init();
-
 	this.getWebOSVersion();
 
-	setTimeout(function () {
-		WebosDevice.getPlatformInfo();
-		WebosDevice.getNetworkInfo();
-		WebosDevice.getNetworkMacInfo();
-		WebosDevice.getSystemUsageInfo()
-		WebosDevice.setUiTile(false);
-	}, 400);
+	fs = new Filesystem();
+	fs.init();
 
 	startSignalSocket();
 	downloader = new Downloader();
@@ -146,23 +161,30 @@ window.onload = function () {
 
 		if (result) {
 
-			Logger.sendMessage('player register');
+			webosIsRegister = WebosSettings.value("PlayerSettings/status","");
+
+			Logger.sendMessage('player register'+webosIsRegister);
 			Logger.sendMessage('player playerId:' + WebosSettings.value("PlayerSettings/playerId", ""));
 			Logger.sendMessage('player custormerId:' + WebosSettings.value("Customer/id", ""));
-			setTimeout(function(){
+
+			setTimeout(function () {
 				$("#screen-shot-image").hide();
-			},2000);
+			}, 2000);
+
 		} else {
+
 			Logger.sendMessage('player register degil');
+			webosIsRegister = WebosSettings.value("PlayerSettings/status","");
 			CreateIframeElement("Login/login.html", "login");
 			$("#screen-shot-image").show();
+
 		}
 
 	});
 
 	sendHardbitSystemInfo();
 	sendSystemInfo();
-	checkSocketConnection(); 
+	checkSocketConnection();
 }
 
 function messageCheck(msg) {
@@ -228,7 +250,7 @@ function download(url, callback) {
 	});
 }
 
-function downloadNext() { 
+function downloadNext() {
 	currentIndex = currentIndex + 1
 	if (currentIndex < urlArray.length) {
 		var currentUrl = urlArray[currentIndex];
@@ -259,9 +281,9 @@ function downloadNext() {
 	else {
 		currentIndex = -1;
 		Logger.sendMessage("download complated all files ✅");
-		setTimeout(function(){
+		setTimeout(function () {
 			$("#screen-shot-image").hide();
-		},2000);
+		}, 2000);
 
 		if (downloadDir == publishmentsDir) {
 			Logger.sendMessage("SHOWWW PLAYERE✅");
@@ -274,7 +296,7 @@ function downloadNext() {
 		listDir(contentsDir);
 	}
 }
-  
+
 function fileExists(files, callback) {
 	var successCb = function (cbObject) {
 		var exists = cbObject.exists;
@@ -525,8 +547,8 @@ function sendHardbitSystemInfo() {
 			customerId: WebosSettings.value("Customer/id", "")
 
 		}
-
-		sendSignal(commandMessage.HealthCheck, systemInfData);
+		if(webosIsRegister == true)
+			sendSignal(commandMessage.HealthCheck, systemInfData);
 	}, 10000);
 
 }
@@ -566,7 +588,8 @@ function sendSystemInfo() {
 			customerId: WebosSettings.value("Customer/id", "")
 
 		}
-		sendSignal(commandMessage.Sys_Info, systemInfData);
+		if(webosIsRegister == true)
+			sendSignal(commandMessage.Sys_Info, systemInfData);
 
 	}, 60000);
 
