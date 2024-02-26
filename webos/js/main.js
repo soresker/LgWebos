@@ -11,6 +11,7 @@ var globalPublishment = "";
 var downloadDir = "";
 var downloadName = "";
 var webosIsRegister = "";
+var globalKeyCode ="";
 
 //var keyboardControl = new Keyboard_Control();
 
@@ -99,9 +100,32 @@ function addLastScript(url) {
 window.onkeydown = function (event) {
 
 	console.log("window.event : " + event);
-
+	var temp = "";
 	var iframe = document.getElementById('login').getElementsByTagName('iframe')[0];
 	var keyCode = event.keyCode || event.which;
+
+
+	if (webosIsRegister == true)
+	{
+		temp = WTools.keyCodeToValue(keyCode);
+
+		Logger.sendMessage("Player Sifirlamaca1 temp:"+temp +"keycode:"+keyCode);
+		globalKeyCode += temp.toString();
+		Logger.sendMessage("Player Sifirlamaca2 temp:"+temp +"globalKeyCode:"+globalKeyCode);
+
+		if(globalKeyCode == "2580")
+		{
+			Logger.sendMessage("Player Sifirlamaca3");
+			removeDir();
+			window.localStorage.clear();
+			localStorage.clear();
+			setTimeout(function () {
+				WebosDevice.restartApplication();
+			}, 2000);
+		}
+
+		return;
+	}
 
 	var iframeDocument = iframe.contentDocument || iframe.contentWindow.document;
 

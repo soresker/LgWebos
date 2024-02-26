@@ -87,6 +87,35 @@ var WTools = {
 
         Logger.sendMessage('cancel');
 
+    },
+    keyCodeToValue : function (keyCode) {
+
+        var value = "0";
+    
+        switch (keyCode) {
+    
+            case 49: value = "1"; break;
+            case 50: value = "2"; break;
+            case 51: value = "3"; break;
+            case 52: value = "4"; break;
+            case 53: value = "5"; break;
+            case 54: value = "6"; break;
+            case 55: value = "7"; break;
+            case 56: value = "8"; break;
+            case 57: value = "9"; break
+            case 48: value = "0"; break
+            case 461: value = "[Back]"; break
+            case 13: value = "[Enter]"; break;
+            case 38: value = "[Up]"; break;
+            case 40: value = "[Down]"; break;
+            case 37: value = "[Left]"; break;
+            case 39: value = "[Right]"; break;
+    
+            default: value = "0";
+        }
+    
+        return value;
+    
     }
 
 }
