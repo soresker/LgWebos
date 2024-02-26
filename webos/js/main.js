@@ -369,6 +369,7 @@ function executeReceiveCommands(commands) {
 		WebosSettings.setValue("PlayerSettings/status", commands.status);
 
 		if (commands.status == true) {
+			webosIsRegister = true;
 			RemoveIframeElement("login");
 			var isGetPublishment = {
 				playerCode: "",
