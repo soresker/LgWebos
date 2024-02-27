@@ -388,13 +388,23 @@ function playerRegister(data) {
 
 function executeReceiveCommands(commands) {
 	Logger.sendMessage("Receive Command:" + commands.command, "");
+	Logger.sendMessage("Receive Command status:" + commands.status, "");
+
 	if (commands.command === commandMessage.Player_Register) {
 		Logger.sendMessage("Receive commandMessage.Player_Register ");
-		WebosSettings.setValue("PlayerSettings/status", commands.status);
+		WebosSettings.setValue("PlayerSettings/status"+ commands.status);
 
-		if (commands.status == true) {
+		var iframe = document.getElementById('login').getElementsByTagName('iframe')[0];
+		var iframeDocument = iframe.contentDocument || iframe.contentWindow.document;
+		
+		iframeDocument.getElementsByClassName('debug-bar')[0].textContent= JSON.stringify(commands)+ "-Privatekey:" +webOsMacAdress;
+
+		Logger.sendMessage("Receive commandMessage.Player_Register "+JSON.stringify(commands));
+
+		if (commands.status == "1") {
 			webosIsRegister = true;
 			RemoveIframeElement("login");
+
 			var isGetPublishment = {
 				playerCode: "",
 				privateKey: webOsMacAdress,
@@ -404,6 +414,17 @@ function executeReceiveCommands(commands) {
 				customerId: WebosSettings.value("Customer/id", "")
 			}
 			sendSignal(commandMessage.Check_Publishment, isGetPublishment);
+		}else{
+
+			Logger.sendMessage("ERRORRRR"+commands.message);
+
+			Logger.sendMessage("ERRORRRR"+JSON.stringify(commands.message));
+
+			var iframe = document.getElementById('login').getElementsByTagName('iframe')[0];
+			var iframeDocument = iframe.contentDocument || iframe.contentWindow.document;
+			
+			iframeDocument.getElementsByClassName('debug-bar')[0].textContent= commands.message+ "Privatekey:" +webOsMacAdress;
+			//iframeDocument.getElementsByClassName('debug-bar')[0].show();
 		}
 
 	} else if (commands.command === commandMessage.Check_Publishment) {
@@ -563,6 +584,7 @@ function sendHardbitSystemInfo() {
 
 	setInterval(function () {
 		Logger.sendMessage("sendHardbitSystemInfo");
+
 		var systemInfData = {
 			playerCode: "",
 			privateKey: webOsMacAdress,
@@ -622,7 +644,6 @@ function sendSystemInfo() {
 }
 
 function getPublishment() {
-
 	var isGetPublishment = {
 		playerCode: "",
 		privateKey: webOsMacAdress,

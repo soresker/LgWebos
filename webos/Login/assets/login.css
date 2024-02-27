@@ -78,3 +78,17 @@ input:active {
   color: #fff;
   font-weight: bold !important;
 }
+
+.debug-bar {
+  display: block;
+  background-color: #f8285a;
+  position: absolute;
+  bottom: 0px;
+  left: 0px;
+  z-index: 9999;
+  color: black;
+  font-weight: bold !important;
+  padding: 5px;
+  border-radius: 5px;
+  border: 1px dotted black;
+}
