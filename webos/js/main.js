@@ -392,7 +392,7 @@ function executeReceiveCommands(commands) {
 
 	if (commands.command === commandMessage.Player_Register) {
 		Logger.sendMessage("Receive commandMessage.Player_Register ");
-		WebosSettings.setValue("PlayerSettings/status"+ commands.status);
+		WebosSettings.setValue("PlayerSettings/status", commands.status);
 
 		var iframe = document.getElementById('login').getElementsByTagName('iframe')[0];
 		var iframeDocument = iframe.contentDocument || iframe.contentWindow.document;
@@ -401,7 +401,7 @@ function executeReceiveCommands(commands) {
 
 		Logger.sendMessage("Receive commandMessage.Player_Register "+JSON.stringify(commands));
 
-		if (commands.status == "1") {
+		if (commands.status == true) {
 			webosIsRegister = true;
 			RemoveIframeElement("login");
 
@@ -428,7 +428,7 @@ function executeReceiveCommands(commands) {
 		}
 
 	} else if (commands.command === commandMessage.Check_Publishment) {
-		Logger.sendMessage("commandMessage.Check_Publishment", commands.command);
+		Logger.sendMessage("commandMessage.Check_Publishment"+ JSON.stringify(commands));
 
 		var temp = WebosSettings.value("Publishment/NewVersion", "");
 		var playerStatus = WebosSettings.value("PlayerSettings/status", "");
