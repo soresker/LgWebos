@@ -148,8 +148,8 @@ Publishment_Reader.parseContents = function (playlistInfo, playlistInfoToParse) 
 
         contentInfo.setFileUniqueKey(Tools.defaultValue(currentContentInfoToParse.contentUniqId, ""));
 
-        var expireDate = moment(currentContentInfoToParse.endDate, "YYYY-MM-DD HH:mm:ss");
-        expireDate = !expireDate.isValid() ? "" : currentContentInfoToParse.endDate;
+        var expireDate = moment(currentContentInfoToParse.expireDate, "YYYY-MM-DD");
+        expireDate = !expireDate.isValid() ? "" : currentContentInfoToParse.expireDate;
         contentInfo.setExpireDate(Tools.defaultValue(expireDate, ""));
 
         var startDate = moment(currentContentInfoToParse.startDate, "YYYY-MM-DD");
