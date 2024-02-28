@@ -409,4 +409,47 @@ WebosDevice.setUiTile = function(data) {
     
 }
 
+WebosDevice.setMasterSync = function (dev_ip,dev_port) {
+// Sets the master signage device.
+var custom = new Custom();
+
+    custom.VideoSync.setMaster(
+        function successCallback(successObject) {
+            Logger.sendMessage('setMaster is : ' + JSON.stringify(successObject));
+        },
+        function failureCallback(failureObject) {
+            Logger.sendMessage('[' + failureObject.errorCode + '] ' + failureObject.errorText)
+        },
+        {
+            ip : dev_ip,
+            port : dev_port,
+            //Optional property when there are multiple video tags.
+            videoElement : document.getElementById("video") 
+        }
+    );
+
+} 
+
+WebosDevice.setSlaveSync = function (dev_ip,dev_port) {
+// Sets the slave device.
+var custom = new Custom();
+
+    custom.VideoSync.setSlave(
+        function successCallback(successObject) {
+            Logger.sendMessage('setSlave is successfully run.'+JSON.stringify(successObject));
+        },
+        function failureCallback(failureObject) {
+            Logger.sendMessage('[' + failureObject.errorCode + '] ' + failureObject.errorText)
+        },
+        {
+            ip : dev_ip,
+            port : dev_port,
+            // Value from Master device
+            basetime: '1524680133333', 
+            //Optional property when there are multiple video tags.
+            videoElement : document.getElementById("video")
+        }
+    );
+} 
+
     

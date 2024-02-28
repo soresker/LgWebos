@@ -73,92 +73,43 @@ Content_Video.prototype.removeAllListeners = function(node, event) {
 
 Content_Video.prototype.showContent = function(func) {
 
-    if(Publisher.videoType == 0) //buraya bir video mod koyalım vlc acmak durumunda kalırsak
-    {
+    Content_Abstractor.prototype.showContent.call(this);
 
-        Content_Abstractor.prototype.showContent.call(this);
-
-        try {
-
-           Player_Ui_Creator.UIElement.appendHTML("#frame-" + this.frameUniqueKey, this.generateUIElement());
-
-          // Player_Ui_Creator.UIElement.appendHTML("#frame-" + this.frameUniqueKey, this.generateScreenShotElement());
-
-           var fileUrlEdits = Publisher.playerGlobalData.replace(/\\/g, '/')  + this.fileName;
-    
-            $(this.videoSelector).attr('src',fileUrlEdits);
-            var video = document.getElementById("content-" + this.playlistContentUniqueKey + "-video");
-            console.log("Video.basePath2:" +fileUrlEdits);
-
-            if (this.settingSeekStart)
-                this.settingSeekStart = false;
-
-            if (this.loop) {
-                $(this.videoSelector).attr("loop", "loop");
-            }
-            
-            $(this.videoSelector)[0].play();
-
-           //console.log('Video Guid ' + this.guid);
-            
-            var this_ = this;
-
-            $(this_.videoSelector).show();
-            if (func)
-                func();
-            this_.videoPlayed = true;
-   /*
-            if (!this_.videoPlayed && video.currentTime > 0.500) {
-                console.log("video played")
-                 $(this_.videoSelector).show();
-                 if (func)
-                     func();
-                 this_.videoPlayed = true;
-                 // $(this_.videoSelector).prop('muted', false);
-             }
-          
-            this.addListener(video, 'timeupdate', function() {
-                if (!this_.videoPlayed && video.currentTime > 0.500) {
-                   console.log("video played")
-                    $(this_.videoSelector).show();
-                    if (func)
-                        func();
-                    this_.videoPlayed = true;
-                    // $(this_.videoSelector).prop('muted', false);
-                }
-            }, false);
-*/
-        } catch (exception) {
-           console.log("[Video][Error]", exception)
-            this.parentFrameObject.setCurrentContentValidity(false);
-            if (func)
-                func();
-            this.contentEnded();
-            return;
-        }
-    }else{
-
-        Content_Abstractor.prototype.showContent.call(this);
+    try {
 
         Player_Ui_Creator.UIElement.appendHTML("#frame-" + this.frameUniqueKey, this.generateUIElement());
 
-        var video = document.getElementById("content-" + this.playlistContentUniqueKey + "-video");
+        // Player_Ui_Creator.UIElement.appendHTML("#frame-" + this.frameUniqueKey, this.generateScreenShotElement());
 
-        
         var fileUrlEdits = Publisher.playerGlobalData.replace(/\\/g, '/')  + this.fileName;
 
-        var message = {
-            Type : "openFFMpeg",
-            Path : fileUrlEdits,
-            Duration:this.duration
+        $(this.videoSelector).attr('src',fileUrlEdits);
+        var video = document.getElementById("content-" + this.playlistContentUniqueKey + "-video");
+        console.log("Video.basePath2:" +fileUrlEdits);
+
+        if (this.settingSeekStart)
+            this.settingSeekStart = false;
+
+        if (this.loop) {
+            $(this.videoSelector).attr("loop", "loop");
         }
+        
+        $(this.videoSelector)[0].play();
+        
+        var this_ = this;
 
-        window.parent.postMessage(JSON.stringify(message));
-        console.log("FFMPEG open path:",fileUrlEdits);
-
+        $(this_.videoSelector).show();
         if (func)
             func();
+        this_.videoPlayed = true;
 
+    } catch (exception) {
+        console.log("[Video][Error]", exception)
+        this.parentFrameObject.setCurrentContentValidity(false);
+        if (func)
+            func();
+        this.contentEnded();
+        return;
     }
 
 };

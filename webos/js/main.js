@@ -91,7 +91,7 @@ function addLastScript(url) {
 		WebosDevice.getPlatformInfo();
 		WebosDevice.getNetworkInfo();
 		WebosDevice.getSystemUsageInfo()
-		WebosDevice.setUiTile(false);
+		//WebosDevice.setUiTile(false);
 	}
 	document.body.appendChild(script)
 
