@@ -32,6 +32,7 @@ var commandMessage = {
     ScreenLoging: 'screenLoging',
     ConsoleLogging: "consoleLogging",
     PlayerSettingsHere: "playerSettingsHere",
-    Get_Publishment: "getPublishment"
+    Get_Publishment: "getPublishment",
+    Update_Publisment_Date: "updatePublishmentDate"
 
 };

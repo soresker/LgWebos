@@ -278,7 +278,8 @@ function downloadNext() {
 	currentIndex = currentIndex + 1
 	if (currentIndex < urlArray.length) {
 		var currentUrl = urlArray[currentIndex];
-		Logger.sendMessage('download start:' + 'download status:' + (currentIndex + 1) + '/' + urlArray.length)
+		Logger.sendMessage('download start:' + 'download status:' + (currentIndex + 1) + '/' + urlArray.length);
+		sendConsoleLog('download start:' + 'download status:' + (currentIndex + 1) + '/' + urlArray.length)
 		Logger.sendMessage('download file url:' + currentUrl)
 		var fileName = currentUrl.split('/').pop();
 		fileExists(downloadDir + fileName, function (error, data) {
@@ -290,7 +291,7 @@ function downloadNext() {
 						Logger.sendMessage("download failed error:" + JSON.stringify(err));
 					} else {
 						Logger.sendMessage('download complete: ' + (currentIndex + 1) + '/' + urlArray.length + ' 😃');
-						Logger.sendMessage("download complete: " + (currentIndex + 1) + "/" + urlArray.length);
+						sendConsoleLog("download complete: " + (currentIndex + 1) + "/" + urlArray.length);			
 					}
 					$(".download-bar").html("Downloading " + (currentIndex + 1) + "/" + urlArray.length);
 					downloadNext()
@@ -305,6 +306,9 @@ function downloadNext() {
 	else {
 		currentIndex = -1;
 		Logger.sendMessage("download complated all files ✅");
+
+		this.updatePublishmentDate();
+
 		setTimeout(function () {
 			$("#screen-shot-image").hide();
 		}, 2000);
@@ -318,6 +322,8 @@ function downloadNext() {
 		$(".download-bar").hide()
 		listDir(publishmentsDir);
 		listDir(contentsDir);
+
+		sendConsoleLog("download complated all files");
 	}
 }
 
@@ -388,6 +394,7 @@ function playerRegister(data) {
 
 function executeReceiveCommands(commands) {
 	Logger.sendMessage("Receive Command:" + commands.command, "");
+	sendConsoleLog("Receive Command:" + commands.command);
 	Logger.sendMessage("Receive Command status:" + commands.status, "");
 
 	if (commands.command === commandMessage.Player_Register) {
@@ -513,6 +520,7 @@ function executeReceiveCommands(commands) {
 function showPlayer() {
 
 	Logger.sendMessage("showPlayer :)");
+	sendConsoleLog("showPlayer :)");
 
 	var Data = globalPublishment;
 	var initPlayer = { "MessageType": "initPlayer", "Data": { "filePath": "./content/contents/", "videoMode": "0" } }
@@ -631,7 +639,7 @@ function sendSystemInfo() {
 			playerDeviceType: 'Webos',
 			serialNo: webOsSerialNumber,
 			playerId: WebosSettings.value("PlayerSettings/playerId", ""),
-			appVersion: '1.0.64',
+			appVersion: '1.0.66',
 			customerId: WebosSettings.value("Customer/id", "")
 
 		}
@@ -693,4 +701,27 @@ function readPulishmentFile(fileName) {
 		}
 		rawFile.send(null);
 	});
+}
+
+function updatePublishmentDate() {
+	var updatePublishment = {
+		playerCode: "",
+		privateKey: webOsMacAdress,
+		publicKey: webOsMacAdress,
+		playerId: WebosSettings.value("PlayerSettings/playerId", ""),
+		playerName: webOsModelName,
+		customerId: WebosSettings.value("Customer/id", "")
+	}
+	sendSignal(commandMessage.Update_Publisment_Date, updatePublishment);
+}
+
+function sendConsoleLog(log) {
+    console.log("sendConsoleLog",log);
+    let sendLogs = {
+      customerid : WebosSettings.value("Customer/id", ""),
+      playerId : WebosSettings.value("PlayerSettings/playerId", ""),
+      logs: JSON.stringify(log)
+    }
+    sendSignal(commandMessage.ConsoleLogging, sendLogs); 
+     
 }
