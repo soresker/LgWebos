@@ -394,7 +394,6 @@ function playerRegister(data) {
 
 function executeReceiveCommands(commands) {
 	Logger.sendMessage("Receive Command:" + commands.command, "");
-	sendConsoleLog("Receive Command:" + commands.command);
 	Logger.sendMessage("Receive Command status:" + commands.status, "");
 
 	if (commands.command === commandMessage.Player_Register) {
@@ -435,6 +434,7 @@ function executeReceiveCommands(commands) {
 		}
 
 	} else if (commands.command === commandMessage.Check_Publishment) {
+		sendConsoleLog("Receive Command:" + commands.command);
 		Logger.sendMessage("commandMessage.Check_Publishment"+ JSON.stringify(commands));
 
 		var temp = WebosSettings.value("Publishment/NewVersion", "");
@@ -461,22 +461,28 @@ function executeReceiveCommands(commands) {
 		}
 
 	} else if (commands.command === commandMessage.WinScreenShotRequest) {
+		sendConsoleLog("Receive Command:" + commands.command);
 		Logger.sendMessage("WinScreenShotRequest");
 		WebosDevice.screenShot(false, true);
 	}
 	else if (commands.command === commandMessage.Player_Restart) {
+		sendConsoleLog("Receive Command:" + commands.command);
 		Logger.sendMessage("Player_Restart");
 		WebosDevice.deviceRestart();
 	}
 	else if (commands.command === commandMessage.Player_Shutdown) {
+		sendConsoleLog("Receive Command:" + commands.command);
 		Logger.sendMessage("Player_Shutdown");
 		WebosDevice.deviceShutDown();
 	}
 	else if (commands.command === commandMessage.Check_Upgrade) {
+		sendConsoleLog("Receive Command:" + commands.command);
 		Logger.sendMessage("Check_Upgrade");
 		WebosDevice.upgradeIpkApplication();
 	}
 	else if (commands.command === commandMessage.PlayerDeleted) {
+		sendConsoleLog("Receive Command:" + commands.command);
+
 		Logger.sendMessage("PlayerDeleted");
 		removeDir();
 		window.localStorage.clear();
@@ -489,10 +495,14 @@ function executeReceiveCommands(commands) {
 		Logger.sendMessage("HealthCheck");
 	}
 	else if (commands.command === commandMessage.AppRestart) {
+		sendConsoleLog("Receive Command:" + commands.command);
+
 		Logger.sendMessage("AppRestart");
 		WebosDevice.restartApplication();
 	}
 	else if (commands.command === commandMessage.PlayerSettingsHere) {
+		sendConsoleLog("Receive Command:" + commands.command);
+
 		Logger.sendMessage("PlayerSettingsHere:" + JSON.stringify(commands));
 		if (webOsHardwareVersion >= "3.0") {
 			Logger.sendMessage("Rotate Setleniyor:" + JSON.stringify(commands));
@@ -504,10 +514,13 @@ function executeReceiveCommands(commands) {
 		Logger.sendMessage(" Receive commandMessage.Sys_Info", JSON.stringify(commands));
 	}
 	else if (commands.command === commandMessage.Get_Publishment) {
+		sendConsoleLog("Receive Command:" + commands.command);
 		Logger.sendMessage(" Receive GetPublishment", JSON.stringify(commands));
 		receive_Publishment(commands);
 	}
 	else if (commands.command === commandMessage.PublishmentDelete) {
+		sendConsoleLog("Receive Command:" + commands.command);
+
 		Logger.sendMessage(" Receive PublishmentDelete", JSON.stringify(commands));
 		removeDir();
 	}
@@ -639,7 +652,7 @@ function sendSystemInfo() {
 			playerDeviceType: 'Webos',
 			serialNo: webOsSerialNumber,
 			playerId: WebosSettings.value("PlayerSettings/playerId", ""),
-			appVersion: '1.0.66',
+			appVersion: '1.0.67',
 			customerId: WebosSettings.value("Customer/id", "")
 
 		}
