@@ -15,6 +15,11 @@ var webOsFirmwareVersion = "";
 var isInternetActive = false;
 var webOsIp = "";
 
+var webosIsSync = false;
+var webosIsMaster = false;
+var webosSyncMasterIp = "";
+var webosSyncMasterPort = "";
+
 function WebosDevice ()  {
                      
 }
@@ -445,7 +450,6 @@ var custom = new Custom();
             ip : dev_ip,
             port : dev_port,
             // Value from Master device
-            basetime: '1524680133333', 
             //Optional property when there are multiple video tags.
             videoElement : document.getElementById("video")
         }

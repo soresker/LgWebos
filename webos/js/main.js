@@ -209,6 +209,7 @@ window.onload = function () {
 	sendHardbitSystemInfo();
 	sendSystemInfo();
 	checkSocketConnection();
+	StartSyncAction();
 }
 
 function messageCheck(msg) {
@@ -508,6 +509,20 @@ function executeReceiveCommands(commands) {
 			Logger.sendMessage("Rotate Setleniyor:" + JSON.stringify(commands));
 			WebosDevice.setRotate(commands.jsonData.rotation);
 		}
+		if (webOsHardwareVersion >= "2.0") {
+			if(commands.jsonData.isSync == true )
+			{
+				Logger.sendMessage("Sync setleniyor" + JSON.stringify(commands));
+				sendConsoleLog("Sync setleniyor" + JSON.stringify(commands));
+				
+				WebosSettings.setValue("PlayerSettings/isSync",commands.jsonData.isSync);
+				WebosSettings.setValue("PlayerSettings/isMaster",commands.jsonData.isMaster);
+				WebosSettings.setValue("PlayerSettings/syncMasterIp",commands.jsonData.syncMasterIp);
+				WebosSettings.setValue("PlayerSettings/syncMasterPort",commands.jsonData.syncMasterPort);
+
+				StartSyncAction();
+			}
+		}
 		//WebosDevice.setUiTile(false); //sonra acilabilir.      
 	}
 	else if (commands.command === commandMessage.Sys_Info) {
@@ -735,6 +750,33 @@ function sendConsoleLog(log) {
       playerId : WebosSettings.value("PlayerSettings/playerId", ""),
       logs: JSON.stringify(log)
     }
-    sendSignal(commandMessage.ConsoleLogging, sendLogs); 
-     
+    sendSignal(commandMessage.ConsoleLogging, sendLogs);    
+}
+
+function StartSyncAction() {
+    console.log("StartSyncAction");
+
+	webosIsSync = WebosSettings.value("PlayerSettings/isSync","");
+	webosIsMaster = WebosSettings.value("PlayerSettings/isMaster","");
+	webosSyncMasterIp = WebosSettings.value("PlayerSettings/syncMasterIp","");
+	webosSyncMasterPort = WebosSettings.value("PlayerSettings/syncMasterPort","");
+
+	if(webosIsSync)
+	{
+		console.log("StartSyncAction: webosIsSync");
+
+		if(webosIsMaster)
+		{
+			console.log("StartSyncAction: webosIsMaster");
+			WebosDevice.setMasterSync(webosSyncMasterIp,webosSyncMasterPort);
+		}else{
+			console.log("StartSyncAction: webosIsSlave");
+			WebosDevice.setSlaveSync(webosSyncMasterIp,webosSyncMasterPort);
+		}
+	}else{
+
+		console.log("StartSyncAction: NOT ACTIVE");
+
+	}
+
 }
