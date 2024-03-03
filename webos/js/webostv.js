@@ -19,6 +19,7 @@ var webosIsSync = false;
 var webosIsMaster = false;
 var webosSyncMasterIp = "";
 var webosSyncMasterPort = "";
+var globalVideoPath = "";
 
 function WebosDevice ()  {
                      
@@ -418,18 +419,20 @@ WebosDevice.setMasterSync = function (dev_ip,dev_port) {
 // Sets the master signage device.
 var custom = new Custom();
 
+    Logger.sendMessage('setMaster is : ' + dev_ip+"--"+dev_port +"--"+globalVideoPath);
+
     custom.VideoSync.setMaster(
         function successCallback(successObject) {
-            Logger.sendMessage('setMaster is : ' + JSON.stringify(successObject));
+            Logger.sendMessage('setMaster successCallback is : ' + JSON.stringify(successObject));
         },
         function failureCallback(failureObject) {
             Logger.sendMessage('[' + failureObject.errorCode + '] ' + failureObject.errorText)
         },
         {
             ip : dev_ip,
-            port : dev_port,
+            port :parseInt(dev_port),
             //Optional property when there are multiple video tags.
-            videoElement : document.getElementById("video") 
+            videoElement : globalVideoPath
         }
     );
 
@@ -437,6 +440,9 @@ var custom = new Custom();
 
 WebosDevice.setSlaveSync = function (dev_ip,dev_port) {
 // Sets the slave device.
+
+Logger.sendMessage('setSlaveSync is : ' + dev_ip+"--"+dev_port +"--"+globalVideoPath);
+
 var custom = new Custom();
 
     custom.VideoSync.setSlave(
@@ -448,10 +454,10 @@ var custom = new Custom();
         },
         {
             ip : dev_ip,
-            port : dev_port,
+            port : parseInt(dev_port),
             // Value from Master device
             //Optional property when there are multiple video tags.
-            videoElement : document.getElementById("video")
+            videoElement : globalVideoPath
         }
     );
 } 

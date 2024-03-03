@@ -38,6 +38,7 @@ function Content_Video(contentInfo, parentFrameObject) {
     this.settingSeekStart = false;
     this.videoSelector = "#content-" + contentInfo.playlistUniqueKey + '-' + guid + "-video";
     this.videoRepeatCount = 1;
+    globalVideoPath = this.videoSelector;
 
     this.playlistContentUniqueKey = contentInfo.playlistUniqueKey + '-' + guid;
     this.fileName = contentInfo.getTypeContentProperty("filename");

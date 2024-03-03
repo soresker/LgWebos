@@ -209,7 +209,7 @@ window.onload = function () {
 	sendHardbitSystemInfo();
 	sendSystemInfo();
 	checkSocketConnection();
-	//StartSyncAction();
+	StartSyncAction();
 }
 
 function messageCheck(msg) {
@@ -520,7 +520,7 @@ function executeReceiveCommands(commands) {
 				WebosSettings.setValue("PlayerSettings/syncMasterIp",commands.jsonData.syncMasterIp);
 				WebosSettings.setValue("PlayerSettings/syncMasterPort",commands.jsonData.syncMasterPort);
 
-				//StartSyncAction();
+				StartSyncAction();
 			}
 		}
 		//WebosDevice.setUiTile(false); //sonra acilabilir.      
