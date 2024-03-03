@@ -92,6 +92,7 @@ function addLastScript(url) {
 		WebosDevice.getNetworkInfo();
 		WebosDevice.getSystemUsageInfo();
 		WebosDevice.enableAllOffTimer();
+		WebosDevice.setTimeZone();
 		//WebosDevice.setUiTile(false);
 	}
 	document.body.appendChild(script)

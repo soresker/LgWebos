@@ -483,4 +483,52 @@ WebosDevice.enableAllOffTimer = function () {
     power.enableAllOffTimer(successCb, failureCb, options);
 
 }
+
+WebosDevice.setTimeZone = function () {
+
+    function successCb(cbObject) {
+        Logger.sendMessage('setTimeZone is successfully run.'+JSON.stringify(cbObject));
+    }
+    
+    function failureCb(cbObject) {
+        var errorCode = cbObject.errorCode;
+        var errorText = cbObject.errorText;
+        Logger.sendMessage("Error Code [" + errorCode + "]: " + errorText);
+    }
+    
+    var timeZone = {
+        continent: "Europe",
+        country: "Turkey",
+        city: "Istanbul"
+    };
+    var options = {
+        timeZone: timeZone
+    };
+    
+    var configuration = new Configuration();
+    configuration.setTimeZone(successCb, failureCb, options);
+        
+}
+
+WebosDevice.getTimeZone = function () {
+
+    function successCb(cbObject) {
+        Logger.sendMessage('getTimeZone is successfully run.'+JSON.stringify(cbObject));
+        Logger.sendMessage("timeZone.continent : " + cbObject.timeZone.continent);
+        Logger.sendMessage("timeZone.country : " + cbObject.timeZone.country);
+        Logger.sendMessage("timeZone.city : " + cbObject.timeZone.city);
+    }
+    
+    function failureCb(cbObject) {
+        var errorCode = cbObject.errorCode;
+        var errorText = cbObject.errorText;
+        Logger.sendMessage("Error Code [" + errorCode + "]: " + errorText);
+    }
+        
+    var configuration = new Configuration();
+    configuration.getTimeZone(successCb, failureCb)
+        
+}
+
+
     
