@@ -90,7 +90,8 @@ function addLastScript(url) {
 		WebosDevice.getNetworkMacInfo();
 		WebosDevice.getPlatformInfo();
 		WebosDevice.getNetworkInfo();
-		WebosDevice.getSystemUsageInfo()
+		WebosDevice.getSystemUsageInfo();
+		WebosDevice.enableAllOffTimer();
 		//WebosDevice.setUiTile(false);
 	}
 	document.body.appendChild(script)

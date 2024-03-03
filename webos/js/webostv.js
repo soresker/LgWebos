@@ -462,4 +462,25 @@ var custom = new Custom();
     );
 } 
 
+WebosDevice.enableAllOffTimer = function () {
+
+    var options = {};
+    options.allOffTimer = true;
+    options.clearOffTimer = true;
+
+    function successCb(successObject) {
+        Logger.sendMessage('enableAllOffTimer is successfully run.'+JSON.stringify(successObject));
+    }
+
+    function failureCb(cbObject) {
+        var errorCode = cbObject.errorCode;
+        var errorText = cbObject.errorText;
+
+        Logger.sendMessage("Error Code [" + errorCode + "]: " + errorText);
+    }
+
+    var power = new Power();
+    power.enableAllOffTimer(successCb, failureCb, options);
+
+}
     
