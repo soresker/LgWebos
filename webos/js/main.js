@@ -93,6 +93,7 @@ function addLastScript(url) {
 		WebosDevice.getSystemUsageInfo();
 		WebosDevice.enableAllOffTimer();
 		WebosDevice.setCurrentTime();
+		WebosDevice.setPowerSaveMode();
 	}
 	document.body.appendChild(script)
 
@@ -668,7 +669,7 @@ function sendSystemInfo() {
 			playerDeviceType: 'Webos',
 			serialNo: webOsSerialNumber,
 			playerId: WebosSettings.value("PlayerSettings/playerId", ""),
-			appVersion: '1.0.69',
+			appVersion: '1.0.73',
 			customerId: WebosSettings.value("Customer/id", "")
 
 		}

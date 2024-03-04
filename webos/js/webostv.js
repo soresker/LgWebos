@@ -540,10 +540,13 @@ WebosDevice.setCurrentTime = function () {
     options.minute = 40;
     options.sec = 50;
     options.ntp = true;
-    options.ntpServerAddress = "192.168.0.4";
+    options.ntpServerAddress = "";
     
     function successCb(cbObject) {
-        Logger.sendMessage("setCurrentTime : " + cbObject);
+        Logger.sendMessage("setCurrentTime : " + JSON.stringify(cbObject));
+   /*     if (webOsHardwareVersion == "4.0" || webOsHardwareVersion == "4.2" ) 
+        Logger.sendMessage("setCurrentTime : " + JSON.stringify(cbObject));
+        else*/
         this.WebosDevice.setTimeZone();
     }
     
@@ -556,6 +559,32 @@ WebosDevice.setCurrentTime = function () {
     
     var configuration = new Configuration();
     configuration.setCurrentTime(successCb, failureCb, options);
-    }
+}
+
+WebosDevice.setPowerSaveMode = function () {
+
+    var options = {
+        powerSaveMode: {
+            ses: false,
+            dpmMode: Signage.DpmMode.OFF,
+            automaticStandby: Signage.AutomaticStandbyMode.OFF,
+            do15MinOff: false
+        }
+    };
+    
+    var successCb = function () {
+        Logger.sendMessage("setPowerSaveMode successfully Set");
+    };
+    
+    var failureCb = function (cbObject) {
+        var errorCode = cbObject.errorCode;
+        var errorText = cbObject.errorText;
+        Logger.sendMessage(" Error Code [" + errorCode + "]: " + errorText);
+    };
+    
+    var signage = new Signage();
+    signage.setPowerSaveMode(successCb, failureCb, options);
+}
+    
     
     
