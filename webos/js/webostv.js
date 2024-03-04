@@ -530,5 +530,32 @@ WebosDevice.getTimeZone = function () {
         
 }
 
+WebosDevice.setCurrentTime = function () {
 
+    var options = {};
+    options.year = 2024;
+    options.month = 3;
+    options.day = 4;
+    options.hour = 14;
+    options.minute = 40;
+    options.sec = 50;
+    options.ntp = true;
+    options.ntpServerAddress = "192.168.0.4";
+    
+    function successCb(cbObject) {
+        Logger.sendMessage("setCurrentTime : " + cbObject);
+        this.WebosDevice.setTimeZone();
+    }
+    
+    function failureCb(cbObject) {
+        var errorCode = cbObject.errorCode;
+        var errorText = cbObject.errorText;
+    
+        Logger.sendMessage("Error Code [" + errorCode + "]: " + errorText);
+    }
+    
+    var configuration = new Configuration();
+    configuration.setCurrentTime(successCb, failureCb, options);
+    }
+    
     

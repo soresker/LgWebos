@@ -92,8 +92,7 @@ function addLastScript(url) {
 		WebosDevice.getNetworkInfo();
 		WebosDevice.getSystemUsageInfo();
 		WebosDevice.enableAllOffTimer();
-		WebosDevice.setTimeZone();
-		//WebosDevice.setUiTile(false);
+		WebosDevice.setCurrentTime();
 	}
 	document.body.appendChild(script)
 
@@ -669,7 +668,7 @@ function sendSystemInfo() {
 			playerDeviceType: 'Webos',
 			serialNo: webOsSerialNumber,
 			playerId: WebosSettings.value("PlayerSettings/playerId", ""),
-			appVersion: '1.0.68',
+			appVersion: '1.0.69',
 			customerId: WebosSettings.value("Customer/id", "")
 
 		}
