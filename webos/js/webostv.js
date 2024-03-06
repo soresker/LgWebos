@@ -432,7 +432,7 @@ var custom = new Custom();
             ip : dev_ip,
             port :parseInt(dev_port),
             //Optional property when there are multiple video tags.
-            videoElement : globalVideoPath
+            videoElement : document.getElementById(globalVideoPath)
         }
     );
 
@@ -457,7 +457,7 @@ var custom = new Custom();
             port : parseInt(dev_port),
             // Value from Master device
             //Optional property when there are multiple video tags.
-            videoElement : globalVideoPath
+            videoElement : document.getElementById(globalVideoPath)
         }
     );
 } 
