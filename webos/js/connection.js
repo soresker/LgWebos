@@ -17,7 +17,6 @@ function startSignalSocket() {
 connection.onreconnected = function (connectionId) {
     Logger.sendMessage(connection.state === signalR.HubConnectionState.Connected);
     Logger.sendMessage("onreconnected id = ", connectionId);
-    getPublishment();
 };
 
 connection.onreconnecting = function (error) {
@@ -55,6 +54,23 @@ function getConnectionState() {
     Logger.sendMessage("getConnectionState connectionstate:"+connection.state);
 
     Logger.sendMessage("getConnectionState signalR.HubConnectionState.Connected:"+signalR.HubConnectionState.Connected);
+
+    if(connection.state == "Reconnecting" && signalR.HubConnectionState.Connected =="Connected" && globalPublishmentControlForNet == false)
+    {
+        Logger.sendMessage("Cihaz baglanti deniyor:"+connection.state);
+        globalPublishmentControlForNet = true;
+
+    }else if(connection.state == "Connected" && signalR.HubConnectionState.Connected =="Connected" && globalPublishmentControlForNet == true)
+    {
+        Logger.sendMessage("Cihaz baglandi getPublishment :"+connection.state);
+        getLastPublishment();
+        globalPublishmentControlForNet = false;
+    }else{
+
+        Logger.sendMessage("Reset globalPublishmentControlForNet :"+connection.state);
+        //globalPublishmentControlForNet = false;
+
+    }
 
     if (connection.state == "Disconnected") {
         return false;
