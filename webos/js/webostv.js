@@ -419,6 +419,8 @@ WebosDevice.setMasterSync = function (dev_ip,dev_port) {
 // Sets the master signage device.
 var custom = new Custom();
 
+Logger.sendMessage("aranan video:" + JSON.stringify(document.getElementsByTagName('video')))
+
     Logger.sendMessage('setMaster is : ' + dev_ip+"--"+dev_port +"--"+globalVideoPath);
 
     custom.VideoSync.setMaster(
@@ -432,7 +434,7 @@ var custom = new Custom();
             ip : dev_ip,
             port :parseInt(dev_port),
             //Optional property when there are multiple video tags.
-            videoElement : document.getElementById(globalVideoPath)
+            videoElement : document.getElementById(globalVideoPath.replace("#",""))
         }
     );
 
@@ -442,7 +444,7 @@ WebosDevice.setSlaveSync = function (dev_ip,dev_port) {
 // Sets the slave device.
 
 Logger.sendMessage('setSlaveSync is : ' + dev_ip+"--"+dev_port +"--"+globalVideoPath);
-
+Logger.sendMessage("aranan video:" + JSON.stringify(document.getElementsByTagName('video')))
 var custom = new Custom();
 
     custom.VideoSync.setSlave(
@@ -455,9 +457,9 @@ var custom = new Custom();
         {
             ip : dev_ip,
             port : parseInt(dev_port),
-            // Value from Master device
+            basetime: '',            // Value from Master device
             //Optional property when there are multiple video tags.
-            videoElement : document.getElementById(globalVideoPath)
+            videoElement : document.getElementById(globalVideoPath.replace("#",""))
         }
     );
 } 

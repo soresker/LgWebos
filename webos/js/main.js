@@ -12,6 +12,7 @@ var downloadDir = "";
 var downloadName = "";
 var webosIsRegister = "";
 var globalKeyCode ="";
+var globalPublishmentControlForNet = false;
 
 //var keyboardControl = new Keyboard_Control();
 
@@ -211,7 +212,14 @@ window.onload = function () {
 	sendHardbitSystemInfo();
 	sendSystemInfo();
 	checkSocketConnection();
-	StartSyncAction();
+	setTimeout(function(){
+		getLastPublishment();
+	}, 5000);
+	/*
+	setTimeout(function() {
+		StartSyncAction();
+	}, 5000);
+	*/
 }
 
 function messageCheck(msg) {
@@ -460,7 +468,13 @@ function executeReceiveCommands(commands) {
 			WebosSettings.setValue("Publishment/OldVersion", commands.jsonData.publishmentName);
 			fetchPublishment(commands.jsonData.publishmentData);
 		} else {
+
 			Logger.sendMessage("DEVAMKEEEE :)");
+			Logger.sendMessage("Publisment dosyasi indiriliyor:", commands);
+			//this.writefile(commands.jsonData.publishmentName, commands.jsonData.publishmentData);
+			WebosSettings.setValue("Publishment/NewVersion", commands.jsonData.publishmentName);
+			WebosSettings.setValue("Publishment/OldVersion", commands.jsonData.publishmentName);
+			fetchPublishment(commands.jsonData.publishmentData);
 		}
 
 	} else if (commands.command === commandMessage.WinScreenShotRequest) {
@@ -522,7 +536,7 @@ function executeReceiveCommands(commands) {
 				WebosSettings.setValue("PlayerSettings/syncMasterIp",commands.jsonData.syncMasterIp);
 				WebosSettings.setValue("PlayerSettings/syncMasterPort",commands.jsonData.syncMasterPort);
 
-				StartSyncAction();
+				//StartSyncAction();
 			}
 		}
 		//WebosDevice.setUiTile(false); //sonra acilabilir.      
@@ -669,7 +683,7 @@ function sendSystemInfo() {
 			playerDeviceType: 'Webos',
 			serialNo: webOsSerialNumber,
 			playerId: WebosSettings.value("PlayerSettings/playerId", ""),
-			appVersion: '1.0.74',
+			appVersion: '1.0.76',
 			customerId: WebosSettings.value("Customer/id", "")
 
 		}
@@ -782,3 +796,18 @@ function StartSyncAction() {
 	}
 
 }
+
+function getLastPublishment() {
+    console.log("getLastPublishment");
+	var isGetPublishment = {
+		playerCode: "",
+		privateKey: webOsMacAdress,
+		publicKey: webOsMacAdress,
+		playerId: WebosSettings.value("PlayerSettings/playerId", ""),
+		playerName: webOsModelName,
+		customerId: WebosSettings.value("Customer/id", "")
+	}
+	sendSignal(commandMessage.Check_Publishment, isGetPublishment);
+}
+
+
