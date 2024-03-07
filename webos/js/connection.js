@@ -17,6 +17,7 @@ function startSignalSocket() {
 connection.onreconnected = function (connectionId) {
     Logger.sendMessage(connection.state === signalR.HubConnectionState.Connected);
     Logger.sendMessage("onreconnected id = ", connectionId);
+    getPublishment();
 };
 
 connection.onreconnecting = function (error) {
