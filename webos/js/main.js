@@ -214,7 +214,9 @@ window.onload = function () {
 	checkSocketConnection();
 	setTimeout(function(){
 		getLastPublishment();
-	}, 5000);
+	}, 10000);
+
+	checkPeriodPublishment();
 	/*
 	setTimeout(function() {
 		StartSyncAction();
@@ -471,10 +473,6 @@ function executeReceiveCommands(commands) {
 
 			Logger.sendMessage("DEVAMKEEEE :)");
 			Logger.sendMessage("Publisment dosyasi indiriliyor:", commands);
-			//this.writefile(commands.jsonData.publishmentName, commands.jsonData.publishmentData);
-			WebosSettings.setValue("Publishment/NewVersion", commands.jsonData.publishmentName);
-			WebosSettings.setValue("Publishment/OldVersion", commands.jsonData.publishmentName);
-			fetchPublishment(commands.jsonData.publishmentData);
 		}
 
 	} else if (commands.command === commandMessage.WinScreenShotRequest) {
@@ -683,7 +681,7 @@ function sendSystemInfo() {
 			playerDeviceType: 'Webos',
 			serialNo: webOsSerialNumber,
 			playerId: WebosSettings.value("PlayerSettings/playerId", ""),
-			appVersion: '1.0.77',
+			appVersion: '1.0.78',
 			customerId: WebosSettings.value("Customer/id", "")
 
 		}
@@ -810,4 +808,11 @@ function getLastPublishment() {
 	sendSignal(commandMessage.Check_Publishment, isGetPublishment);
 }
 
+function checkPeriodPublishment() {
 
+	setInterval(function () {
+		Logger.sendMessage("checkPeriodPublishment");
+		getLastPublishment();
+	}, 5*60*1000); //5dk da bir
+
+}

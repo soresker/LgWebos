@@ -283,10 +283,10 @@ WebosDevice.screenShot = function (opt1,opt2) {
 
     var options = {};
     options.save = opt1;
-    options.thumbnail = opt2;
+    options.thumbnail = false;
     
-    if(opt2)
-        options.imgResolution = Signage.ImgResolution.FHD;
+    //if(opt2)
+    options.imgResolution = Signage.ImgResolution.HD;
     
     var successCB = function (cbObject) {
         var size = cbObject.size;
