@@ -214,7 +214,7 @@ window.onload = function () {
 	checkSocketConnection();
 	setTimeout(function(){
 		getLastPublishment();
-	}, 10000);
+	}, 20000);
 
 	checkPeriodPublishment();
 	/*
@@ -260,23 +260,6 @@ function messageCheck(msg) {
 	}
 }
 
-function writefile(fileName, data) {
-	Logger.sendMessage('writefile path:' + fileName);
-	Logger.sendMessage("data" + data)
-
-	var path = publishmentsDir + fileName + ".json";
-	Logger.sendMessage('writefile path:', path);
-	var Data = data;
-	var jsonData = {
-		"MessageType": "startPublishment", "Data": Data
-	};
-	fs.writeFile(path, JSON.stringify(jsonData), function (error) {
-		if (error)
-			return Logger.sendMessage('error write json:' + error);
-		else
-			Logger.sendMessage('write json data:' + data);
-	})
-}
 function download(url, callback) {
 	downloader.start({
 		url: url,
@@ -457,7 +440,6 @@ function executeReceiveCommands(commands) {
 			Logger.sendMessage("Player ilk kez ayaga kalkiyor ve yayini indirmeli:", commands);
 			WebosSettings.setValue("Publishment/NewVersion", commands.jsonData.publishmentName);
 			WebosSettings.setValue("Publishment/OldVersion", commands.jsonData.publishmentName);
-			//this.writefile(commands.jsonData.publishmentName, commands.jsonData.publishmentData);
 			fetchPublishment(commands.jsonData.publishmentData);
 			Logger.sendMessage("burayageldik mi :", commands.jsonData);
 
@@ -465,7 +447,6 @@ function executeReceiveCommands(commands) {
 
 		if (temp != commands.jsonData.publishmentName && playerStatus == true) {
 			Logger.sendMessage("Publisment dosyasi indiriliyor:", commands);
-			//this.writefile(commands.jsonData.publishmentName, commands.jsonData.publishmentData);
 			WebosSettings.setValue("Publishment/NewVersion", commands.jsonData.publishmentName);
 			WebosSettings.setValue("Publishment/OldVersion", commands.jsonData.publishmentName);
 			fetchPublishment(commands.jsonData.publishmentData);
@@ -646,7 +627,7 @@ function sendHardbitSystemInfo() {
 		}
 		if(webosIsRegister == true)
 			sendSignal(commandMessage.HealthCheck, systemInfData);
-	}, 10000);
+	}, 30000);
 
 }
 
@@ -681,7 +662,7 @@ function sendSystemInfo() {
 			playerDeviceType: 'Webos',
 			serialNo: webOsSerialNumber,
 			playerId: WebosSettings.value("PlayerSettings/playerId", ""),
-			appVersion: '1.0.78',
+			appVersion: '1.0.81',
 			customerId: WebosSettings.value("Customer/id", "")
 
 		}
