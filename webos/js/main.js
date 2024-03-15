@@ -582,14 +582,14 @@ function fetchPublishment(readPublishment) {
 function checkPublishment() {
 	fs.ls(defaultDir + 'publishments', function (error, data) {
 		if (error) {
-			Logger.sendMessage('publishments file not found -', error);
+			Logger.sendMessage('publishments file not found -'+ error);
 
 			fs.mkdir(defaultDir + 'publishments/', function (error, data) {
 				if (error) {
-					Logger.sendMessage('publishments dir not created -', error);
+					Logger.sendMessage('publishments dir not created -'+ error);
 				}
 				else {
-					Logger.sendMessage('publishments dir created +', publishmentsDir);
+					Logger.sendMessage('publishments dir created +'+ publishmentsDir);
 				}
 			});
 		}
@@ -597,14 +597,14 @@ function checkPublishment() {
 
 	fs.ls(defaultDir + 'contents', function (error, data) {
 		if (error) {
-			Logger.sendMessage('contents file not found -', error);
+			Logger.sendMessage('contents file not found -'+ error);
 
 			fs.mkdir(defaultDir + 'contents/', function (error, data) {
 				if (error) {
-					Logger.sendMessage('contents dir not created -', error);
+					Logger.sendMessage('contents dir not created -'+ error);
 				}
 				else {
-					Logger.sendMessage('contents dir created +', contentsDir);
+					Logger.sendMessage('contents dir created +'+ contentsDir);
 				}
 			});
 		}
@@ -643,35 +643,37 @@ function checkSocketConnection() {
 
 }
 
-function sendSystemInfo() {
+function sendSystemInfoInterval() {
 
 	setInterval(function () {
-
-		var systemInfData = {
-			privateKey: webOsMacAdress,
-			publicKey: webOsMacAdress,
-			deviceType: webOsModelName,
-			osType: 'Lg Webos ' + webOsHardwareVersion,
-			osArch: webOsFirmwareVersion,
-			totalHddSize: webOsTotalMemory,
-			currentHddSize: webOsUsedMemory,
-			screenResolution: '',
-			fileSystemType: 'fat32',
-			ipAddress: webOsIp,
-			mac: webOsMacAdress,
-			playerDeviceType: 'Webos',
-			serialNo: webOsSerialNumber,
-			playerId: WebosSettings.value("PlayerSettings/playerId", ""),
-			appVersion: '1.0.81',
-			customerId: WebosSettings.value("Customer/id", "")
-
-		}
-		if(webosIsRegister == true)
-			sendSignal(commandMessage.Sys_Info, systemInfData);
-
+		sendSystemInfo()
 	}, 60000);
 
+}
 
+function sendSystemInfo() {
+
+	var systemInfData = {
+		privateKey: webOsMacAdress,
+		publicKey: webOsMacAdress,
+		deviceType: webOsModelName,
+		osType: 'Lg Webos ' + webOsHardwareVersion,
+		osArch: webOsFirmwareVersion,
+		totalHddSize: webOsTotalMemory,
+		currentHddSize: webOsUsedMemory,
+		screenResolution: '',
+		fileSystemType: 'fat32',
+		ipAddress: webOsIp,
+		mac: webOsMacAdress,
+		playerDeviceType: 'Webos',
+		serialNo: webOsSerialNumber,
+		playerId: WebosSettings.value("PlayerSettings/playerId", ""),
+		appVersion: '1.0.81',
+		customerId: WebosSettings.value("Customer/id", "")
+
+	}
+	if(webosIsRegister == true)
+		sendSignal(commandMessage.Sys_Info, systemInfData);
 }
 
 function getPublishment() {
