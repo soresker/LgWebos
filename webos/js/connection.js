@@ -9,7 +9,9 @@ var connection = new signalR.HubConnectionBuilder()
         connection.start()
             .then(function() {
                 Logger.sendMessage("SignalRF Connected.");
-                sendSystemInfo();
+                setTimeout(function() {getPublishment();}, 1000);
+                setTimeout(function() {sendSystemInfo();}, 5000);
+
             })
             .catch(function(err) {
                 Logger.sendMessage('startSignalSocket ERROR: '+ err);
@@ -19,6 +21,9 @@ var connection = new signalR.HubConnectionBuilder()
 connection.onreconnected = function (connectionId) {
     Logger.sendMessage(connection.state === signalR.HubConnectionState.Connected);
     Logger.sendMessage("onreconnected id = ", connectionId);
+    sendSystemInfo();
+    setTimeout(function() {getPublishment();}, 3000);
+    
 };
 
 connection.onreconnecting = function (error) {
@@ -67,7 +72,7 @@ function getConnectionState() {
     }else if(connection.state == "Connected" && signalR.HubConnectionState.Connected =="Connected" && globalPublishmentControlForNet == true)
     {
         Logger.sendMessage("Cihaz baglandi getPublishment :"+connection.state);
-        getLastPublishment();
+        getPublishment();
         globalPublishmentControlForNet = false;
     }else{
 

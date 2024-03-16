@@ -13,7 +13,10 @@ var downloadName = "";
 var webosIsRegister = "";
 var globalKeyCode ="";
 var globalPublishmentControlForNet = false;
-
+var globalPublishmentName = "";
+var devicePublishment = "";
+var cameCheckPublish = false;
+var webosAppVersion = "1.0.83"
 //var keyboardControl = new Keyboard_Control();
 
 function listener(event) {
@@ -210,18 +213,11 @@ window.onload = function () {
 	});
 
 	sendHardbitSystemInfo();
-	sendSystemInfo();
-	checkSocketConnection();
-	setTimeout(function(){
-		getLastPublishment();
-	}, 20000);
-
+	sendSystemInfoInterval();
 	checkPeriodPublishment();
-	/*
 	setTimeout(function() {
-		StartSyncAction();
-	}, 5000);
-	*/
+		checkSocketConnection();
+	}, 10000);
 }
 
 function messageCheck(msg) {
@@ -285,6 +281,7 @@ function downloadNext() {
 						Logger.sendMessage("download failed: " + (currentIndex + 1) + '/' + urlArray.length);
 						Logger.sendMessage("download failed:" + (currentIndex + 1) + "");
 						Logger.sendMessage("download failed error:" + JSON.stringify(err));
+						sendConsoleLog("download failed error:" + (currentIndex + 1) + JSON.stringify(err));
 					} else {
 						Logger.sendMessage('download complete: ' + (currentIndex + 1) + '/' + urlArray.length + ' 😃');
 						sendConsoleLog("download complete: " + (currentIndex + 1) + "/" + urlArray.length);			
@@ -303,23 +300,50 @@ function downloadNext() {
 		currentIndex = -1;
 		Logger.sendMessage("download complated all files ✅");
 
-		this.updatePublishmentDate();
-
 		setTimeout(function () {
 			$("#screen-shot-image").hide();
 		}, 2000);
 
 		if (downloadDir == publishmentsDir) {
-			Logger.sendMessage("SHOWWW PLAYERE✅");
-			showPlayer();
-		} else {
-			this.getPublishment();
+
+			WebosSettings.setValue("Publishment/NewVersion", globalPublishmentName);
+			WebosSettings.setValue("Publishment/OldVersion", globalPublishmentName);
+
+			Logger.sendMessage("YENI Publisment Download edildi ✅" +globalPublishmentName);
+
+			if(cameCheckPublish == false)
+			{
+				Logger.sendMessage("YENI PUBLISMENT VAR ONUN DA ICERIKLERINI INDIRMEYE BASLAYAK✅");
+				getLastPublishment();
+			}else{
+
+				Logger.sendMessage("SHOWWW PLAYERE publishmentsDir✅");
+				showPlayer();
+				cameCheckPublish = false;
+				this.updatePublishmentDate();
+			}
+		
+		} else if(downloadDir == contentsDir) {
+
+			var oldPublish = WebosSettings.value("Publishment/NewVersion", "");
+			Logger.sendMessage("DEVICE AND GLOABAL PUBLISH SAME : ✅" +oldPublish +"--"+globalPublishmentName);
+
+			if(oldPublish == globalPublishmentName)
+			{
+				Logger.sendMessage("SHOWWW PLAYERE✅");
+				showPlayer();
+				this.updatePublishmentDate();
+			}else{
+				Logger.sendMessage("CHECK PUBLISHTEN GELDI GIT Publishi indir:✅");
+				cameCheckPublish = true;
+				getPublishment();
+			}
+
 		}
+
 		$(".download-bar").hide()
 		listDir(publishmentsDir);
 		listDir(contentsDir);
-
-		sendConsoleLog("download complated all files");
 	}
 }
 
@@ -438,22 +462,19 @@ function executeReceiveCommands(commands) {
 
 		if (temp == "" && playerStatus == true) {
 			Logger.sendMessage("Player ilk kez ayaga kalkiyor ve yayini indirmeli:", commands);
-			WebosSettings.setValue("Publishment/NewVersion", commands.jsonData.publishmentName);
-			WebosSettings.setValue("Publishment/OldVersion", commands.jsonData.publishmentName);
+			//WebosSettings.setValue("Publishment/NewVersion", commands.jsonData.publishmentName);
+			//WebosSettings.setValue("Publishment/OldVersion", commands.jsonData.publishmentName);
 			fetchPublishment(commands.jsonData.publishmentData);
-			Logger.sendMessage("burayageldik mi :", commands.jsonData);
-
 		}
 
 		if (temp != commands.jsonData.publishmentName && playerStatus == true) {
 			Logger.sendMessage("Publisment dosyasi indiriliyor:", commands);
-			WebosSettings.setValue("Publishment/NewVersion", commands.jsonData.publishmentName);
-			WebosSettings.setValue("Publishment/OldVersion", commands.jsonData.publishmentName);
+			//WebosSettings.setValue("Publishment/NewVersion", commands.jsonData.publishmentName);
+			//WebosSettings.setValue("Publishment/OldVersion", commands.jsonData.publishmentName);
 			fetchPublishment(commands.jsonData.publishmentData);
 		} else {
 
 			Logger.sendMessage("DEVAMKEEEE :)");
-			Logger.sendMessage("Publisment dosyasi indiriliyor:", commands);
 		}
 
 	} else if (commands.command === commandMessage.WinScreenShotRequest) {
@@ -521,11 +542,11 @@ function executeReceiveCommands(commands) {
 		//WebosDevice.setUiTile(false); //sonra acilabilir.      
 	}
 	else if (commands.command === commandMessage.Sys_Info) {
-		Logger.sendMessage(" Receive commandMessage.Sys_Info", JSON.stringify(commands));
+		Logger.sendMessage(" Receive commandMessage.Sys_Info"+ JSON.stringify(commands));
 	}
 	else if (commands.command === commandMessage.Get_Publishment) {
 		sendConsoleLog("Receive Command:" + commands.command);
-		Logger.sendMessage(" Receive GetPublishment", JSON.stringify(commands));
+		Logger.sendMessage("Receive GetPublishment:"+ JSON.stringify(commands));
 		receive_Publishment(commands);
 	}
 	else if (commands.command === commandMessage.PublishmentDelete) {
@@ -575,7 +596,7 @@ function fetchPublishment(readPublishment) {
 	$(".download-bar").show();
 	downloadNext();
 
-	Logger.sendMessage("fetchPublishment download sonrasi:)");
+	Logger.sendMessage("fetchPublishment download baslayacak");
 
 }
 
@@ -668,7 +689,7 @@ function sendSystemInfo() {
 		playerDeviceType: 'Webos',
 		serialNo: webOsSerialNumber,
 		playerId: WebosSettings.value("PlayerSettings/playerId", ""),
-		appVersion: '1.0.81',
+		appVersion: webosAppVersion,
 		customerId: WebosSettings.value("Customer/id", "")
 
 	}
@@ -694,11 +715,21 @@ function receive_Publishment(publishment) {
 	var temp = [];
 	temp[0] = publishment.jsonData.publishmentUrl;
 	urlArray = temp; //guncelle
-	Logger.sendMessage("BURASI ONEMLI receive_Publishment URLLLLL " + urlArray);
+	Logger.sendMessage("BURASI ONEMLI receive_Publishment URL: " + urlArray);
 
-	downloadDir = publishmentsDir;
-	downloadName = publishment.jsonData.publishmentName + ".json";
-	downloadNext();
+	devicePublishment = WebosSettings.value("Publishment/NewVersion", "");
+	Logger.sendMessage("BURASI ONEMLI devicePublishment: " + devicePublishment);
+
+	if(devicePublishment != publishment.jsonData.publishmentName)
+	{
+		globalPublishmentName = publishment.jsonData.publishmentName;
+		downloadDir = publishmentsDir;
+		downloadName = publishment.jsonData.publishmentName + ".json";
+		downloadNext();
+	}else{
+		Logger.sendMessage("Get Publishment sonrasi DEVAM KE : " + devicePublishment);
+	}
+
 }
 
 function readPulishmentFile(fileName) {
@@ -794,8 +825,8 @@ function getLastPublishment() {
 function checkPeriodPublishment() {
 
 	setInterval(function () {
-		Logger.sendMessage("checkPeriodPublishment");
-		getLastPublishment();
+		Logger.sendMessage("checkPeriodPublishment ----getPublishment");
+		getPublishment();
 	}, 5*60*1000); //5dk da bir
 
 }
