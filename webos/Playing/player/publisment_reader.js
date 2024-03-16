@@ -19,10 +19,15 @@ Publishment_Reader.parseLatestPublishment = function (data) {
         (!currentPublishment.calendar || currentPublishment.calendar.length == 0) &&
         (!currentPublishment.templates || currentPublishment.templates.length == 0)
     ) {
-        console.log("Publishmentta SORUN VAR calendar:"+currentPublishment.calendar);
         console.log("Publishmentta SORUN VAR templates: "+currentPublishment.templates);
-        Tools.showImage(); //error durumu aslinda
-    } else {
+        setTimeout(function() {sendConsoleLog("Publishmentta SORUN VAR templates yok bos yayin: ");}, 5000);
+        //Tools.showImage(); //error durumu aslinda
+    }else if (!currentPublishment.templates[0].frames || currentPublishment.templates[0].frames.length == 0 )
+    {
+        console.log("Publishmentta SORUN VAR frame yok bos yayin: ");
+        setTimeout(function() {sendConsoleLog("Publishmentta SORUN VAR frame yok bos yayin: ");}, 5000);
+    }
+    else {
         console.log("Publishment_Reader:Hide Image:", "Info");
         Tools.hideImage();
     }

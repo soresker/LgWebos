@@ -49,7 +49,20 @@ function sendSignal(command, data) {
             Logger.sendMessage("Mesaj Gonderildi: "+JSON.stringify(command));
         })
         .catch(function(err) {
+
             Logger.sendMessage(err);
+
+            if(checkForString(err,"getPublishment"))
+            {
+                Logger.sendMessage("5 SN sonra tekra GETPUBLISH DENEYECEGIM");
+                setTimeout(function() {getPublishment();}, 5000);
+            }else if(checkForString(err,"checkPublishment"))
+            {
+                Logger.sendMessage("5 SN sonra tekra CHECK PUBLISH DENEYECEGIM");
+                setTimeout(function() {getLastPublishment();}, 5000);
+            }else{
+                Logger.sendMessage(err);
+            }
         });
 }
 
@@ -82,6 +95,17 @@ function getConnectionState() {
     }
 
     if (connection.state == "Disconnected") {
+        return false;
+    } else {
+        return true;
+    }
+}
+function checkForString(inputString, searchString) {
+    // İlgili string içinde arama yap
+    var position = inputString.indexOf(searchString);
+
+    // Eğer pozisyon -1 ise, kelime bulunamadı demektir
+    if (position === -1) {
         return false;
     } else {
         return true;
