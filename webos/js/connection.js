@@ -54,10 +54,12 @@ function sendSignal(command, data) {
 
             if(checkForString(err,"getPublishment"))
             {
+                sendConsoleLog("5 SN sonra tekra GETPUBLISH DENEYECEGIM");
                 Logger.sendMessage("5 SN sonra tekra GETPUBLISH DENEYECEGIM");
                 setTimeout(function() {getPublishment();}, 5000);
             }else if(checkForString(err,"checkPublishment"))
             {
+                sendConsoleLog("5 SN sonra tekra CHECK PUBLISH DENEYECEGIM");
                 Logger.sendMessage("5 SN sonra tekra CHECK PUBLISH DENEYECEGIM");
                 setTimeout(function() {getLastPublishment();}, 5000);
             }else{
