@@ -8,11 +8,12 @@ var Player = {
             Video: "video",
             Image: "image",
             Html: "html",
-            Date: "date",
+            Date: "datetime",
             Label: "label",
             Weather: "weather",
-            Finance: "finance",
-            Yandex : "yandex"
+            Currency: "currency",
+            Yandex : "yandex",
+            Audio : "audio"
         }
     },
 
