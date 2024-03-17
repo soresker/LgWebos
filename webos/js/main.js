@@ -5,7 +5,7 @@ var publishmentsDir = defaultDir + 'publishments/';
 var contentsDir = defaultDir + 'contents/';
 var contentsDirReq = './content/publishments/';
 var connection = null;
-var urlArray;
+var downloadedContentList = "";
 var currentIndex = -1
 var globalPublishment = "";
 var downloadDir = "";
@@ -16,7 +16,7 @@ var globalPublishmentControlForNet = false;
 var globalPublishmentName = "";
 var devicePublishment = "";
 var cameCheckPublish = false;
-var webosAppVersion = "1.0.84"
+var webosAppVersion = "1.0.85"
 //var keyboardControl = new Keyboard_Control();
 
 function listener(event) {
@@ -319,6 +319,7 @@ function downloadNext() {
 
 				Logger.sendMessage("SHOWWW PLAYERE publishmentsDir✅");
 				showPlayer();
+				deleteNonListedFiles(downloadedContentList,contentsDir);
 				cameCheckPublish = false;
 				this.updatePublishmentDate();
 			}
@@ -332,6 +333,7 @@ function downloadNext() {
 			{
 				Logger.sendMessage("SHOWWW PLAYERE✅");
 				showPlayer();
+				deleteNonListedFiles(downloadedContentList,contentsDir);
 				this.updatePublishmentDate();
 			}else{
 				Logger.sendMessage("CHECK PUBLISHTEN GELDI GIT Publishi indir:✅");
@@ -343,7 +345,6 @@ function downloadNext() {
 
 		$(".download-bar").hide()
 		listDir(publishmentsDir);
-		listDir(contentsDir);
 	}
 }
 
@@ -591,6 +592,7 @@ function fetchPublishment(readPublishment) {
 	//listDir(publishmentsDir)
 	globalPublishment = readPublishment;
 	urlArray = readPublishment.urlArray;
+	downloadedContentList = readPublishment.urlArray;
 	downloadDir = contentsDir;
 	downloadName = "";
 	$(".download-bar").show();
@@ -828,5 +830,48 @@ function checkPeriodPublishment() {
 		Logger.sendMessage("checkPeriodPublishment ----getPublishment");
 		getPublishment();
 	}, 5*60*1000); //5dk da bir
+}
+
+function getFileExtension(url) {
+    const parts = url.split('/');
+    return parts[parts.length - 1];
+}
+
+function deleteNonListedFiles(urlList, basePath) {
+    var existingFiles = "";
+	Logger.sendMessage("deleteNonListedFiles");
+	Logger.sendMessage("deleteNonListedFiles path:"+basePath);
+	Logger.sendMessage("deleteNonListedFiles urlList:"+urlList);
+
+	fs.ls(basePath, function (error, data) {
+		if (error)
+			return Logger.sendMessage('error', error);
+
+		Logger.sendMessage("List Files:" + JSON.stringify(data));
+		
+		existingFiles = data;
+		
+		for (var i = 0; i < existingFiles.length; i++) {
+			var file = existingFiles[i].name;
+			var filePath = basePath + file;
+			var found = false;
+	
+			for (var j = 0; j < urlList.length; j++) {
+				if (getFileExtension(urlList[j]) === file) {
+					found = true;
+					break;
+				}
+			}
+	
+			if (!found) {
+				WebosDevice.removeFile(filePath);
+				Logger.sendMessage('URL listesinde olmayan dosya silenecek: ' +filePath);
+			}
+		}
+
+		listDir(contentsDir);
+
+	})
+
 
 }

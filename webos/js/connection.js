@@ -1,6 +1,6 @@
 var connection = new signalR.HubConnectionBuilder()
-    //.withUrl("https://dev-01.api.ist/playerHub")
-    .withUrl(("https://prod.api.ist/playerHub"))
+    .withUrl("https://dev-01.api.ist/playerHub")
+    //.withUrl(("https://prod.api.ist/playerHub"))
     .configureLogging(signalR.LogLevel.Information)
     .withAutomaticReconnect()
     .build();
@@ -39,6 +39,24 @@ connection.onclose = function () {
 connection.on("TestMessage", function (data) {
     Logger.sendMessage("Gelen Mesaj ha:" + data);
 });
+
+function checkForString(inputString, searchString) {
+    // inputString'in bir string olup olmadığını kontrol et
+    if (typeof inputString !== 'string') {
+        return false; // Eğer inputString bir string değilse, false dön
+    }
+
+    // İlgili string içinde arama yap
+    var position = inputString.indexOf(searchString);
+
+    // Eğer pozisyon -1 ise, kelime bulunamadı demektir
+    if (position === -1) {
+        return false;
+    } else {
+        return true;
+    }
+}
+
 
 function sendSignal(command, data) {
     Logger.sendMessage("Sending Command " + JSON.stringify(command), "");
@@ -97,17 +115,6 @@ function getConnectionState() {
     }
 
     if (connection.state == "Disconnected") {
-        return false;
-    } else {
-        return true;
-    }
-}
-function checkForString(inputString, searchString) {
-    // İlgili string içinde arama yap
-    var position = inputString.indexOf(searchString);
-
-    // Eğer pozisyon -1 ise, kelime bulunamadı demektir
-    if (position === -1) {
         return false;
     } else {
         return true;

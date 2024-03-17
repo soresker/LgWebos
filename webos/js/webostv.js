@@ -2,6 +2,7 @@
 //var power = new Power();
 //var signage = new Signage();
 //var configuration = new Configuration();
+var removeFileinPath = new Storage();
 
 var webOsModelName = "";
 var webOsSerialNumber = ""; 
@@ -588,5 +589,23 @@ WebosDevice.setPowerSaveMode = function () {
     signage.setPowerSaveMode(successCb, failureCb, options);
 }
     
+WebosDevice.removeFile = function (path) {
+
+    var successCb = function () {
+        Logger.sendMessage("Removing File done." +path);
+    };
     
+    var failureCb = function (cbObject) {
+        var errorCode = cbObject.errorCode;
+        var errorText = cbObject.errorText;
+        Logger.sendMessage(" Error Code [" + errorCode + "]: " + errorText);
+    };
+    
+    var options = {
+        file: path,
+    };
+
+    removeFileinPath.removeFile(successCb, failureCb, options);
+    
+}
     
