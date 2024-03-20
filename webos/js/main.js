@@ -16,7 +16,7 @@ var globalPublishmentControlForNet = false;
 var globalPublishmentName = "";
 var devicePublishment = "";
 var cameCheckPublish = false;
-var webosAppVersion = "1.0.86"
+var webosAppVersion = "1.0.87"
 //var keyboardControl = new Keyboard_Control();
 
 function listener(event) {

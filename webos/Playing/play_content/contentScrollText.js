@@ -19,7 +19,7 @@ function Content_ScrollText(contentInfo, parentFrameObject) {
         this.textHorizontalAlignment = contentInfo.getTypeContentProperty("align");
         this.textVerticalAlignment = contentInfo.getTypeContentProperty("verticalAlign");
         this.textFontType = contentInfo.getTypeContentProperty("fontType");
-        this.hiz = contentInfo.getTypeSpecificProperty("direction");
+        this.speed = contentInfo.getTypeSpecificProperty("speed");
 
         this.actualProvider = 0;
         this.frameUniqueKey = parentFrameObject.uniqueKey;
@@ -44,7 +44,7 @@ Content_ScrollText.prototype.showContent = function () {
 
         console.log("Content_ScrollText this.value" + this.value);
         console.log("Content_ScrollText this.backgroundColor" + this.backgroundColor);
-        console.log("Content_ScrollText this.speed" + this.hiz);
+        console.log("Content_ScrollText this.speed" + this.speed);
         console.log("Content_ScrollText this.textColor" + this.textColor);
         console.log("Content_ScrollText this.textFontFamily" + this.textFontFamily);
         console.log("Content_ScrollText this.textSizePixels" + this.textSizePixels);
@@ -121,7 +121,7 @@ Content_ScrollText.prototype.showContent = function () {
             var marqueeStyle = "font-weight:" + fontWeight +";font-style:" +fontStyle + ";font-size:" +this.textSizePixels +";text-decoration:" +textDecoration + ";color:"+this.textColor +";";
            
             $("#content-" + this.frameUniqueKey).html("");
-            $("#content-" + this.frameUniqueKey).html('<marquee width="100%" direction="left" scrollamount="'+this.textSizePixels+'" height="100px" style="'+marqueeStyle+'">'+this.value+'</marquee>');
+            $("#content-" + this.frameUniqueKey).html('<marquee width="100%" direction="left" scrollamount="'+this.speed+'" height="100px" style="'+marqueeStyle+'">'+this.value+'</marquee>');
             $("#content-" + this.frameUniqueKey).show();
 
        
