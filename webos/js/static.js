@@ -33,6 +33,9 @@ var commandMessage = {
     ConsoleLogging: "consoleLogging",
     PlayerSettingsHere: "playerSettingsHere",
     Get_Publishment: "getPublishment",
-    Update_Publisment_Date: "updatePublishmentDate"
+    Update_Publisment_Date: "updatePublishmentDate",
+    GetWeatherForecast :"getWeatherForecast",
+    GetCurrencies :"getCurrencyValue",
+    GetNewsData:"getNewsData"
 
 };

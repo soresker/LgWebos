@@ -469,18 +469,24 @@ Play_Frame.prototype.playNextContent = function (isComeFromEndOfAContent) {
                     this.currentContent = new Content_Weather(contentInfo, this);
                 }
                 break;
-            case Player.Content.Type.Finance:
+            case Player.Content.Type.Currency:    
                 {
-                    console.log("new Content_Date : " + contentInfo)
-                    this.currentContent = new Content_Finance(contentInfo, this);
+                    console.log("new Currency : "+ contentInfo)
+                    this.currentContent = new Content_Currency(contentInfo, this );
                 }
-                break;
-            case Player.Content.Type.Yandex:
+            break;   
+            case Player.Content.Type.Yandex:    
                 {
-                    console.log("new Content_Yandex : " + contentInfo)
-                    this.currentContent = new Content_Yandex(contentInfo, this);
+                console.log("new Content_Yandex : "+ contentInfo)
+                this.currentContent = new Content_Yandex(contentInfo, this );
                 }
-                break;
+            break;      
+            case Player.Content.Type.News:    
+                {
+                console.log("new Content.Type.News : "+ contentInfo)
+                this.currentContent = new Content_ScrollText(contentInfo, this );
+                }
+            break;       
             default:
                 break;
         }

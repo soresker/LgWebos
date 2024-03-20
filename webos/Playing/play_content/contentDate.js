@@ -67,11 +67,11 @@ Content_Date.prototype.showContent = function () {
         Player_Ui_Creator.UIElement.appendHTML("#frame-" + this.frameUniqueKey, this.generateUIElement());
 
         if (!Tools.isEmptyString(this.backgroundColor)) {
-            $("#content-" + this.frameUniqueKey).css("background-color", "rgba({0})".pxcFormatString(this.backgroundColor));
+            $("#content-" + this.frameUniqueKey).css("background-color", "{0}".pxcFormatString(this.backgroundColor));
         }
 
         if (!Tools.isEmptyString(this.textColor)) {
-            $("#content-" + this.frameUniqueKey).css("color", "rgba({0})".pxcFormatString(this.textColor));
+            $("#content-" + this.frameUniqueKey).css("color", "{0}".pxcFormatString(this.textColor));
         }
 
         if (!Tools.isEmptyString(this.textFontFamily)) {

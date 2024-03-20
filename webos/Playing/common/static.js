@@ -13,7 +13,8 @@ var Player = {
             Weather: "weather",
             Currency: "currency",
             Yandex : "yandex",
-            Audio : "audio"
+            Audio : "audio",
+            News : "news"
         }
     },
 
