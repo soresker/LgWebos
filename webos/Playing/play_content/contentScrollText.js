@@ -13,12 +13,13 @@ function Content_ScrollText(contentInfo, parentFrameObject) {
 
         this.value = contentInfo.getTypeContentProperty("contents");
         this.backgroundColor = contentInfo.getTypeContentProperty("backgroundColor");
-        this.speed = parseInt(contentInfo.getTypeSpecificProperty("speed")) || 0;
         this.textColor = contentInfo.getTypeContentProperty("color");
         this.textFontFamily = contentInfo.getTypeContentProperty("fontFamily");
-        this.textSizePixels = parseInt(contentInfo.getTypeContentProperty("fontSize")) || 0;
+        this.textSizePixels = contentInfo.getTypeContentProperty("fontSize");
         this.textHorizontalAlignment = contentInfo.getTypeContentProperty("align");
         this.textVerticalAlignment = contentInfo.getTypeContentProperty("verticalAlign");
+        this.textFontType = contentInfo.getTypeContentProperty("fontType");
+        this.hiz = contentInfo.getTypeSpecificProperty("direction");
 
         this.actualProvider = 0;
         this.frameUniqueKey = parentFrameObject.uniqueKey;
@@ -41,6 +42,18 @@ Content_ScrollText.prototype.showContent = function () {
 
         Player_Ui_Creator.UIElement.appendHTML("#frame-" + this.frameUniqueKey, this.generateUIElement());
 
+        console.log("Content_ScrollText this.value" + this.value);
+        console.log("Content_ScrollText this.backgroundColor" + this.backgroundColor);
+        console.log("Content_ScrollText this.speed" + this.hiz);
+        console.log("Content_ScrollText this.textColor" + this.textColor);
+        console.log("Content_ScrollText this.textFontFamily" + this.textFontFamily);
+        console.log("Content_ScrollText this.textSizePixels" + this.textSizePixels);
+        console.log("Content_ScrollText this.textFontType" + this.textFontType);
+        console.log("Content_ScrollText this.textHorizontalAlignment" + this.textHorizontalAlignment);
+        console.log("Content_ScrollText this.textVerticalAlignment" + this.textVerticalAlignment);
+
+
+        /*
             if (!Tools.isEmptyString(this.backgroundColor)) {
                 $("#content-" + this.frameUniqueKey).css("background-color", "{0}".pxcFormatString(this.backgroundColor));
             }
@@ -89,33 +102,27 @@ Content_ScrollText.prototype.showContent = function () {
                     $("#content-" + this.frameUniqueKey + "-span").css("vertical-align", verticalAlignValue);
                 }
             }
-    
-            var fontWeight = "normal";
+            */    
+            var fontWeight =this.textFontType;
             var fontStyle = "normal";
             var textDecoration = "none";
     
-            if (this.isBold)
-                fontWeight = "bold";
+            //fontWeight = "bold";
     
-            if (this.isItalic)
-                fontStyle = "italic";
     
             if (this.isUnderlined)
                 textDecoration = "underline";
     
+            /*    
             $("#content-" + this.frameUniqueKey + "-span").css("font-weight", fontWeight);
             $("#content-" + this.frameUniqueKey + "-span").css("font-style", fontStyle);
             $("#content-" + this.frameUniqueKey + "-span").css("text-decoration", textDecoration);
-    
+              */  
+            var marqueeStyle = "font-weight:" + fontWeight +";font-style:" +fontStyle + ";font-size:" +this.textSizePixels +";text-decoration:" +textDecoration + ";color:"+this.textColor +";";
+           
             $("#content-" + this.frameUniqueKey).html("");
-            $("#content-" + this.frameUniqueKey).html(this.value);
+            $("#content-" + this.frameUniqueKey).html('<marquee width="100%" direction="left" scrollamount="'+this.textSizePixels+'" height="100px" style="'+marqueeStyle+'">'+this.value+'</marquee>');
             $("#content-" + this.frameUniqueKey).show();
-            $("#content-" + this.frameUniqueKey).marquee({
-                speed: this.speed,
-                startVisible: true,
-                duplicated: false
-            });
-
 
        
     } catch (exception) {
