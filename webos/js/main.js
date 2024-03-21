@@ -16,7 +16,11 @@ var globalPublishmentControlForNet = false;
 var globalPublishmentName = "";
 var devicePublishment = "";
 var cameCheckPublish = false;
-var webosAppVersion = "1.0.87"
+var webosAppVersion = "1.0.89"
+var changeActiveDatas = false;
+var weatherActive = false;
+var currencyActive = false;
+var newsActive = false;
 //var keyboardControl = new Keyboard_Control();
 
 function listener(event) {
@@ -218,6 +222,12 @@ window.onload = function () {
 	setTimeout(function() {
 		checkSocketConnection();
 	}, 10000);
+
+	checkOnlinePeriodDatas();
+
+	setTimeout(function() { 
+		sendNewDataShowUi();
+	}, 60000);
 }
 
 function messageCheck(msg) {
@@ -875,3 +885,184 @@ function deleteNonListedFiles(urlList, basePath) {
 
 
 }
+//************************WIDGET LAR **********************/
+function readPublishmentForMessage(publishName) {
+
+	console.info('readPublishmentForMessage:',publishName);
+  
+	globalPublishment = publishment;
+
+	weatherActive = checkForKey(publishment.templates[0].frames, "weather","locationId");
+	newsActive = checkForKey(publishment.templates[0].frames, "news","tagId");
+	currencyActive = checkForKey(publishment.templates[0].frames, "currency","currencyId");
+
+	console.log("checkForKey weatherActive:"+weatherActive);
+	console.log("checkForKey newsActive:"+newsActive);
+	console.log("checkForKey currencyActive:"+currencyActive);
+	
+  }
+
+function randomInRange(min, max) {
+	return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+function setForKey(frameData, checkValue, property, value, currencyId, newData, callback) {
+	var success = false;
+	frameData.forEach(function(frame) {
+	  if (frame.type && frame.type === checkValue) {
+		console.log("Found frame with type '" + checkValue + "': " + frame.frameUniqId);
+	  }
+	  if (frame.playlists) {
+		frame.playlists.forEach(function(playlist) {
+		  if (playlist.contents) {
+			playlist.contents.forEach(function(content) {
+			  if (content.type && content.type === checkValue) {
+				console.log("Found content with type '" + checkValue + "' in playlist " + playlist.name + " on frame " + frame.frameUniqId);
+				if (content.contentProperties) {
+				  var propId = content.contentProperties.find(function(prop) {
+					return prop.name === property && prop.value === currencyId;
+				  });
+				  var propValue = content.contentProperties.find(function(prop) {
+					return prop.name === value;
+				  });
+				  if (propId && propValue) {
+					console.log("Found " + property + ": " + propId.value);
+					if (propValue.value !== newData) {
+					  propValue.value = newData;
+					  console.log("Set " + value + " to " + newData);
+					  success = true;
+					} else {
+					  console.log("CurrencyValue is already equal to " + newData + ". No change made.");
+					}
+				  }
+				}
+			  }
+			});
+		  }
+		});
+	  }
+	});
+	if (callback && typeof callback === 'function') {
+	  callback({ success: success });
+	}
+  }
+  
+  function SetForKeyWeather(frameData, checkValue, property, value, currencyId, newData, callback) {
+	var success = false;
+	frameData.forEach(function(frame) {
+	  if (frame.type && frame.type === checkValue) {
+		console.log("Found frame with type '" + checkValue + "': " + frame.frameUniqId);
+		if (frame.playlists) {
+		  frame.playlists.forEach(function(playlist) {
+			if (playlist.contents) {
+			  playlist.contents.forEach(function(content) {
+				if (content.type && content.type === checkValue) {
+				  console.log("Found content with type '" + checkValue + "' in playlist " + playlist.name + " on frame " + frame.frameUniqId);
+				  if (content.contentProperties) {
+					var propValue = content.contentProperties.find(function(prop) {
+					  return prop.name === "type" && prop.value === "max";
+					});
+					if (propValue && propValue.name === "weatherValue") {
+					  console.log("Found 'weatherValue' property with value '" + propValue.value + "'");
+					  if (propValue.value !== newData) {
+						propValue.value = newData;
+						console.log("Set 'weatherValue' to " + newData);
+						success = true;
+					  } else {
+						console.log("'weatherValue' is already equal to " + newData + ". No change made.");
+					  }
+					}
+				  }
+				}
+			  });
+			}
+		  });
+		}
+	  }
+	});
+  
+	if (callback && typeof callback === 'function') {
+	  callback({ success: success });
+	}
+  }
+  
+  function setWeatherForecast(weatherArray) {
+	weatherArray.forEach(function(item) {
+  
+	  var locationId = item.locationId;
+	  var min = item.min;
+  
+	  SetForKeyWeather(globalPublishment.templates[0].frames, "weather","min",min,locationId, min, function(response) {
+		if (response.success) {
+			console.log("Okk WeatherForecast kardi");
+			changeActiveDatas = true;
+		} else {
+		  console.log("WeatherForecast zaten yeni veri ile ayni. Değişiklik yapilmadi.");     
+		}
+	  });
+  
+	  var max = item.max;
+  
+	  SetForKeyWeather(globalPublishment.templates[0].frames, "weather","max",max,locationId, max, function(response) {
+		if (response.success) {
+			console.log("Okk WeatherForecast kardi");
+			changeActiveDatas = true;
+		} else {
+		  console.log("WeatherForecast zaten yeni veri ile ayni. Değişiklik yapilmadi.");     
+		}
+	  });
+  
+	  var icon = item.icon;
+  
+	  SetForKeyWeather(globalPublishment.templates[0].frames, "weather","icon",icon,locationId, icon, function(response) {
+		if (response.success) {
+			console.log("Okk WeatherForecast kardi");
+			changeActiveDatas = true;
+		} else {
+		  console.log("WeatherForecast zaten yeni veri ile ayni. Değişiklik yapilmadi.");     
+		}
+	  });
+	  
+	  // Burada alınan min, max ve icon değerleriyle istediğiniz işlemi yapabilirsiniz
+	  console.log("Min: " + min + ", Max: " + max + ", Icon: " + icon);
+	});
+	
+  }
+  
+  function sendNewDataShowUi() {
+	console.log("*********sendNewDataShowUi************");
+
+	if (changeActiveDatas === true) {
+	  console.log("************sendNewDataShowUi gönderildi*************");
+	  changeActiveDatas = false;
+
+	  var Data = globalPublishment;
+	  var initPlayer = { "MessageType": "initPlayer", "Data": { "filePath": "./content/contents/", "videoMode": "0" } }
+	  
+	  Start_Handler.receiveMessage(initPlayer);
+	  
+	  var jsonData = {
+		  "MessageType": "startPublishment", "Data": Data
+	  };
+
+	  Start_Handler.receiveMessage(jsonData);;
+	
+	}
+  }
+  
+  function checkOnlinePeriodDatas() {
+	console.log("checkOnlinePeriodDatas");
+	setInterval(function() {
+	  if (weatherActive === true || newsActive === true || currencyActive === true) {
+		console.log("checkOnlinePeriodDatas gönderildi");
+		weatherActive = checkForKey(globalPublishment.templates[0].frames, "weather", "locationId");
+		newsActive = checkForKey(globalPublishment.templates[0].frames, "news", "tagId");
+		currencyActive = checkForKey(globalPublishment.templates[0].frames, "currency", "currencyId");
+  
+		console.log("checkForKey weatherActive:" + weatherActive);
+		console.log("checkForKey newsActive:" + newsActive);
+		console.log("checkForKey currencyActive:" + currencyActive);
+	  }
+	}, 120 * 60 * 1000); //2 saate bir kontrol et
+  }
+  

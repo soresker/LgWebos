@@ -6,24 +6,40 @@ function Content_Weather(contentInfo, parentFrameObject) {
         this.height = contentInfo.height;
         this.x = contentInfo.x;
         this.y = contentInfo.y
+        this.z = contentInfo.z
+
         this.refreshTimer = 0;
         this.isCurrentDtSet = false;
         this.currentDtPending = false;
         this.timerCurrentDt = 0;
 
 
-        this.backgroundColor = contentInfo.getTypeContentProperty("backgroundColor");
-        this.textColor = contentInfo.getTypeContentProperty("color");
-        this.textFontFamily = contentInfo.getTypeContentProperty("fontFamily");
-        this.textSizePixels = parseInt(contentInfo.getTypeContentProperty("fontSize")) || 0;
-        this.textHorizontalAlignment = contentInfo.getTypeContentProperty("align");
-        this.textVerticalAlignment = contentInfo.getTypeContentProperty("verticalAlign");
+        this.weatherProperty = contentInfo.getTypeContentProperty("type");
+
+        console.log("Content_Weather weatherProperty :",this.weatherProperty);
+
+        if(this.weatherProperty == "icon")
+        {
+            this.uniqueKey = contentInfo.fileUniqId; //buraya uniqId gelmeli
+            this.playlistContentUniqueKey = contentInfo.playlistUniqueKey + '-' + moment().format('HHmmss');    
+            this.data = Publisher.playerGlobalData.replace(/\\/g, '/')  + contentInfo.getTypeContentProperty("weatherValue");
+
+        }else{
+            this.backgroundColor = contentInfo.getTypeContentProperty("backgroundColor");
+            this.textColor = contentInfo.getTypeContentProperty("color");
+            this.textFontFamily = contentInfo.getTypeContentProperty("fontFamily");
+            this.textSizePixels = parseInt(contentInfo.getTypeContentProperty("fontSize")) || 0;
+            this.textHorizontalAlignment = contentInfo.getTypeContentProperty("align");
+            this.textVerticalAlignment = contentInfo.getTypeContentProperty("verticalAlign");
+            this.data = contentInfo.getTypeContentProperty("weatherValue"); //
+        }
+
        //buraya kac derece oldugu ile degiscez
-        this.data = contentInfo.getTypeContentProperty("weatherValue"); //
       
         this.actualProvider = 0;
 
         console.log("Content_Weather Value:",this.data);
+
         this.frameUniqueKey = parentFrameObject.uniqueKey;
 
     }
@@ -43,6 +59,13 @@ Content_Weather.prototype.showContent = function () {
     try {
 
         Player_Ui_Creator.UIElement.appendHTML("#frame-" + this.frameUniqueKey, this.generateUIElement());
+
+        if(this.weatherProperty == "icon")
+        {
+            $("#content-" + this.frameUniqueKey).css('background-image', "url('{0}')".pxcFormatString(this.data));
+            $("#content-" + this.frameUniqueKey).css("background-size", "{0}px {1}px".pxcFormatString(this.width, this.height));
+            $("#content-" + this.frameUniqueKey).css("background-repeat", "no-repeat");
+        }
 
         
         if (!Tools.isEmptyString(this.backgroundColor)) {
@@ -136,7 +159,10 @@ Content_Weather.prototype.generateUIElement = function () {
 
     this.value = this.data;
 
-    return '<div id="content-{0}" class="playing-platform-content playing-common-content-datetime" style="top:{1}px;left:{2}px;z-index:{3};width:{4}px; height:{5}px; position: absolute;"><span id="content-{0}-span" style="width:{4}px; height:{5}px; display:table-cell;">{6}</span></div>'
+    if(this.weatherProperty == "icon")
+        return '<div id="content-{0}" class="playing-platform-content playing-common-content-image" style="z-index:{1};width:{2}px; height:{3}px;"></div>'.pxcFormatString(this.frameUniqueKey, Tools.defaultValue(this.z, 0), this.width, this.height);   
+    else
+        return '<div id="content-{0}" class="playing-platform-content playing-common-content-datetime" style="top:{1}px;left:{2}px;z-index:{3};width:{4}px; height:{5}px; position: absolute;"><span id="content-{0}-span" style="width:{4}px; height:{5}px; display:table-cell;">{6}</span></div>'
         .pxcFormatString(this.frameUniqueKey,
         this.y,
         this.x,

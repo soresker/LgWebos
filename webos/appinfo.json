@@ -8,7 +8,7 @@
   "icon": "icon.png",
   "largeIcon": "largeIcon.png", 
   "inspectable": true,
-  "useVirtualKeyboard":true,
+  "useVirtualKeyboard":false,
   "supportedOrientations": [
     "Landscape",
     "InvertedPortrait",

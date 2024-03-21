@@ -73,7 +73,20 @@ Content_Html.prototype.showContent = function(func) {
             Z: this.parentFrameObject.z
         }
 
-        window.parent.postMessage(JSON.stringify(message));
+        var iframe = document.createElement('iframe');
+        iframe.src = this.contentInfo.getTypeContentProperty('url');
+        iframe.style.width = '100%';
+        iframe.style.height = '100%';
+        iframe.style.border = 'none';
+
+        iframe.addEventListener('click', function(event) {
+            event.stopPropagation(); // Tıklamayı durdur
+            event.preventDefault(); // Tıklamanın varsayılan davranışını engelle
+          });
+
+        // İlgili frame'e iframe'i ekleyin
+        document.querySelector("#frame-" + this.frameUniqueKey).appendChild(iframe);
+       
     
     } catch (exception) {
 
@@ -101,7 +114,7 @@ Content_Html.prototype.deleteUIElement = function() {
             Z: this.parentFrameObject.z
         }
 
-        window.parent.postMessage(JSON.stringify(message));
+        ///window.parent.postMessage(JSON.stringify(message));
 
         $(this.contentSelector).remove();
     } catch (exception) {
