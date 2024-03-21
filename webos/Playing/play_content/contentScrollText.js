@@ -52,11 +52,6 @@ Content_ScrollText.prototype.showContent = function () {
         console.log("Content_ScrollText this.textHorizontalAlignment" + this.textHorizontalAlignment);
         console.log("Content_ScrollText this.textVerticalAlignment" + this.textVerticalAlignment);
 
-        console.log("Content_ScrollText getTypeContentProperty:"+this.value);
-        console.log("Content_ScrollText getTypeContentProperty:"+JSON.stringify(this.value));
-        console.log("Content_ScrollText getTypeContentProperty:"+contentInfo.getTypeContentProperty("contents"));
-        console.log("Content_ScrollText getTypeContentProperty:"+JSON.stringify(contentInfo.getTypeContentProperty("contents")));
-
         var fontWeight =this.textFontType;
         var fontStyle = "normal";
         var textDecoration = "none";
@@ -67,18 +62,19 @@ Content_ScrollText.prototype.showContent = function () {
         if (this.isUnderlined)
             textDecoration = "underline";
 
-        /*    
-        $("#content-" + this.frameUniqueKey + "-span").css("font-weight", fontWeight);
-        $("#content-" + this.frameUniqueKey + "-span").css("font-style", fontStyle);
-        $("#content-" + this.frameUniqueKey + "-span").css("text-decoration", textDecoration);
-            */  
+    
+        var contentArray = JSON.parse(this.value);
+        // Tüm içerikleri birleştirerek bir string oluştur
+        var result = contentArray.reduce(function(acc, item) {
+            return acc + item.replace(/<\/?p>/g, ''); // <p> etiketlerini kaldır
+        }, '');    
+
         var marqueeStyle = "font-weight:" + fontWeight +";font-style:" +fontStyle + ";font-size:" +this.textSizePixels +";text-decoration:" +textDecoration + ";color:"+this.textColor +";";
         
         $("#content-" + this.frameUniqueKey).html("");
-        $("#content-" + this.frameUniqueKey).html('<marquee width="100%" direction="left" scrollamount="'+this.speed+'" height="100px" style="'+marqueeStyle+'">'+this.value+'</marquee>');
+        $("#content-" + this.frameUniqueKey).html('<marquee width="100%" direction="left" scrollamount="'+this.speed+'" height="100px" style="'+marqueeStyle+'">'+result+'</marquee>');
         $("#content-" + this.frameUniqueKey).show();
-
-       
+    
     } catch (exception) {
 
         console.log("Content_ScrollText.ShowContent", exception);
