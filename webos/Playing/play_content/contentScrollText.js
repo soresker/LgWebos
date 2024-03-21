@@ -52,6 +52,11 @@ Content_ScrollText.prototype.showContent = function () {
         console.log("Content_ScrollText this.textHorizontalAlignment" + this.textHorizontalAlignment);
         console.log("Content_ScrollText this.textVerticalAlignment" + this.textVerticalAlignment);
 
+        console.log("Content_ScrollText getTypeContentProperty:"+this.value);
+        console.log("Content_ScrollText getTypeContentProperty:"+JSON.stringify(this.value));
+        console.log("Content_ScrollText getTypeContentProperty:"+contentInfo.getTypeContentProperty("contents"));
+        console.log("Content_ScrollText getTypeContentProperty:"+JSON.stringify(contentInfo.getTypeContentProperty("contents")));
+
 
         /*
             if (!Tools.isEmptyString(this.backgroundColor)) {
