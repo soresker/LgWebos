@@ -57,77 +57,26 @@ Content_ScrollText.prototype.showContent = function () {
         console.log("Content_ScrollText getTypeContentProperty:"+contentInfo.getTypeContentProperty("contents"));
         console.log("Content_ScrollText getTypeContentProperty:"+JSON.stringify(contentInfo.getTypeContentProperty("contents")));
 
+        var fontWeight =this.textFontType;
+        var fontStyle = "normal";
+        var textDecoration = "none";
 
-        /*
-            if (!Tools.isEmptyString(this.backgroundColor)) {
-                $("#content-" + this.frameUniqueKey).css("background-color", "{0}".pxcFormatString(this.backgroundColor));
-            }
-    
-            if (!Tools.isEmptyString(this.textColor)) {
-                $("#content-" + this.frameUniqueKey).css("color", "{0}".pxcFormatString(this.textColor));
-            }
-    
-            if (!Tools.isEmptyString(this.textFontFamily)) {
-                $("#content-" + this.frameUniqueKey).css("font-family", "{0}".pxcFormatString(this.textFontFamily));
-            }
-    
-            if (this.textSizePixels > 0) {
-                $("#content-" + this.frameUniqueKey).css("font-size", this.textSizePixels);
-            }
-    
-            if (!Tools.isEmptyString(this.textHorizontalAlignment)) {
-                var horizontalAlignValue = "";
-    
-                if (this.textHorizontalAlignment.toLowerCase().trim() == "center")
-                    horizontalAlignValue = "center";
-                else if (this.textHorizontalAlignment.toLowerCase().trim() == "left")
-                    horizontalAlignValue = "left";
-                else if (this.textHorizontalAlignment.toLowerCase().trim() == "right")
-                    horizontalAlignValue = "right";
-    
-                if (!Tools.isEmptyString(horizontalAlignValue)) {
-                    $("#content-" + this.frameUniqueKey + "-span").css("text-align", horizontalAlignValue);
-                }
-    
-            }
-    
-            if (!Tools.isEmptyString(this.textVerticalAlignment)) {
-    
-                var verticalAlignValue = "";
-    
-                if (this.textVerticalAlignment.toLowerCase().trim() == "center")
-                    verticalAlignValue = "middle";
-                else if (this.textVerticalAlignment.toLowerCase().trim() == "bottom")
-                    verticalAlignValue = "bottom";
-                else if (this.textVerticalAlignment.toLowerCase().trim() == "top")
-                    verticalAlignValue = "top";
-    
-                if (!Tools.isEmptyString(verticalAlignValue)) {
-                   // $("#content-" + this.frameUniqueKey).css("line-height", this.parentFrameObject + "px");
-                    $("#content-" + this.frameUniqueKey + "-span").css("vertical-align", verticalAlignValue);
-                }
-            }
-            */    
-            var fontWeight =this.textFontType;
-            var fontStyle = "normal";
-            var textDecoration = "none";
-    
-            //fontWeight = "bold";
-    
-    
-            if (this.isUnderlined)
-                textDecoration = "underline";
-    
-            /*    
-            $("#content-" + this.frameUniqueKey + "-span").css("font-weight", fontWeight);
-            $("#content-" + this.frameUniqueKey + "-span").css("font-style", fontStyle);
-            $("#content-" + this.frameUniqueKey + "-span").css("text-decoration", textDecoration);
-              */  
-            var marqueeStyle = "font-weight:" + fontWeight +";font-style:" +fontStyle + ";font-size:" +this.textSizePixels +";text-decoration:" +textDecoration + ";color:"+this.textColor +";";
-           
-            $("#content-" + this.frameUniqueKey).html("");
-            $("#content-" + this.frameUniqueKey).html('<marquee width="100%" direction="left" scrollamount="'+this.speed+'" height="100px" style="'+marqueeStyle+'">'+this.value+'</marquee>');
-            $("#content-" + this.frameUniqueKey).show();
+        //fontWeight = "bold";
+
+
+        if (this.isUnderlined)
+            textDecoration = "underline";
+
+        /*    
+        $("#content-" + this.frameUniqueKey + "-span").css("font-weight", fontWeight);
+        $("#content-" + this.frameUniqueKey + "-span").css("font-style", fontStyle);
+        $("#content-" + this.frameUniqueKey + "-span").css("text-decoration", textDecoration);
+            */  
+        var marqueeStyle = "font-weight:" + fontWeight +";font-style:" +fontStyle + ";font-size:" +this.textSizePixels +";text-decoration:" +textDecoration + ";color:"+this.textColor +";";
+        
+        $("#content-" + this.frameUniqueKey).html("");
+        $("#content-" + this.frameUniqueKey).html('<marquee width="100%" direction="left" scrollamount="'+this.speed+'" height="100px" style="'+marqueeStyle+'">'+this.value+'</marquee>');
+        $("#content-" + this.frameUniqueKey).show();
 
        
     } catch (exception) {
