@@ -1070,3 +1070,17 @@ function setForKey(frameData, checkValue, property, value, currencyId, newData, 
 	}, 120 * 60 * 1000); //2 saate bir kontrol et
   }
   
+  function startForSync() {
+	console.log("*********startForSync************");
+	  var Data = globalPublishment;
+	  var initPlayer = { "MessageType": "initPlayer", "Data": { "filePath": "./content/contents/", "videoMode": "0" } }
+	  
+	  Start_Handler.receiveMessage(initPlayer);
+	  
+	  var jsonData = {
+		  "MessageType": "startPublishment", "Data": Data
+	  };
+
+	  Start_Handler.receiveMessage(jsonData);;
+		
+  }

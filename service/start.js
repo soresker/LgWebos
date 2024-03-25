@@ -22,13 +22,9 @@ var qs = require('querystring');
 /**
  * Port define
  */
-var allRestartControlHandle = null;
-
 var clients = [];
 
 var logs = [];
-
-var lstVideoReadyId = null;
 
 var server = null;
 
@@ -51,7 +47,7 @@ function openWebSocketServer() {
     
         if (clients.findIndex(x => x.dsID == query["playerID"]) == -1) {
     
-            let syncClient = {
+            var syncClient = {
                 dsID: query["playerID"],
                 socket: connection,
                 role: query.role
@@ -62,11 +58,11 @@ function openWebSocketServer() {
                 console.log(`Synchronous master client connected. dsID : ${query["playerID"]}`, "success");
     
                 syncClient.socket.on('message', function (msg) {
-                    let m = JSON.parse(msg.utf8Data);
+                    var m = JSON.parse(msg.utf8Data);
                     console.log(JSON.stringify(m));
                     switch (m.cmd) {
                         case "triggerTick":
-                            sendSlave2Msg({
+                            MessageSendSlave({
                                 c: "sync_tick",
                                 data: m.data
                             });
@@ -79,33 +75,21 @@ function openWebSocketServer() {
                                 }));
                             });
                             break;
-                        case "comp_adjustment":
-                            sendSlave2Msg({
-                                c: "sync_comp_adjusment",
-                                data: m.data
-                            });
-                            break;
-                        case "video_ready":
-                            console.log("master player video ready. " + query["playerID"]);
-                            syncClient[`video_${m.data}_ready`] = true;
-                            lstVideoReadyId = m.data;
-                            syncVideoLoadControl(m.data);
-                            break;
                         case "video_set_time":
-                            // sendSlave2Msg({
-                            //     c: "sync_video_time",
-                            //     data: m.data
-                            // });                        
+                            MessageSendSlave({
+                                 c: "sync_video_time",
+                                 data: m.data
+                             }); 
+                                                       
                             break;
                         case "get_client_list":
                             
-                            sendMaster2Msg({
+                            MessageSendMaster({
                                 c: "client_list",
                                 data: clients.map(x => {
                                     return {
                                         dsID: x.dsID,
                                         role: x.role,
-                                        ready: x[`video_${lstVideoReadyId}_ready`]
                                     }
                                 })
                             });
@@ -116,19 +100,18 @@ function openWebSocketServer() {
                 console.log(`Synchronous slave client connected. dsID : ${query["playerID"]}`, "success");
             
                     syncClient.socket.on('message', (msg) => {
-                    let m = JSON.parse(msg.utf8Data);
+                    var m = JSON.parse(msg.utf8Data);
                     console.log(JSON.stringify(m));
     
                     switch (m.cmd) {
                         case "video_ready":
                             console.log("player video ready. " + query["playerID"] + ", " + clients.length);
                             syncClient[`video_${m.data}_ready`] = true;
-                            syncVideoLoadControl(m.data);
                             break;
                     }
                 });
     
-                sendMaster2Msg({
+                MessageSendMaster({
                     c: "sync_restart",
                 });
     
@@ -137,55 +120,27 @@ function openWebSocketServer() {
             clients.push(syncClient);
         }
     
-    
         connection.on('close', function () {
             console.log("[DISCONNECT] " + query["playerID"]);
-            let i = clients.findIndex(x => x.dsID == query["playerID"]);
-            if (i > -1) {
-                clients.splice(i, 1);
-                if (lstVideoReadyId) syncVideoLoadControl(lstVideoReadyId);
-            }
-    
-            if (query["role"] == "master") {
-                sendSlave2Msg({
-                    c: "master_disconnect"
-                })
-            }
     
         })
     });
 }
 
-
-
-function syncVideoLoadControl(_id) {
-
-    if (clients.filter(x => !x[`video_${_id}_ready`]).length == 0) {
-        clearTimeout(allRestartControlHandle);
-        allRestartControlHandle = null;
-        clients.forEach((cli) => {
-            cli.socket.send(JSON.stringify({
-                c: "video_play",
-                data: _id
-            }));
-            delete cli[`video_${_id}_ready`];
-        });
-        lstVideoReadyId = null;
-    }  
-
-
+function MessageSendSlave(m) {
+    for (var i = 0; i < clients.length; i++) {
+        if (clients[i].role === "slave") {
+            clients[i].socket.send(JSON.stringify(m));
+        }
+    }
 }
 
-function sendSlave2Msg(m) {
-    clients.filter(x => x.role == "slave").forEach((cli) => {
-        cli.socket.send(JSON.stringify(m));
-    });
-}
-
-function sendMaster2Msg(m) {
-    clients.filter(x => x.role == "master").forEach((cli) => {
-        cli.socket.send(JSON.stringify(m));
-    });
+function MessageSendMaster(m) {
+    for (var i = 0; i < clients.length; i++) {
+        if (clients[i].role === "master") {
+            clients[i].socket.send(JSON.stringify(m));
+        }
+    }
 }
 
 service.register('serverOn', function(message) {
