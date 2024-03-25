@@ -16,7 +16,7 @@ var globalPublishmentControlForNet = false;
 var globalPublishmentName = "";
 var devicePublishment = "";
 var cameCheckPublish = false;
-var webosAppVersion = "1.0.91"
+var webosAppVersion = "1.0.92"
 var changeActiveDatas = false;
 var weatherActive = false;
 var currencyActive = false;
@@ -228,6 +228,7 @@ window.onload = function () {
 	setTimeout(function() { 
 		sendNewDataShowUi();
 	}, 60000);
+	StartSyncAction();
 }
 
 function messageCheck(msg) {
@@ -547,7 +548,7 @@ function executeReceiveCommands(commands) {
 				WebosSettings.setValue("PlayerSettings/syncMasterIp",commands.jsonData.syncMasterIp);
 				WebosSettings.setValue("PlayerSettings/syncMasterPort",commands.jsonData.syncMasterPort);
 
-				//StartSyncAction();
+				StartSyncAction();
 			}
 		}
 		//WebosDevice.setUiTile(false); //sonra acilabilir.      
@@ -801,17 +802,22 @@ function StartSyncAction() {
 	webosSyncMasterIp = WebosSettings.value("PlayerSettings/syncMasterIp","");
 	webosSyncMasterPort = WebosSettings.value("PlayerSettings/syncMasterPort","");
 
+	console.log("StartSyncAction webosIsSync"+webosIsSync);
+	console.log("StartSyncAction webosIsMaster"+webosIsMaster);
+	console.log("StartSyncAction webosSyncMasterIp"+webosSyncMasterIp);
+	console.log("StartSyncAction webosSyncMasterPort"+webosSyncMasterPort);
+
 	if(webosIsSync)
 	{
 		console.log("StartSyncAction: webosIsSync");
 
-		if(webosIsMaster)
+		if(webosIsMaster == "true")
 		{
 			console.log("StartSyncAction: webosIsMaster");
-			WebosDevice.setMasterSync(webosSyncMasterIp,webosSyncMasterPort);
+			webosServiceIsHere(webosSyncMasterIp,webosSyncMasterPort,webosIsMaster)
 		}else{
 			console.log("StartSyncAction: webosIsSlave");
-			WebosDevice.setSlaveSync(webosSyncMasterIp,webosSyncMasterPort);
+			webosServiceIsHere(webosSyncMasterIp,webosSyncMasterPort,webosIsMaster)
 		}
 	}else{
 
@@ -882,8 +888,6 @@ function deleteNonListedFiles(urlList, basePath) {
 		listDir(contentsDir);
 
 	})
-
-
 }
 //************************WIDGET LAR **********************/
 function readPublishmentForMessage(publishName) {

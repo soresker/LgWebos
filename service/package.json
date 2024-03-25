@@ -1,0 +1,11 @@
+{
+  "name": "com.lg.app.signage.server",
+  "version": "1.0.0",
+  "description": "sync server service",
+  "main": "start.js",
+  "scripts": {
+    "test": "echo Error: no test specified && exit 1"
+  },
+  "author": "",
+  "license": "BSD"
+}

@@ -1,0 +1,17 @@
+{
+  "id": "com.lg.app.signage.server",
+  "description": "sync server Service",
+  "services": [
+    {
+      "name": "com.lg.app.signage.server",
+      
+      "commands": [
+        {
+          "name": "serverOn",
+          "description": "Open server",
+          "public": true
+        }
+      ]
+    }
+  ]
+}
