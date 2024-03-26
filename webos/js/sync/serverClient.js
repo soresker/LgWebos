@@ -30,7 +30,8 @@ function webosServiceIsHere(dev_ip, dev_port, isMaster,webOsMacAdress) {
 
     if(isMaster == "true" )
     {
-      isMaster = "master"
+      isMaster = "master";
+      MasterTimer();
     }else{
       isMaster = "slave"
     }
@@ -67,11 +68,12 @@ function SocketStart(isMaster,masterIP,masterPort,webOsMacAdress) {
       {
         globalData = m;
       }
-       if (m.c === 'sync_begin') {
+      
+      if (m.c === 'sync_begin') {
         console.log("m.c === sync_begin");
 
        if(isMaster == "master" )
-    {
+      {
       var syncVideo = document.getElementById(globalVideoPath.replace("#",""));
 
         setTimeout(function () {
@@ -83,12 +85,7 @@ function SocketStart(isMaster,masterIP,masterPort,webOsMacAdress) {
             }
           });
         }, 250);
-    }
-        
-        //startForSync();
-      } else if (m.c === 'video_play') {
-        console.log("m.c === video_play");
-  
+      }
       } else if (m.c === "reconnect") {
 
         console.log("m.c === reconnect");
@@ -159,21 +156,19 @@ function MasterTimer() {
 
   setInterval(() => {
    
-    if(isMaster == "master" )
-    {
-      console.log("**************MASTER************ NEW TIME GONDERIYOR");
-      var syncVideo = document.getElementById(globalVideoPath.replace("#",""));
+    console.log("**************MASTER************ NEW TIME GONDERIYOR");
+    var syncVideo = document.getElementById(globalVideoPath.replace("#",""));
 
-        setTimeout(function () {
-          MessageSendMaster({
-            cmd: "video_set_time",
-            data: {
-              currentTime: syncVideo.currentTime,
-              id: globalData.data
-            }
-          });
-        }, 250);
-    }
+      setTimeout(function () {
+        MessageSendMaster({
+          cmd: "video_set_time",
+          data: {
+            currentTime: syncVideo.currentTime,
+            id: globalData.data
+          }
+        });
+      }, 250);
+    
   }, 15000);
 
 }
