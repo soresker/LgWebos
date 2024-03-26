@@ -75,23 +75,18 @@ function openWebSocketServer() {
                             });
                             break;
                         case "video_set_time":
-                            MessageSendSlave({
+                            /*MessageSendSlave({
                                  c: "sync_video_time",
                                  data: m.data
                              }); 
-                                                       
-                            break;
-                        case "get_client_list":
-                            
-                            MessageSendMaster({
-                                c: "client_list",
-                                data: clients.map(x => {
-                                    return {
-                                        dsID: x.dsID,
-                                        role: x.role,
-                                    }
-                                })
+                             */   
+                             clients.forEach((cli) => {
+                                cli.socket.send(JSON.stringify({
+                                    c: "sync_video_time",
+                                    data: m.data
+                                }));
                             });
+                                                       
                             break;
                     }
                 });
@@ -103,24 +98,20 @@ function openWebSocketServer() {
                     console.log(JSON.stringify(m));
     
                     switch (m.cmd) {
-                        case "video_ready":
-                            console.log("player video ready. " + query["playerID"] + ", " + clients.length);
-                            syncClient[`video_${m.data}_ready`] = true;
-                            break;
-                    }
-                    switch (m.cmd) {
                         case "begin":
-                            console.log("player video ready. " + query["playerID"] + ", " + clients.length);
                             MessageSendMaster({
                                 c: "sync_begin",
+                                data: m.data
                             });
                             break;
+                        case "video_set_time":
+                            MessageSendSlave({
+                                c: "sync_video_time",
+                                data: m.data
+                            });
+                            break;    
                     }
                 });
-    
-    
-    
-    
             }
             clients.push(syncClient);
         }

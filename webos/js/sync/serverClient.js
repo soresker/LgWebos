@@ -54,7 +54,7 @@ function SocketStart(isMaster,masterIP,masterPort,webOsMacAdress) {
       {
         console.log("Connected to  Slave on the Server..");
         MessageSendSlave({
-          c: "begin",
+          cmd: "begin",
         });
       }
     }
@@ -69,11 +69,12 @@ function SocketStart(isMaster,masterIP,masterPort,webOsMacAdress) {
         globalData = m;
       }
       
-      if (m.c === 'sync_begin') {
-        console.log("m.c === sync_begin");
+      if (m.c == 'sync_begin') {
+      
+      console.log("sync_begin geldi");
 
-       if(isMaster == "master" )
-      {
+      console.log("VIDEO URL: "+globalVideoPath.replace("#",""));
+        
       var syncVideo = document.getElementById(globalVideoPath.replace("#",""));
 
         setTimeout(function () {
@@ -81,11 +82,11 @@ function SocketStart(isMaster,masterIP,masterPort,webOsMacAdress) {
             cmd: "video_set_time",
             data: {
               currentTime: syncVideo.currentTime,
-              id: globalData.data
+              id: m.data
             }
           });
         }, 250);
-      }
+      
       } else if (m.c === "reconnect") {
 
         console.log("m.c === reconnect");
@@ -98,6 +99,8 @@ function SocketStart(isMaster,masterIP,masterPort,webOsMacAdress) {
 
         if(isMaster == "slave" )
         {
+          console.log("BEN SLAVE VIDEO sync start");
+
           var syncItem = document.getElementById(globalVideoPath.replace("#",""))
           var currentItemTime = syncItem.currentTime;
           var receivedTime = m.data.currentTime;
@@ -105,6 +108,9 @@ function SocketStart(isMaster,masterIP,masterPort,webOsMacAdress) {
           if (timeDifference > syncThreshold) {
             console.log('Time difference is greater than 500 ms. Syncing video...');
             syncItem.currentTime = receivedTime;
+        }else{
+
+          console.log("BEN MASTERIM VIDEO sync bana uymaz kardas git slave yapsin");
         }
  
       }
