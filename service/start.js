@@ -1,10 +1,6 @@
 var DEBUG_FLAG = true;
 var sync_port = 14726;
 
-console.clear = function () {
-    process.stdout.write('\033c');
-}
-console.clear();
 /**
  * webOS Service
  */
@@ -44,7 +40,16 @@ function openWebSocketServer() {
         var connection = request.accept(null, request.origin);
         var query = request.resourceURL.query;
         console.log(JSON.stringify(query));
-    
+        /*
+        message.respond({
+            returnValue : false,
+            message : JSON.stringify(query)
+        });
+*/
+        MessageSendMaster({
+            c: "sync_begin",
+        });
+
         if (clients.findIndex(x => x.dsID == query["playerID"]) == -1) {
     
             var syncClient = {
@@ -61,12 +66,6 @@ function openWebSocketServer() {
                     var m = JSON.parse(msg.utf8Data);
                     console.log(JSON.stringify(m));
                     switch (m.cmd) {
-                        case "triggerTick":
-                            MessageSendSlave({
-                                c: "sync_tick",
-                                data: m.data
-                            });
-                            break;
                         case "begin":
                             beginSync = true;
                             clients.forEach((cli) => {
@@ -109,11 +108,17 @@ function openWebSocketServer() {
                             syncClient[`video_${m.data}_ready`] = true;
                             break;
                     }
+                    switch (m.cmd) {
+                        case "begin":
+                            console.log("player video ready. " + query["playerID"] + ", " + clients.length);
+                            MessageSendMaster({
+                                c: "sync_begin",
+                            });
+                            break;
+                    }
                 });
     
-                MessageSendMaster({
-                    c: "sync_restart",
-                });
+    
     
     
             }
@@ -152,12 +157,15 @@ service.register('serverOn', function(message) {
                 errorText: 'Server already opened'
             });
         } else {
+            console.log("CopenWebSocketServer... :" );
+
             openWebSocketServer();
             message.respond({
                 returnValue : true
             });
         }
     } catch(err) {
+        console.log("CopenWebSocketServer... :");
         openWebSocketServer();
         message.respond({
             returnValue : false,

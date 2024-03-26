@@ -814,10 +814,10 @@ function StartSyncAction() {
 		if(webosIsMaster == "true")
 		{
 			console.log("StartSyncAction: webosIsMaster");
-			webosServiceIsHere(webosSyncMasterIp,webosSyncMasterPort,webosIsMaster)
+			webosServiceIsHere(webosSyncMasterIp,webosSyncMasterPort,webosIsMaster,webOsMacAdress)
 		}else{
 			console.log("StartSyncAction: webosIsSlave");
-			webosServiceIsHere(webosSyncMasterIp,webosSyncMasterPort,webosIsMaster)
+			webosServiceIsHere(webosSyncMasterIp,webosSyncMasterPort,webosIsMaster,webOsMacAdress)
 		}
 	}else{
 
