@@ -117,11 +117,16 @@ function SocketStart(isMaster,masterIP,masterPort,webOsMacAdress) {
 
           console.log('timeDifference:'+timeDifference);
 
+          if (timeDifference > 1.1) {
+            syncItem.currentTime = receivedTime+1;
+            return;
+          }
+
           if (timeDifference > syncThreshold) {
             console.log('Time difference is greater than 500 ms. Syncing video...');
             syncItem.currentTime = receivedTime;
-        }else{
 
+        }else{
           console.log("BEN MASTERIM VIDEO sync bana uymaz kardas git slave yapsin");
         }
  

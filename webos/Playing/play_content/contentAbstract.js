@@ -81,6 +81,8 @@ Content_Abstractor.prototype.contentEnded = function() {
     clearTimeout(this.mainTimer);
     this.mainTimer = 0;
     this.parentFrameObject.continueFrame(true);
+    checkForPlayStartEndSync();
+
 
 };
 

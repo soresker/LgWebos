@@ -16,7 +16,7 @@ var globalPublishmentControlForNet = false;
 var globalPublishmentName = "";
 var devicePublishment = "";
 var cameCheckPublish = false;
-var webosAppVersion = "1.0.93"
+var webosAppVersion = "1.0.94"
 var changeActiveDatas = false;
 var weatherActive = false;
 var currencyActive = false;
@@ -1089,3 +1089,17 @@ function setForKey(frameData, checkValue, property, value, currencyId, newData, 
 	  Start_Handler.receiveMessage(jsonData);;
 		
   }
+  function checkForPlayStartEndSync() {
+	
+	webosIsMaster = WebosSettings.value("PlayerSettings/isMaster","");
+
+	if(webosIsMaster == "true")
+	{
+		console.log("*********checkForPlayStartEndSync************");
+		MessageSendMaster({
+			cmd: "begin",
+		  });
+	}  		
+		
+  }
+  
