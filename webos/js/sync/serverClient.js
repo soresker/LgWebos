@@ -95,11 +95,6 @@ function SocketStart(isMaster,masterIP,masterPort,webOsMacAdress) {
 
         console.log("m.c === reconnect");
         socketInstance.close();
-        setTimeout(function() {
-          SocketStart(isMaster,masterIP,masterPort,isMacAdress);
-        }, 15000);
-        
-
       } else if (m.c === "sync_video_time") {
 
         console.log("sync_video_time");
