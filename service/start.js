@@ -38,36 +38,34 @@ function openWebSocketServer() {
     
     wsServer.on('request', function (request) {
         var connection = request.accept(null, request.origin);
+
         var query = request.resourceURL.query;
         console.log(JSON.stringify(query));
-        /*
-        message.respond({
-            returnValue : false,
-            message : JSON.stringify(query)
-        });
-*/
-        MessageSendMaster({
-            c: "sync_begin",
+
+        clients.forEach((cli) => {
+            cli.socket.send(JSON.stringify({
+                c: "log",
+                data: JSON.stringify(query)
+            }));
         });
 
-        if (clients.findIndex(x => x.dsID == query["playerID"]) == -1) {
+        if (clients.findIndex(x => x.playId == query["playerID"]) == -1) {
     
             var syncClient = {
-                dsID: query["playerID"],
+                playId: query["playerID"],
                 socket: connection,
                 role: query.role
     
             };
     
             if (query.role == "master") {
-                console.log(`Synchronous master client connected. dsID : ${query["playerID"]}`, "success");
+                console.log(`Synchronous master client connected. playId : ${query["playerID"]}`, "success");
     
                 syncClient.socket.on('message', function (msg) {
                     var m = JSON.parse(msg.utf8Data);
                     console.log(JSON.stringify(m));
                     switch (m.cmd) {
                         case "begin":
-                            beginSync = true;
                             clients.forEach((cli) => {
                                 cli.socket.send(JSON.stringify({
                                     c: "sync_begin"
@@ -75,11 +73,6 @@ function openWebSocketServer() {
                             });
                             break;
                         case "video_set_time":
-                            /*MessageSendSlave({
-                                 c: "sync_video_time",
-                                 data: m.data
-                             }); 
-                             */   
                              clients.forEach((cli) => {
                                 cli.socket.send(JSON.stringify({
                                     c: "sync_video_time",
@@ -99,15 +92,18 @@ function openWebSocketServer() {
     
                     switch (m.cmd) {
                         case "begin":
-                            MessageSendMaster({
-                                c: "sync_begin",
-                                data: m.data
+                            clients.forEach((cli) => {
+                                cli.socket.send(JSON.stringify({
+                                    c: "sync_begin"
+                                }));
                             });
                             break;
                         case "video_set_time":
-                            MessageSendSlave({
-                                c: "sync_video_time",
-                                data: m.data
+                            clients.forEach((cli) => {
+                                cli.socket.send(JSON.stringify({
+                                    c: "sync_video_time",
+                                    data: m.data
+                                }));
                             });
                             break;    
                     }
@@ -117,26 +113,27 @@ function openWebSocketServer() {
         }
     
         connection.on('close', function () {
-            console.log("[DISCONNECT] " + query["playerID"]);
-    
-        })
+            clients.forEach((cli) => {
+                cli.socket.send(JSON.stringify({
+                    c: "log",
+                    data: "[DISCONNECT] " + query["playerID"]
+                }));
+            });
+            // İstemciyi 'clients' dizisinden kaldır
+            var index = clients.findIndex(cli => cli.playId == query["playerID"]);
+            if (index !== -1) {
+                clients.splice(index, 1);
+
+                clients.forEach((cli) => {
+                    cli.socket.send(JSON.stringify({
+                        c: "log",
+                        data: "Client disconnected and removed from clients array."
+                    }));
+                });
+            }
+        });
+        
     });
-}
-
-function MessageSendSlave(m) {
-    for (var i = 0; i < clients.length; i++) {
-        if (clients[i].role === "slave") {
-            clients[i].socket.send(JSON.stringify(m));
-        }
-    }
-}
-
-function MessageSendMaster(m) {
-    for (var i = 0; i < clients.length; i++) {
-        if (clients[i].role === "master") {
-            clients[i].socket.send(JSON.stringify(m));
-        }
-    }
 }
 
 service.register('serverOn', function(message) {

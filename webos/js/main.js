@@ -21,6 +21,7 @@ var changeActiveDatas = false;
 var weatherActive = false;
 var currencyActive = false;
 var newsActive = false;
+var isMac = "";
 //var keyboardControl = new Keyboard_Control();
 
 function listener(event) {
@@ -547,6 +548,7 @@ function executeReceiveCommands(commands) {
 				WebosSettings.setValue("PlayerSettings/isMaster",commands.jsonData.isMaster);
 				WebosSettings.setValue("PlayerSettings/syncMasterIp",commands.jsonData.syncMasterIp);
 				WebosSettings.setValue("PlayerSettings/syncMasterPort",commands.jsonData.syncMasterPort);
+				WebosSettings.setValue("PlayerSettings/privateKey",commands.jsonData.privateKey);
 
 				StartSyncAction();
 			}
@@ -801,11 +803,14 @@ function StartSyncAction() {
 	webosIsMaster = WebosSettings.value("PlayerSettings/isMaster","");
 	webosSyncMasterIp = WebosSettings.value("PlayerSettings/syncMasterIp","");
 	webosSyncMasterPort = WebosSettings.value("PlayerSettings/syncMasterPort","");
+	isMac = WebosSettings.value("PlayerSettings/privateKey","");
+
 
 	console.log("StartSyncAction webosIsSync"+webosIsSync);
 	console.log("StartSyncAction webosIsMaster"+webosIsMaster);
 	console.log("StartSyncAction webosSyncMasterIp"+webosSyncMasterIp);
 	console.log("StartSyncAction webosSyncMasterPort"+webosSyncMasterPort);
+	console.log("StartSyncAction isMac "+isMac);
 
 	if(webosIsSync)
 	{
@@ -814,10 +819,10 @@ function StartSyncAction() {
 		if(webosIsMaster == "true")
 		{
 			console.log("StartSyncAction: webosIsMaster");
-			webosServiceIsHere(webosSyncMasterIp,webosSyncMasterPort,webosIsMaster,webOsMacAdress)
+			webosServiceIsHere(webosSyncMasterIp,webosSyncMasterPort,webosIsMaster,isMac)
 		}else{
 			console.log("StartSyncAction: webosIsSlave");
-			webosServiceIsHere(webosSyncMasterIp,webosSyncMasterPort,webosIsMaster,webOsMacAdress)
+			webosServiceIsHere(webosSyncMasterIp,webosSyncMasterPort,webosIsMaster,isMac)
 		}
 	}else{
 

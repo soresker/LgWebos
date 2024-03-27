@@ -3,7 +3,7 @@ var connectedActive = false;
 var masterIP = "";
 var masterPort = "";
 var isMaster = "";
-var syncInterval = 500; // Sync interval in milliseconds
+var syncThreshold = 0.2; // Sync interval in milliseconds
 var globalData = "";
 var isMacAdress = "";
 
@@ -53,7 +53,7 @@ function SocketStart(isMaster,masterIP,masterPort,webOsMacAdress) {
       else
       {
         console.log("Connected to  Slave on the Server..");
-        MessageSendSlave({
+        MessageSendMaster({
           cmd: "begin",
         });
       }
@@ -64,20 +64,24 @@ function SocketStart(isMaster,masterIP,masterPort,webOsMacAdress) {
       var m = JSON.parse(msg.data);
       console.log("Client socketInstance.onmessage: "+JSON.stringify(m));
 
-      if(isMaster == "slave" )
       {
         globalData = m;
       }
       
-      if (m.c == 'sync_begin') {
+     if (m.c === "log") {
+        console.log("LOGSSSSS:::::"+m.data);
+
+      }
+      else if (m.c == 'sync_begin') {
       
       console.log("sync_begin geldi");
 
       console.log("VIDEO URL: "+globalVideoPath.replace("#",""));
-        
+
       var syncVideo = document.getElementById(globalVideoPath.replace("#",""));
 
-        setTimeout(function () {
+        startForSync();
+        /*setTimeout(function () {
           MessageSendMaster({
             cmd: "video_set_time",
             data: {
@@ -85,12 +89,16 @@ function SocketStart(isMaster,masterIP,masterPort,webOsMacAdress) {
               id: m.data
             }
           });
-        }, 250);
+        }, 20000);*/
       
       } else if (m.c === "reconnect") {
 
         console.log("m.c === reconnect");
         socketInstance.close();
+        setTimeout(function() {
+          SocketStart(isMaster,masterIP,masterPort,isMacAdress);
+        }, 15000);
+        
 
       } else if (m.c === "sync_video_time") {
 
@@ -102,9 +110,18 @@ function SocketStart(isMaster,masterIP,masterPort,webOsMacAdress) {
           console.log("BEN SLAVE VIDEO sync start");
 
           var syncItem = document.getElementById(globalVideoPath.replace("#",""))
+          console.log('syncItem:'+JSON.stringify(syncItem));
+
           var currentItemTime = syncItem.currentTime;
           var receivedTime = m.data.currentTime;
+
+          console.log('currentItemTime:'+currentItemTime);
+          console.log('timeDifference:'+receivedTime);
+
           var timeDifference = Math.abs(receivedTime - currentItemTime);
+
+          console.log('timeDifference:'+timeDifference);
+
           if (timeDifference > syncThreshold) {
             console.log('Time difference is greater than 500 ms. Syncing video...');
             syncItem.currentTime = receivedTime;
@@ -115,12 +132,7 @@ function SocketStart(isMaster,masterIP,masterPort,webOsMacAdress) {
  
       }
 
-    } else if (m.c === "master_disconnect") {
-      console.log("master_disconnect");
-        setTimeout(function () {
-          SocketStart(isMaster,masterIP,masterPort,isMacAdress);
-        }, 8000);
-      }
+    }
     };
 
     socketInstance.onerror = function () {
@@ -130,14 +142,7 @@ function SocketStart(isMaster,masterIP,masterPort,webOsMacAdress) {
       setTimeout(function() {
         SocketStart(isMaster,masterIP,masterPort,isMacAdress);
       }, 10000);
-    };
-
-    socketInstance.onclose = function () {
-      console.log("Disconnected Server... ", "error");
-      connectedActive = false;
-      setTimeout(function() {
-        SocketStart(isMaster,masterIP,masterPort,isMacAdress);
-      }, 5000);
+      
     };
 
   }
@@ -145,36 +150,36 @@ function SocketStart(isMaster,masterIP,masterPort,webOsMacAdress) {
 function MessageSendSlave(m) {
 
   console.log("MessageSendSlave:"+JSON.stringify(m));
+  console.log("Socket Instance Slave Null ? :" + socketInstance);
   socketInstance.send(JSON.stringify(m));
     
 }
 
 function MessageSendMaster(m) {
   console.log("MessageSendMaster:"+JSON.stringify(m));
-
+  console.log("Socket Instance Master Null ? :" + socketInstance);
   socketInstance.send(JSON.stringify(m));
 
 }
 
 function MasterTimer() {
   
-  console.log("**************MASTER************ NEW TIME GONDERECEK isMaster"+isMaster);
+  console.log("**************MASTER************isMaster:"+isMaster);
+  console.log("**************MASTER************globalData:"+globalData);
 
   setInterval(() => {
    
     console.log("**************MASTER************ NEW TIME GONDERIYOR");
     var syncVideo = document.getElementById(globalVideoPath.replace("#",""));
 
-      setTimeout(function () {
-        MessageSendMaster({
-          cmd: "video_set_time",
-          data: {
-            currentTime: syncVideo.currentTime,
-            id: globalData.data
-          }
-        });
-      }, 250);
+      MessageSendMaster({
+        cmd: "video_set_time",
+        data: {
+          currentTime: syncVideo.currentTime,
+          //id: globalData.data
+        }
+      });
     
-  }, 15000);
+  }, 7000);
 
 }
