@@ -14,7 +14,8 @@ var Player = {
             Currency: "currency",
             Yandex : "yandex",
             Audio : "audio",
-            News : "news"
+            News : "news",
+            Stream : "stream"
         }
     },
 

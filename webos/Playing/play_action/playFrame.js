@@ -486,7 +486,14 @@ Play_Frame.prototype.playNextContent = function (isComeFromEndOfAContent) {
                 console.log("new Content.Type.News : "+ contentInfo)
                 this.currentContent = new Content_ScrollText(contentInfo, this );
                 }
-            break;       
+            break;
+            case Player.Content.Type.Stream:    
+            {
+                console.log("new Content.Type.Stream : "+ contentInfo)
+                this.currentContent = new Content_Stream(contentInfo, this );
+            }
+           break;   
+            
             default:
                 break;
         }
