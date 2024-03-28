@@ -1,12 +1,12 @@
 function Content_Stream(contentInfo, parentFrameObject) {
 
-    console.log("Content_Stream" ,'Info');
+    console.log("Content_Stream", 'Info');
 
     Content_Abstractor.call(this, contentInfo, parentFrameObject);
 
-   // this.x = 0; //parentFrameObject.x;
-   /// this.y = 0; //parentFrameObject.y;
-   
+    // this.x = 0; //parentFrameObject.x;
+    /// this.y = 0; //parentFrameObject.y;
+
     this.width = contentInfo.width;
     this.height = contentInfo.height;
 
@@ -43,12 +43,16 @@ function Content_Stream(contentInfo, parentFrameObject) {
     this.playlistContentUniqueKey = contentInfo.playlistUniqueKey + '-' + guid;
     this.fileName = contentInfo.getTypeContentProperty("filename");
     this.displayOption = contentInfo.getTypeContentProperty("displayoption");
+    this.streamUrl = contentInfo.getTypeContentProperty("streamUrl");
+    this.streamType = contentInfo.getTypeContentProperty("streamType");
+    this.videoType = contentInfo.getTypeContentProperty("videoType");
+
 }
 
 Content_Stream.prototype = Object.create(Content_Abstractor.prototype);
 Content_Stream.prototype.constructor = Content_Stream;
 
-Content_Stream.prototype.addListener = function(node, event, handler, capture) {
+Content_Stream.prototype.addListener = function (node, event, handler, capture) {
     if (!(node in this.videoHandlers)) {
         this.videoHandlers[node] = {};
     }
@@ -59,7 +63,7 @@ Content_Stream.prototype.addListener = function(node, event, handler, capture) {
     node.addEventListener(event, handler, capture);
 };
 
-Content_Stream.prototype.removeAllListeners = function(node, event) {
+Content_Stream.prototype.removeAllListeners = function (node, event) {
     if (node in this.videoHandlers) {
         var handlers = this.videoHandlers[node];
         if (event in handlers) {
@@ -72,7 +76,7 @@ Content_Stream.prototype.removeAllListeners = function(node, event) {
     }
 };
 
-Content_Stream.prototype.showContent = function(func) {
+Content_Stream.prototype.showContent = function (func) {
 
     Content_Abstractor.prototype.showContent.call(this);
 
@@ -82,11 +86,23 @@ Content_Stream.prototype.showContent = function(func) {
 
         // Player_Ui_Creator.UIElement.appendHTML("#frame-" + this.frameUniqueKey, this.generateScreenShotElement());
 
-        var fileUrlEdits = Publisher.playerGlobalData.replace(/\\/g, '/')  + this.fileName;
+        var source = document.createElement("source");
 
-        $(this.videoSelector).attr('src',fileUrlEdits);
-        var video = document.getElementById("content-" + this.playlistContentUniqueKey + "-video");
-        console.log("Video.basePath2:" +fileUrlEdits);
+        var fileUrlEdits = this.streamUrl;
+        $(source).attr('src', fileUrlEdits);
+        $(source).attr('type', this.streamType);
+
+        //$(this.videoSelector).attr('src',fileUrlEdits);
+        $(this.videoSelector).attr('data-setup', "{}");
+        $(this.videoSelector).attr('autoplay', "true");
+        $(this.videoSelector).attr('muted', "muted");
+        $(this.videoSelector).attr('class', "video-js");
+        $(this.videoSelector).attr('controls', '');
+
+        $(this.videoSelector).append(source);
+
+
+        console.log("Video.basePath2:" + fileUrlEdits);
 
         if (this.settingSeekStart)
             this.settingSeekStart = false;
@@ -94,9 +110,10 @@ Content_Stream.prototype.showContent = function(func) {
         if (this.loop) {
             $(this.videoSelector).attr("loop", "loop");
         }
-        
-        $(this.videoSelector)[0].play();
-        
+
+        videojs(this.videoSelector, {}, function onPlayerReady() {
+            this.play();
+        });
         var this_ = this;
 
         $(this_.videoSelector).show();
@@ -115,9 +132,9 @@ Content_Stream.prototype.showContent = function(func) {
 
 };
 
-Content_Stream.prototype.deleteUIElement = function() {
+Content_Stream.prototype.deleteUIElement = function () {
 
-   console.log("Video deleteUIElement "+ "info");
+    console.log("Video deleteUIElement " + "info");
     try {
 
         if (this.attachedErrorHandler === true) {
@@ -144,43 +161,42 @@ Content_Stream.prototype.deleteUIElement = function() {
         this.removeAllListeners(video, 'timeupdate');
 
     } catch (exception) {
-       console.log(" exception Video deleteUIElement :" + exception, "error");
-       console.log("exception  Content_Stream.deleteUIElement",  + exception,"error");
+        console.log(" exception Video deleteUIElement :" + exception, "error");
+        console.log("exception  Content_Stream.deleteUIElement", + exception, "error");
         this.parentFrameObject.setCurrentContentValidity(false);
-    } finally {}
+    } finally { }
 };
 
-Content_Stream.prototype.deleteContent = function() {
-    console.log("Content_Stream.prototype.deleteContent",this.videoType);
-    if(Publisher.videoType == 0) 
-    {
+Content_Stream.prototype.deleteContent = function () {
+    console.log("Content_Stream.prototype.deleteContent", this.videoType);
+    if (Publisher.videoType == 0) {
         this.deleteUIElement();
         $('#content-' + this.playlistContentUniqueKey).remove();
         Content_Abstractor.prototype.deleteContent.call(this);
     }
-    else{
+    else {
 
         this.deleteUIElement();
         $('#content-' + this.playlistContentUniqueKey).remove();
         Content_Abstractor.prototype.deleteContent.call(this);
 
-        var fileUrlEdits = Publisher.playerGlobalData.replace(/\\/g, '/')  + this.fileName;
+        var fileUrlEdits = Publisher.playerGlobalData.replace(/\\/g, '/') + this.fileName;
 
         var message = {
-            Type : "closeFFMpeg",
-            Path : fileUrlEdits
+            Type: "closeFFMpeg",
+            Path: fileUrlEdits
         }
         //window.parent.postMessage(JSON.stringify(message));
 
-        console.log("FFMPEG close path:",fileUrlEdits);
+        console.log("FFMPEG close path:", fileUrlEdits);
     }
 };
 
-Content_Stream.prototype.generateUIElement = function() {
-    return '<div id="content-{0}" style="z-index:{3};width:{4}px; height:{5}px; position:relative"><video muted onloadeddata="this.muted={7}" onloadstart="this.volume={6}" id="content-{0}-video" class="playing-platform-content playing-platform-content-video" style="width:{4}px; height:{5}px; object-fit: fill; background-color:black; display:none" data-videorepeatcount="1"></video></div>'.pxcFormatString(this.playlistContentUniqueKey, this.y, this.x, Tools.defaultValue(this.z, 0), this.width, this.height, this.volume * 1.0 / 100, this.volume==0?"true":"false");
+Content_Stream.prototype.generateUIElement = function () {
+    return '<div id="content-{0}" style="z-index:{3};width:{4}px; height:{5}px; position:relative"><video muted onloadeddata="this.muted={7}" onloadstart="this.volume={6}" id="content-{0}-video" class="playing-platform-content playing-platform-content-video" style="width:{4}px; height:{5}px; object-fit: fill; background-color:black;" data-videorepeatcount="1"></video></div>'.pxcFormatString(this.playlistContentUniqueKey, this.y, this.x, Tools.defaultValue(this.z, 0), this.width, this.height, this.volume * 1.0 / 100, this.volume == 0 ? "true" : "false");
 };
-Content_Stream.prototype.generateScreenShotElement = function() {
+Content_Stream.prototype.generateScreenShotElement = function () {
     return '<div id="player-image">' +
-               '<img id="screen-shot-image" src="./Playing/common/noplaylist.png"/>' +
-           '</div>';
+        '<img id="screen-shot-image" src="./Playing/common/noplaylist.png"/>' +
+        '</div>';
 };
