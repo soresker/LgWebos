@@ -539,7 +539,7 @@ function executeReceiveCommands(commands) {
 			WebosDevice.setRotate(commands.jsonData.rotation);
 		}
 		if (webOsHardwareVersion >= "2.0") {
-			if(commands.jsonData.isSync == true )
+			if(commands.jsonData.isSync == "true")
 			{
 				Logger.sendMessage("Sync setleniyor" + JSON.stringify(commands));
 				sendConsoleLog("Sync setleniyor" + JSON.stringify(commands));
@@ -805,16 +805,15 @@ function StartSyncAction() {
 	webosSyncMasterPort = WebosSettings.value("PlayerSettings/syncMasterPort","");
 	isMac = WebosSettings.value("PlayerSettings/privateKey","");
 
-
 	console.log("StartSyncAction webosIsSync"+webosIsSync);
-	console.log("StartSyncAction webosIsMaster"+webosIsMaster);
-	console.log("StartSyncAction webosSyncMasterIp"+webosSyncMasterIp);
-	console.log("StartSyncAction webosSyncMasterPort"+webosSyncMasterPort);
-	console.log("StartSyncAction isMac "+isMac);
 
-	if(webosIsSync)
+	if(webosIsSync == "true")
 	{
-		console.log("StartSyncAction: webosIsSync");
+		console.log("StartSyncAction webosIsSync"+webosIsSync);
+		console.log("StartSyncAction webosIsMaster"+webosIsMaster);
+		console.log("StartSyncAction webosSyncMasterIp"+webosSyncMasterIp);
+		console.log("StartSyncAction webosSyncMasterPort"+webosSyncMasterPort);
+		console.log("StartSyncAction isMac "+isMac);
 
 		if(webosIsMaster == "true")
 		{
