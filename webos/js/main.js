@@ -22,6 +22,8 @@ var weatherActive = false;
 var currencyActive = false;
 var newsActive = false;
 var isMac = "";
+var urlArray = "";
+var starting = false;
 //var keyboardControl = new Keyboard_Control();
 
 function listener(event) {
@@ -201,11 +203,11 @@ window.onload = function () {
 			Logger.sendMessage('player register'+webosIsRegister);
 			Logger.sendMessage('player playerId:' + WebosSettings.value("PlayerSettings/playerId", ""));
 			Logger.sendMessage('player custormerId:' + WebosSettings.value("Customer/id", ""));
-
+			/*
 			setTimeout(function () {
 				$("#screen-shot-image").hide();
 			}, 2000);
-
+			*/
 		} else {
 
 			Logger.sendMessage('player register degil');
@@ -257,12 +259,14 @@ function messageCheck(msg) {
 			Logger.sendMessage('read file:' + path);
 
 			this.readPulishmentFile(path).then(function (publishmentContent) {
-				globalPublishment = publishmentContent;
+				globalPublishment = JSON.parse(publishmentContent);
 				Logger.sendMessage("publishmentContent" + publishmentContent);
 				urlArray = globalPublishment.filesUrlArray;
+				Logger.sendMessage("publishmentContent urlArray" + urlArray);
 				downloadedContentList = globalPublishment.filesUrlArray;
 				downloadDir = contentsDir;
 				downloadName = "";
+				starting = true;
 				$(".download-bar").show();
 				downloadNext();
 
@@ -285,6 +289,86 @@ function download(url, callback) {
 		callback(error, data)
 	});
 }
+function downloadForPublish() {
+	currentIndex = currentIndex + 1
+	if (currentIndex < urlArray.length) {
+		var currentUrl = urlArray[currentIndex];
+		Logger.sendMessage('download start for publishment:' + 'download status:' + (currentIndex + 1) + '/' + urlArray.length);
+		sendConsoleLog('download start for publishment:' + 'download status:' + (currentIndex + 1) + '/' + urlArray.length)
+		Logger.sendMessage('download file for publishment url:' + currentUrl)
+		var fileName = currentUrl.split('/').pop();
+		fileExistForPublish(downloadDir + fileName, function (error, data) {
+			if (data != null && data == false) {
+				download(currentUrl, function (err, data) {
+					if (err) {
+						Logger.sendMessage("download  for publishment failed: " + (currentIndex + 1) + '/' + urlArray.length);
+						Logger.sendMessage("download for publishment failed error:" + JSON.stringify(err));
+						sendConsoleLog("download for publishment failed error:" + (currentIndex + 1) + JSON.stringify(err));
+					} else {
+						Logger.sendMessage('download for publishment complete: ' + (currentIndex + 1) + '/' + urlArray.length + ' 😃');
+						sendConsoleLog("download for publishment complete: " + (currentIndex + 1) + "/" + urlArray.length);			
+					}
+					$(".download-bar").html("Downloading " + (currentIndex + 1) + "/" + urlArray.length);
+					downloadForPublish()
+				})
+			}
+			else {
+				Logger.sendMessage("download file exist! Go Next File: " + (currentIndex + 1) + '/' + urlArray.length)
+				downloadForPublish()
+			}
+		});
+	}
+	else {
+		currentIndex = -1;
+		Logger.sendMessage("download complated all files ✅");
+
+		setTimeout(function () {
+			$("#screen-shot-image").hide();
+		}, 2000);
+
+		if (downloadDir == publishmentsDir) {
+
+			WebosSettings.setValue("Publishment/NewVersion", globalPublishmentName);
+			WebosSettings.setValue("Publishment/OldVersion", globalPublishmentName);
+
+			Logger.sendMessage("YENI Publisment Download edildi ✅" +globalPublishmentName);
+
+			if(cameCheckPublish == false)
+			{
+				Logger.sendMessage("YENI PUBLISMENT VAR ONUN DA ICERIKLERINI INDIRMEYE BASLAYAK✅");
+				getLastPublishment();
+			}else{
+
+				Logger.sendMessage("SHOWWW PLAYERE publishmentsDir✅");
+				showPlayer();
+				deleteNonListedFiles(downloadedContentList,contentsDir);
+				cameCheckPublish = false;
+				this.updatePublishmentDate();
+			}
+		
+		} 
+
+		$(".download-bar").hide()
+		listDir(publishmentsDir);
+	}
+}
+
+function fileExistForPublish(files, callback) {
+	var successCb = function (cbObject) {
+		var exists = cbObject.exists;
+		callback(null, exists)
+	};
+
+	var failureCb = function (cbObject) {
+		callback(cbObject, null)
+	};
+
+	var options = {};
+	options.path = files;
+
+	var storage = new Storage();
+	storage.exists(successCb, failureCb, options);
+}
 
 function downloadNext() {
     currentIndex++;
@@ -293,8 +377,12 @@ function downloadNext() {
         Logger.sendMessage('download start:' + 'download status:' + (currentIndex + 1) + '/' + urlArray.length);
         sendConsoleLog('download start:' + 'download status:' + (currentIndex + 1) + '/' + urlArray.length)
         Logger.sendMessage('download file url:' + currentFile.url);
-        var fileName = "file" + currentIndex + getFileExtension(currentFile.url);
+
+        var fileName = getFileExtension(currentFile.url);
         var filePath = downloadDir + fileName;
+
+		Logger.sendMessage('download fileName:' +fileName);
+		Logger.sendMessage('download filePath:' +filePath);
 
         fileExists(filePath, currentFile.fileSize, function (fileExistsError, exists, mismatch) {
             if (fileExistsError || !exists || mismatch) {
@@ -325,25 +413,11 @@ function downloadNext() {
             $("#screen-shot-image").hide();
         }, 2000);
 
-        if (downloadDir == publishmentsDir) {
-            WebosSettings.setValue("Publishment/NewVersion", globalPublishmentName);
-            WebosSettings.setValue("Publishment/OldVersion", globalPublishmentName);
-            Logger.sendMessage("New Publishment Downloaded ✅" + globalPublishmentName);
-            if (cameCheckPublish == false) {
-                Logger.sendMessage("New Publishment available, downloading its content ✅");
-                getLastPublishment();
-            } else {
-                Logger.sendMessage("Showing player for publishmentsDir ✅");
-                showPlayer();
-                deleteNonListedFiles(downloadedContentList, contentsDir);
-                cameCheckPublish = false;
-                this.updatePublishmentDate();
-            }
-        } else if (downloadDir == contentsDir) {
-            var oldPublish = WebosSettings.value("Publishment/NewVersion", "");
-            Logger.sendMessage("Device and global publishment are the same : ✅" + oldPublish + "--" + globalPublishmentName);
-            if (oldPublish == globalPublishmentName) {
-                Logger.sendMessage("Showing player ✅");
+		if (downloadDir == contentsDir) {
+
+            if (starting) {
+                Logger.sendMessage("Showing player starting ✅");
+				starting = false;
                 showPlayer();
                 deleteNonListedFiles(downloadedContentList, contentsDir);
                 this.updatePublishmentDate();
@@ -607,7 +681,14 @@ function executeReceiveCommands(commands) {
 		sendConsoleLog("Receive Command:" + commands.command);
 
 		Logger.sendMessage(" Receive PublishmentDelete", JSON.stringify(commands));
-		removeDir();
+		
+		var path = contentsDir;
+		Logger.sendMessage('rmdir path' + path);
+		fs.rmdir(path, { recursive: true }, function (error, data) {
+			if (error)
+				return Logger.sendMessage('error', error);
+			Logger.sendMessage('data' + data);
+		})
 	}
 
 	else {
@@ -659,7 +740,6 @@ function checkPublishment() {
 	fs.ls(defaultDir + 'publishments', function (error, data) {
 		if (error) {
 			Logger.sendMessage('publishments file not found -'+ error);
-
 			fs.mkdir(defaultDir + 'publishments/', function (error, data) {
 				if (error) {
 					Logger.sendMessage('publishments dir not created -'+ error);
@@ -780,7 +860,7 @@ function receive_Publishment(publishment) {
 		globalPublishmentName = publishment.jsonData.publishmentName;
 		downloadDir = publishmentsDir;
 		downloadName = publishment.jsonData.publishmentName + ".json";
-		downloadNext();
+		downloadForPublish();
 	}else{
 		Logger.sendMessage("Get Publishment sonrasi DEVAM KE : " + devicePublishment);
 	}
