@@ -1,55 +1,81 @@
-var connection = new signalR.HubConnectionBuilder()
-    //.withUrl("https://dev-01.api.ist/playerHub")
-    .withUrl(("https://prod.api.ist/playerHub"))
-    .configureLogging(signalR.LogLevel.Information)
-    .withAutomaticReconnect()
-    .build();
+//var hubUrl = "https://prod.api.ist/playerHub";
+var hubUrl = "https://dev-01.api.ist/playerHub";
+var backoffTimes = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
+var connection;
+var reconnectTimeout;
+var globalPublishmentControlForNet = false;
 
-    function startSignalSocket() {
-        connection.start()
-            .then(function() {
-                Logger.sendMessage("SignalRF Connected.");
-                setTimeout(function() {getPublishment();}, 1000);
-                setTimeout(function() {sendSystemInfo();}, 5000);
+function startSignalSocket() {
+    connection = new signalR.HubConnectionBuilder()
+        .withUrl(hubUrl)
+        .configureLogging(signalR.LogLevel.Information)
+        .withAutomaticReconnect()
+        .build();
 
-            })
-            .catch(function(err) {
-                Logger.sendMessage('startSignalSocket ERROR: '+ err);
-            });
+    connection.start()
+        .then(function() {
+            Logger.sendMessage("SignalRF Connected.");
+            setTimeout(function() { getPublishment(); }, 1000);
+            setTimeout(function() { sendSystemInfo(); }, 5000);
+        })
+        .catch(function(err) {
+            Logger.sendMessage('startSignalSocket ERROR: ' + err);
+            // Bağlantı hatası olduğunda geri bağlanmayı deneyin
+            scheduleReconnect();
+        });
+
+    connection.onreconnected = function(connectionId) {
+        Logger.sendMessage(connection.state === signalR.HubConnectionState.Connected);
+        Logger.sendMessage("onreconnected id = ", connectionId);
+        sendSystemInfo();
+        setTimeout(function() { getPublishment(); }, 3000);
+    };
+
+    connection.onreconnecting = function(error) {
+        Logger.sendMessage('onreconnecting', error);
+        Logger.sendMessage(connection.state === signalR.HubConnectionState.Reconnecting);
+    };
+
+    connection.onclose = function() {
+        Logger.sendMessage('onclose startSignalSocket');
+        // Bağlantı kapandığında geri bağlanmayı deneyin
+        scheduleReconnect();
+    };
+
+    connection.on("TestMessage", function(data) {
+        Logger.sendMessage("Gelen Mesaj ha:" + data);
+    });
+
+    connection.on("receiveSignal", function(data) {
+        Logger.sendMessage("receiveSignal:", data);
+        executeReceiveCommands(data);
+    });
+}
+
+function scheduleReconnect() {
+    // Önceki zamanlayıcıyı temizleyin
+    clearTimeout(reconnectTimeout);
+
+    // Exponential Backoff ile yeniden bağlanmayı planlayın
+    var delayTime = backoffTimes.shift() * 1000; // ms cinsinden
+    reconnectTimeout = setTimeout(function() {
+        Logger.sendMessage("Reconnecting...");
+        startSignalSocket();
+    }, delayTime);
+
+    // Geri kalan zamanlayıcıları iptal etmek için kontrol edin
+    for (var i = 0; i < backoffTimes.length; i++) {
+        clearTimeout(backoffTimes[i]);
     }
-
-connection.onreconnected = function (connectionId) {
-    Logger.sendMessage(connection.state === signalR.HubConnectionState.Connected);
-    Logger.sendMessage("onreconnected id = ", connectionId);
-    sendSystemInfo();
-    setTimeout(function() {getPublishment();}, 3000);
-    
-};
-
-connection.onreconnecting = function (error) {
-    Logger.sendMessage('onreconnecting', error);
-    Logger.sendMessage(connection.state === signalR.HubConnectionState.Reconnecting);
-};
-
-connection.onclose = function () {
-    Logger.sendMessage('onclose startSignalSocket');
-    startSignalSocket();
-};
-
-connection.on("TestMessage", function (data) {
-    Logger.sendMessage("Gelen Mesaj ha:" + data);
-});
+}
 
 function checkForString(inputString, searchString) {
-    // inputString'in bir string olup olmadığını kontrol et
     if (typeof inputString !== 'string') {
-        return false; // Eğer inputString bir string değilse, false dön
+        return false;
     }
 
-    // İlgili string içinde arama yap
     var position = inputString.indexOf(searchString);
 
-    // Eğer pozisyon -1 ise, kelime bulunamadı demektir
     if (position === -1) {
         return false;
     } else {
@@ -57,61 +83,50 @@ function checkForString(inputString, searchString) {
     }
 }
 
-
 function sendSignal(command, data) {
     Logger.sendMessage("Sending Command " + JSON.stringify(command), "");
     Logger.sendMessage("Sending JsonData: " + JSON.stringify(data), "");
 
     connection.invoke(command, data)
         .then(function() {
-            Logger.sendMessage("Mesaj Gonderildi: "+JSON.stringify(command));
+            Logger.sendMessage("Mesaj Gonderildi: " + JSON.stringify(command));
         })
         .catch(function(err) {
-
             Logger.sendMessage(err);
 
-            if(checkForString(err,"getPublishment"))
-            {
-                sendConsoleLog("5 SN sonra tekra GETPUBLISH DENEYECEGIM");
-                Logger.sendMessage("5 SN sonra tekra GETPUBLISH DENEYECEGIM");
-                setTimeout(function() {getPublishment();}, 5000);
-            }else if(checkForString(err,"checkPublishment"))
-            {
-                sendConsoleLog("5 SN sonra tekra CHECK PUBLISH DENEYECEGIM");
-                Logger.sendMessage("5 SN sonra tekra CHECK PUBLISH DENEYECEGIM");
-                setTimeout(function() {getLastPublishment();}, 5000);
-            }else{
-                Logger.sendMessage(err);
-            }
+            if (err.message.includes("Failed to invoke 'updatePublishmentDate'")) {
+                Logger.sendMessage("TEKRAR DENIYORUZ updatePublishmentDate");
+                setTimeout(function() {updatePublishmentDate();}, 10000); 
+              }
+              if (err.message.includes("Failed to invoke 'checkPublishment'")) {
+                Logger.sendMessage("TEKRAR DENIYORUZ checkPublishment");
+                setTimeout(function() {getLastPublishment();}, 10000); 
+              }
+              if (err.message.includes("Failed to invoke 'getPublishment'")) {
+                Logger.sendMessage("TEKRAR DENIYORUZ getPublishment");
+                setTimeout(function() {getPublishment();}, 10000); 
+              }
+              if (err.message.includes("Failed to invoke 'systeminfo'")) {
+                Logger.sendMessage("TEKRAR DENIYORUZ systeminfo");
+                setTimeout(function() {sendSystemInfo();}, 10000); 
+              }
+
         });
 }
 
-connection.on("receiveSignal", function (data) {
-    Logger.sendMessage("receiveSignal:", data);
-    executeReceiveCommands(data);
-});
-
 function getConnectionState() {
+    Logger.sendMessage("getConnectionState connectionstate:" + connection.state);
+    Logger.sendMessage("getConnectionState signalR.HubConnectionState.Connected:" + signalR.HubConnectionState.Connected);
 
-    Logger.sendMessage("getConnectionState connectionstate:"+connection.state);
-
-    Logger.sendMessage("getConnectionState signalR.HubConnectionState.Connected:"+signalR.HubConnectionState.Connected);
-
-    if(connection.state == "Reconnecting" && signalR.HubConnectionState.Connected =="Connected" && globalPublishmentControlForNet == false)
-    {
-        Logger.sendMessage("Cihaz baglanti deniyor:"+connection.state);
+    if (connection.state == "Reconnecting" && signalR.HubConnectionState.Connected == "Connected" && globalPublishmentControlForNet == false) {
+        Logger.sendMessage("Cihaz baglanti deniyor:" + connection.state);
         globalPublishmentControlForNet = true;
-
-    }else if(connection.state == "Connected" && signalR.HubConnectionState.Connected =="Connected" && globalPublishmentControlForNet == true)
-    {
-        Logger.sendMessage("Cihaz baglandi getPublishment :"+connection.state);
+    } else if (connection.state == "Connected" && signalR.HubConnectionState.Connected == "Connected" && globalPublishmentControlForNet == true) {
+        Logger.sendMessage("Cihaz baglandi getPublishment :" + connection.state);
         getPublishment();
         globalPublishmentControlForNet = false;
-    }else{
-
-        Logger.sendMessage("Reset globalPublishmentControlForNet :"+connection.state);
-        //globalPublishmentControlForNet = false;
-
+    } else {
+        Logger.sendMessage("Reset globalPublishmentControlForNet :" + connection.state);
     }
 
     if (connection.state == "Disconnected") {
@@ -120,3 +135,4 @@ function getConnectionState() {
         return true;
     }
 }
+

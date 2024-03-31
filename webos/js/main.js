@@ -220,10 +220,11 @@ window.onload = function () {
 	sendHardbitSystemInfo();
 	sendSystemInfoInterval();
 	checkPeriodPublishment();
+	/*
 	setTimeout(function() {
 		checkSocketConnection();
 	}, 10000);
-
+	*/
 	checkOnlinePeriodDatas();
 
 	setTimeout(function() { 
@@ -539,7 +540,7 @@ function executeReceiveCommands(commands) {
 			WebosDevice.setRotate(commands.jsonData.rotation);
 		}
 		if (webOsHardwareVersion >= "2.0") {
-			if(commands.jsonData.isSync == "true")
+			if(commands.jsonData.isSync == true)
 			{
 				Logger.sendMessage("Sync setleniyor" + JSON.stringify(commands));
 				sendConsoleLog("Sync setleniyor" + JSON.stringify(commands));
@@ -807,7 +808,7 @@ function StartSyncAction() {
 
 	console.log("StartSyncAction webosIsSync"+webosIsSync);
 
-	if(webosIsSync == "true")
+	if(webosIsSync == "true" && webosSyncMasterIp != "" && webosSyncMasterPort != "")
 	{
 		console.log("StartSyncAction webosIsSync"+webosIsSync);
 		console.log("StartSyncAction webosIsMaster"+webosIsMaster);
