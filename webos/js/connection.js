@@ -15,8 +15,8 @@ function startSignalSocket() {
     connection.start()
         .then(function() {
             Logger.sendMessage("SignalRF Connected.");
-            setTimeout(function() { getPublishment(); }, 1000);
-            setTimeout(function() { sendSystemInfo(); }, 5000);
+            setTimeout(function() { sendSystemInfo(); }, 3000);
+            setTimeout(function() { getPublishment(); }, 7000);
         })
         .catch(function(err) {
             Logger.sendMessage('startSignalSocket ERROR: ' + err);
@@ -129,7 +129,7 @@ function getConnectionState() {
         Logger.sendMessage("Reset globalPublishmentControlForNet :" + connection.state);
     }
 
-    if (connection.state == "Disconnected") {
+    if (connection.state == "Disconnected" || connection.state == "Reconnecting") {
         return false;
     } else {
         return true;

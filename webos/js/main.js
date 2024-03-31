@@ -220,11 +220,11 @@ window.onload = function () {
 	sendHardbitSystemInfo();
 	sendSystemInfoInterval();
 	checkPeriodPublishment();
-	/*
+	
 	setTimeout(function() {
 		checkSocketConnection();
 	}, 10000);
-	*/
+	
 	checkOnlinePeriodDatas();
 
 	setTimeout(function() { 
@@ -674,9 +674,9 @@ function checkSocketConnection() {
 		Logger.sendMessage("checkSocketConnection");
 		if (getConnectionState() == false) {
 			Logger.sendMessage("socke tekrar baslasin amqq");
-			startSignalSocket();
+			scheduleReconnect();
 		}
-	}, 5000);
+	}, 10000);
 
 }
 
