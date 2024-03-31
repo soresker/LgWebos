@@ -259,7 +259,14 @@ function messageCheck(msg) {
 			this.readPulishmentFile(path).then(function (publishmentContent) {
 				globalPublishment = publishmentContent;
 				Logger.sendMessage("publishmentContent" + publishmentContent);
-				showPlayer();
+				urlArray = readPublishment.filesUrlArray;
+				downloadedContentList = readPublishment.filesUrlArray;
+				downloadDir = contentsDir;
+				downloadName = "";
+				$(".download-bar").show();
+				downloadNext();
+
+				//showPlayer();
 			})
 
 			break;
@@ -359,6 +366,16 @@ function downloadNext() {
 		$(".download-bar").hide()
 		listDir(publishmentsDir);
 	}
+}
+
+// Dosya boyutu uyumsuzsa true döndürür
+function fileSizeMismatch(filePath, expectedSize) {
+    var stats = WebosDevice.statFile(filePath);
+    if (stats.size != expectedSize) {
+        Logger.sendMessage("File size mismatch: " + filePath);
+        return true;
+    }
+    return false;
 }
 
 function fileExists(files, callback) {
@@ -605,8 +622,8 @@ function fetchPublishment(readPublishment) {
 	Logger.sendMessage("received publishment:" + JSON.stringify(readPublishment));
 	//listDir(publishmentsDir)
 	globalPublishment = readPublishment;
-	urlArray = readPublishment.urlArray;
-	downloadedContentList = readPublishment.urlArray;
+	urlArray = readPublishment.filesUrlArray;
+	downloadedContentList = readPublishment.filesUrlArray;
 	downloadDir = contentsDir;
 	downloadName = "";
 	$(".download-bar").show();
