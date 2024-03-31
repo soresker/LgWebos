@@ -16,7 +16,7 @@ var globalPublishmentControlForNet = false;
 var globalPublishmentName = "";
 var devicePublishment = "";
 var cameCheckPublish = false;
-var webosAppVersion = "1.0.92"
+var webosAppVersion = "1.0.100"
 var changeActiveDatas = false;
 var weatherActive = false;
 var currencyActive = false;
@@ -681,7 +681,7 @@ function executeReceiveCommands(commands) {
 		sendConsoleLog("Receive Command:" + commands.command);
 
 		Logger.sendMessage(" Receive PublishmentDelete", JSON.stringify(commands));
-		
+
 		var path = contentsDir;
 		Logger.sendMessage('rmdir path' + path);
 		fs.rmdir(path, { recursive: true }, function (error, data) {
@@ -973,7 +973,7 @@ function checkPeriodPublishment() {
 }
 
 function getFileExtension(url) {
-    const parts = url.split('/');
+    var parts = url.split('/');
     return parts[parts.length - 1];
 }
 
