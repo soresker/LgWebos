@@ -16,7 +16,7 @@ var globalPublishmentControlForNet = false;
 var globalPublishmentName = "";
 var devicePublishment = "";
 var cameCheckPublish = false;
-var webosAppVersion = "1.0.99"
+var webosAppVersion = "1.0.92"
 var changeActiveDatas = false;
 var weatherActive = false;
 var currencyActive = false;
@@ -259,8 +259,8 @@ function messageCheck(msg) {
 			this.readPulishmentFile(path).then(function (publishmentContent) {
 				globalPublishment = publishmentContent;
 				Logger.sendMessage("publishmentContent" + publishmentContent);
-				urlArray = readPublishment.filesUrlArray;
-				downloadedContentList = readPublishment.filesUrlArray;
+				urlArray = globalPublishment.filesUrlArray;
+				downloadedContentList = globalPublishment.filesUrlArray;
 				downloadDir = contentsDir;
 				downloadName = "";
 				$(".download-bar").show();
@@ -287,112 +287,134 @@ function download(url, callback) {
 }
 
 function downloadNext() {
-	currentIndex = currentIndex + 1
-	if (currentIndex < urlArray.length) {
-		var currentUrl = urlArray[currentIndex];
-		Logger.sendMessage('download start:' + 'download status:' + (currentIndex + 1) + '/' + urlArray.length);
-		sendConsoleLog('download start:' + 'download status:' + (currentIndex + 1) + '/' + urlArray.length)
-		Logger.sendMessage('download file url:' + currentUrl)
-		var fileName = currentUrl.split('/').pop();
-		fileExists(downloadDir + fileName, function (error, data) {
-			if (data != null && data == false) {
-				download(currentUrl, function (err, data) {
-					if (err) {
-						Logger.sendMessage("download failed: " + (currentIndex + 1) + '/' + urlArray.length);
-						Logger.sendMessage("download failed:" + (currentIndex + 1) + "");
-						Logger.sendMessage("download failed error:" + JSON.stringify(err));
-						sendConsoleLog("download failed error:" + (currentIndex + 1) + JSON.stringify(err));
-					} else {
-						Logger.sendMessage('download complete: ' + (currentIndex + 1) + '/' + urlArray.length + ' 😃');
-						sendConsoleLog("download complete: " + (currentIndex + 1) + "/" + urlArray.length);			
-					}
-					$(".download-bar").html("Downloading " + (currentIndex + 1) + "/" + urlArray.length);
-					downloadNext()
-				})
-			}
-			else {
-				Logger.sendMessage("download file exist! Go Next File: " + (currentIndex + 1) + '/' + urlArray.length)
-				downloadNext()
-			}
-		});
-	}
-	else {
-		currentIndex = -1;
-		Logger.sendMessage("download complated all files ✅");
+    currentIndex++;
+    if (currentIndex < urlArray.length) {
+        var currentFile = urlArray[currentIndex];
+        Logger.sendMessage('download start:' + 'download status:' + (currentIndex + 1) + '/' + urlArray.length);
+        sendConsoleLog('download start:' + 'download status:' + (currentIndex + 1) + '/' + urlArray.length)
+        Logger.sendMessage('download file url:' + currentFile.url);
+        var fileName = "file" + currentIndex + getFileExtension(currentFile.url);
+        var filePath = downloadDir + fileName;
 
-		setTimeout(function () {
-			$("#screen-shot-image").hide();
-		}, 2000);
+        fileExists(filePath, currentFile.fileSize, function (fileExistsError, exists, mismatch) {
+            if (fileExistsError || !exists || mismatch) {
+                Logger.sendMessage("File does not exist or size mismatch, downloading: " + filePath);
+                download(currentFile.url, function (downloadError, data) {
+                    if (downloadError) {
+                        Logger.sendMessage("Download failed: " + (currentIndex + 1) + '/' + urlArray.length);
+                        Logger.sendMessage("Download failed:" + (currentIndex + 1) + "");
+                        Logger.sendMessage("Download failed error:" + JSON.stringify(downloadError));
+                        sendConsoleLog("Download failed error:" + (currentIndex + 1) + JSON.stringify(downloadError));
+                    } else {
+                        Logger.sendMessage('Download complete: ' + (currentIndex + 1) + '/' + urlArray.length + ' 😃');
+                        sendConsoleLog("Download complete: " + (currentIndex + 1) + "/" + urlArray.length);
+                    }
+                    $(".download-bar").html("Downloading " + (currentIndex + 1) + "/" + urlArray.length);
+                    downloadNext();
+                });
+            } else {
+                Logger.sendMessage("File exists and size matches: " + filePath);
+                downloadNext();
+            }
+        });
+    } else {
+        currentIndex = -1;
+        Logger.sendMessage("Download completed for all files ✅");
 
-		if (downloadDir == publishmentsDir) {
+        setTimeout(function () {
+            $("#screen-shot-image").hide();
+        }, 2000);
 
-			WebosSettings.setValue("Publishment/NewVersion", globalPublishmentName);
-			WebosSettings.setValue("Publishment/OldVersion", globalPublishmentName);
+        if (downloadDir == publishmentsDir) {
+            WebosSettings.setValue("Publishment/NewVersion", globalPublishmentName);
+            WebosSettings.setValue("Publishment/OldVersion", globalPublishmentName);
+            Logger.sendMessage("New Publishment Downloaded ✅" + globalPublishmentName);
+            if (cameCheckPublish == false) {
+                Logger.sendMessage("New Publishment available, downloading its content ✅");
+                getLastPublishment();
+            } else {
+                Logger.sendMessage("Showing player for publishmentsDir ✅");
+                showPlayer();
+                deleteNonListedFiles(downloadedContentList, contentsDir);
+                cameCheckPublish = false;
+                this.updatePublishmentDate();
+            }
+        } else if (downloadDir == contentsDir) {
+            var oldPublish = WebosSettings.value("Publishment/NewVersion", "");
+            Logger.sendMessage("Device and global publishment are the same : ✅" + oldPublish + "--" + globalPublishmentName);
+            if (oldPublish == globalPublishmentName) {
+                Logger.sendMessage("Showing player ✅");
+                showPlayer();
+                deleteNonListedFiles(downloadedContentList, contentsDir);
+                this.updatePublishmentDate();
+            } else {
+                Logger.sendMessage("Checking for new publishment, downloading the publishment: ✅");
+                cameCheckPublish = true;
+                getPublishment();
+            }
+        }
 
-			Logger.sendMessage("YENI Publisment Download edildi ✅" +globalPublishmentName);
+        $(".download-bar").hide();
+        listDir(publishmentsDir);
+    }
+}
 
-			if(cameCheckPublish == false)
-			{
-				Logger.sendMessage("YENI PUBLISMENT VAR ONUN DA ICERIKLERINI INDIRMEYE BASLAYAK✅");
-				getLastPublishment();
-			}else{
-
-				Logger.sendMessage("SHOWWW PLAYERE publishmentsDir✅");
-				showPlayer();
-				deleteNonListedFiles(downloadedContentList,contentsDir);
-				cameCheckPublish = false;
-				this.updatePublishmentDate();
-			}
-		
-		} else if(downloadDir == contentsDir) {
-
-			var oldPublish = WebosSettings.value("Publishment/NewVersion", "");
-			Logger.sendMessage("DEVICE AND GLOABAL PUBLISH SAME : ✅" +oldPublish +"--"+globalPublishmentName);
-
-			if(oldPublish == globalPublishmentName)
-			{
-				Logger.sendMessage("SHOWWW PLAYERE✅");
-				showPlayer();
-				deleteNonListedFiles(downloadedContentList,contentsDir);
-				this.updatePublishmentDate();
-			}else{
-				Logger.sendMessage("CHECK PUBLISHTEN GELDI GIT Publishi indir:✅");
-				cameCheckPublish = true;
-				getPublishment();
-			}
-
-		}
-
-		$(".download-bar").hide()
-		listDir(publishmentsDir);
-	}
+// Dosya uzantısını alma fonksiyonu
+function getFileExtension(filename) {
+    return filename.split('.').pop();
 }
 
 // Dosya boyutu uyumsuzsa true döndürür
-function fileSizeMismatch(filePath, expectedSize) {
-    var stats = WebosDevice.statFile(filePath);
-    if (stats.size != expectedSize) {
-        Logger.sendMessage("File size mismatch: " + filePath);
-        return true;
-    }
-    return false;
+// Dosya boyutu uyumsuzsa true döndürür
+function fileSizeMismatch(filePath, expectedSize, callback) {
+    var successCb = function (cbObject) {
+        Logger.sendMessage("Show File Size " + cbObject.size);
+        if (cbObject.size != expectedSize) {
+            Logger.sendMessage("File size mismatch: " + filePath);
+            callback(true);
+        } else {
+            callback(false);
+        }
+    };
+
+    var failureCb = function (cbObject) {
+        var errorCode = cbObject.errorCode;
+        var errorText = cbObject.errorText;
+        Logger.sendMessage(" Error Code [" + errorCode + "]: " + errorText);
+        callback(true);
+    };
+
+    var options = {
+        path: filePath,
+    };
+
+    var storage = new Storage();
+    storage.statFile(successCb, failureCb, options);
 }
 
-function fileExists(files, callback) {
-	var successCb = function (cbObject) {
-		var exists = cbObject.exists;
-		callback(null, exists)
-	};
 
-	var failureCb = function (cbObject) {
-		callback(cbObject, null)
-	};
+function fileExists(filePath, fileSize, callback) {
+    var successCb = function (cbObject) {
+        var exists = cbObject.exists;
+        if (exists) {
+            fileSizeMismatch(filePath, fileSize, function (mismatch) {
+                callback(null, exists, mismatch);
+            });
+        } else {
+            callback(null, exists, false);
+        }
+    };
 
-	var options = {};
-	options.path = files;
+    var failureCb = function (cbObject) {
+        callback(cbObject, null, false);
+    };
 
-	var storage = new Storage();
-	storage.exists(successCb, failureCb, options);
+    var options = {
+        path: filePath
+    };
+
+    var storage = new Storage();
+    storage.exists(successCb, failureCb, options);
 }
 
 function listDir(dir) {

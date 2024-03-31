@@ -608,24 +608,5 @@ WebosDevice.removeFile = function (path) {
     removeFileinPath.removeFile(successCb, failureCb, options);
     
 }
-    
-WebosDevice.statFile = function (path) {
 
-    var successCb = function (cbObject) {
-        Logger.sendMessage("Show File Size "+cbObject.size);
-    };
-    
-    var failureCb = function (cbObject) {
-        var errorCode = cbObject.errorCode;
-        var errorText = cbObject.errorText;
-        Logger.sendMessage(" Error Code [" + errorCode + "]: " + errorText);
-    };
-    
-    var options = {
-        path: path,
-    };
-    
-    var storage = new Storage();
-    storage.statFile(successCb, failureCb, options);
-}
     
