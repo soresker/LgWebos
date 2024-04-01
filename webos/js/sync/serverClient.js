@@ -167,7 +167,7 @@ function MasterTimer() {
   console.log("**************MASTER************isMaster:"+isMaster);
   console.log("**************MASTER************globalData:"+globalData);
 
-  setInterval(() => {
+  setInterval(function() {
    
     console.log("**************MASTER************ NEW TIME GONDERIYOR");
     var syncVideo = document.getElementById(globalVideoPath.replace("#",""));
