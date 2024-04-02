@@ -665,6 +665,15 @@ function executeReceiveCommands(commands) {
 				WebosSettings.setValue("PlayerSettings/privateKey",commands.jsonData.privateKey);
 
 				StartSyncAction();
+			}else{
+				Logger.sendMessage("Sync FALSE setleniyor" + JSON.stringify(commands));
+
+				WebosSettings.setValue("PlayerSettings/isSync",commands.jsonData.isSync);
+				WebosSettings.setValue("PlayerSettings/isMaster",commands.jsonData.isMaster);
+				WebosSettings.setValue("PlayerSettings/syncMasterIp",commands.jsonData.syncMasterIp);
+				WebosSettings.setValue("PlayerSettings/syncMasterPort",commands.jsonData.syncMasterPort);
+				WebosSettings.setValue("PlayerSettings/privateKey",commands.jsonData.privateKey);
+
 			}
 		}
 		//WebosDevice.setUiTile(false); //sonra acilabilir.      

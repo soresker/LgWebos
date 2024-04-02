@@ -518,7 +518,7 @@ Play_Frame.prototype.playNextContent = function (isComeFromEndOfAContent) {
                 this.currentContent.showContent(function () {
                     setTimeout(function () {
                         this_.deletePreviousContent();
-                    }, 1000);
+                    }, 600);
                 });
             }
             else {
