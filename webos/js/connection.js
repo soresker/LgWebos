@@ -6,6 +6,11 @@ var reconnectTimeout;
 var globalPublishmentControlForNet = false;
 
 function startSignalSocket() {
+
+    if (connection) {
+        connection.stop();
+    }
+    
     connection = new signalR.HubConnectionBuilder()
         .withUrl(hubUrl)
         .configureLogging(signalR.LogLevel.Information)
