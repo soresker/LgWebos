@@ -257,21 +257,26 @@ function messageCheck(msg) {
 			var path = fileName + ".json";
 
 			Logger.sendMessage('read file:' + path);
+			
+			setTimeout(function() {
+				
+				this.readPulishmentFile(path).then(function (publishmentContent) {
+					globalPublishment = JSON.parse(publishmentContent);
+					Logger.sendMessage("publishmentContent" + publishmentContent);
+					urlArray = globalPublishment.filesUrlArray;
+					Logger.sendMessage("publishmentContent urlArray" + urlArray);
+					downloadedContentList = globalPublishment.filesUrlArray;
+					downloadDir = contentsDir;
+					downloadName = "";
+					starting = true;
+					$(".download-bar").show();
+					downloadNext();
+	
+					//showPlayer();
+				})
 
-			this.readPulishmentFile(path).then(function (publishmentContent) {
-				globalPublishment = JSON.parse(publishmentContent);
-				Logger.sendMessage("publishmentContent" + publishmentContent);
-				urlArray = globalPublishment.filesUrlArray;
-				Logger.sendMessage("publishmentContent urlArray" + urlArray);
-				downloadedContentList = globalPublishment.filesUrlArray;
-				downloadDir = contentsDir;
-				downloadName = "";
-				starting = true;
-				$(".download-bar").show();
-				downloadNext();
-
-				//showPlayer();
-			})
+			}, 2000);
+		
 
 			break;
 
