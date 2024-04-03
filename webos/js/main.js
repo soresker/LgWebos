@@ -378,7 +378,7 @@ function downloadNext() {
         sendConsoleLog('download start:' + 'download status:' + (currentIndex + 1) + '/' + urlArray.length)
         Logger.sendMessage('download file url:' + currentFile.url);
 
-        var fileName = getFileExtension(currentFile.url);
+        var fileName = getFileExtensionUrl(currentFile.url);
         var filePath = downloadDir + fileName;
 
 		Logger.sendMessage('download fileName:' +fileName);
@@ -434,10 +434,11 @@ function downloadNext() {
 }
 
 // Dosya uzantısını alma fonksiyonu
+/*
 function getFileExtension(filename) {
     return filename.split('.').pop();
 }
-
+*/
 // Dosya boyutu uyumsuzsa true döndürür
 // Dosya boyutu uyumsuzsa true döndürür
 function fileSizeMismatch(filePath, expectedSize, callback) {
@@ -981,7 +982,7 @@ function checkPeriodPublishment() {
 	}, 5*60*1000); //5dk da bir
 }
 
-function getFileExtension(url) {
+function getFileExtensionUrl(url) {
     var parts = url.split('/');
     return parts[parts.length - 1];
 }
@@ -1006,7 +1007,7 @@ function deleteNonListedFiles(urlList, basePath) {
 			var found = false;
 	
 			for (var j = 0; j < urlList.length; j++) {
-				if (getFileExtension(urlList[j]) === file) {
+				if (getFileExtensionUrl(urlList[j].url) === file) {
 					found = true;
 					break;
 				}
