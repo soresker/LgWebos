@@ -1226,8 +1226,9 @@ function setForKey(frameData, checkValue, property, value, currencyId, newData, 
   function checkForPlayStartEndSync() {
 	
 	webosIsSync = WebosSettings.value("PlayerSettings/isSync","");
+	webosIsMaster = WebosSettings.value("PlayerSettings/isMaster","");
 
-	if(webosIsSync == "true")
+	if(webosIsSync == "true" && webosIsMaster == "true" )
 	{
 		console.log("*********checkForPlayStartEndSync************");
 		MessageSendMaster({
