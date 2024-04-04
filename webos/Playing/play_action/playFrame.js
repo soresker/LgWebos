@@ -339,7 +339,8 @@ Play_Frame.prototype.playNextContent = function (isComeFromEndOfAContent) {
             }
         }
 
-        var nextCheckInterval = validContentCount === 0 ? 1000 : 100;
+    
+        var nextCheckInterval = validContentCount === 0 ? 1000 : 300;
 
         if (this.singleShotTimer != 0) {
             clearTimeout(this.singleShotTimer);
