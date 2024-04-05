@@ -426,7 +426,18 @@ function downloadNext() {
                 showPlayer();
                 deleteNonListedFiles(downloadedContentList, contentsDir);
                 this.updatePublishmentDate();
-            } else {
+            } 
+			else if(cameCheckPublish == false)
+			{
+                Logger.sendMessage("CIHAZ KAPALI YADA ACIK IKEN YENI YAYIN GELDI Showing player starting ✅");
+				cameCheckPublish = true;
+                getPublishment();
+				starting = false;
+                showPlayer();
+                deleteNonListedFiles(downloadedContentList, contentsDir);
+                this.updatePublishmentDate();
+			}
+			else {
                 Logger.sendMessage("Checking for new publishment, downloading the publishment: ✅");
                 cameCheckPublish = true;
                 getPublishment();
@@ -606,8 +617,13 @@ function executeReceiveCommands(commands) {
 			//WebosSettings.setValue("Publishment/OldVersion", commands.jsonData.publishmentName);
 			fetchPublishment(commands.jsonData.publishmentData);
 		} else {
+			if(cameCheckPublish == false)
+			{
+				fetchPublishment(commands.jsonData.publishmentData);
 
-			Logger.sendMessage("DEVAMKEEEE :)");
+			}else{
+				Logger.sendMessage("DEVAMKEEEE :)");
+			}		
 		}
 
 	} else if (commands.command === commandMessage.WinScreenShotRequest) {
