@@ -35,13 +35,11 @@ Content_Date.prototype = Object.create(Content_Abstractor.prototype);
 Content_Date.prototype.constructor = Content_Date;
 
 Content_Date.prototype.showContent = function () {
-
     if (this.currentDtPending === false) {
         Content_Abstractor.prototype.showContent.call(this);
     }
 
     try {
-
         var currentDt = Tools.getDateTimeNow();
         if (currentDt.isBefore(moment([1980, 1, 1]))) {
             this.currentDtPending = true;
@@ -66,6 +64,8 @@ Content_Date.prototype.showContent = function () {
 
         Player_Ui_Creator.UIElement.appendHTML("#frame-" + this.frameUniqueKey, this.generateUIElement());
 
+        var fontPath = Publisher.playerGlobalData.replace(/\\/g, '/').replace("/contents/","/fonts/");
+
         if (!Tools.isEmptyString(this.backgroundColor)) {
             $("#content-" + this.frameUniqueKey).css("background-color", "{0}".pxcFormatString(this.backgroundColor));
         }
@@ -79,7 +79,7 @@ Content_Date.prototype.showContent = function () {
         }
 
         if (this.textSizePixels > 0) {
-            $("#content-" + this.frameUniqueKey).css("font-size", this.textSizePixels);
+            $("#content-" + this.frameUniqueKey).css("font-size", this.textSizePixels.toString()+"px");
         }
 
         if (!Tools.isEmptyString(this.textHorizontalAlignment)) {
@@ -119,7 +119,7 @@ Content_Date.prototype.showContent = function () {
         var _this = this;
         this.refreshTimer = setInterval(function () {
             var currentDateTime = Tools.getDateTimeNow().locale("tr-TR").format(_this.format);
-            $("#content-" + _this.frameUniqueKey+"-span").html(currentDateTime);
+            $("#content-" + _this.frameUniqueKey + "-span").html(currentDateTime);
         }, 1000);
 
 
@@ -139,6 +139,34 @@ Content_Date.prototype.showContent = function () {
         $("#content-" + this.frameUniqueKey + "-span").css("font-weight", fontWeight);
         $("#content-" + this.frameUniqueKey + "-span").css("font-style", fontStyle);
         $("#content-" + this.frameUniqueKey + "-span").css("text-decoration", textDecoration);
+
+        if (!Tools.isEmptyString(this.textFontFamily)) {
+
+            if(this.textFontFamily == "verdana")
+            {
+                console.log("Content_Date this.textFontFamily" + this.textFontFamily);
+                $("#content-" + this.frameUniqueKey).css("font-family", "{0}".pxcFormatString(this.textFontFamily));
+            }
+            else{
+
+                var fontUrl = fontPath + this.textFontFamily + ".ttf"; // Font dosyasının yolu
+                console.log("Content_Date FONT this.value" + fontUrl);
+
+                var fontFace = new FontFace(this.textFontFamily, 'url(' + fontUrl + ')'); // FontFace nesnesi oluştur
+                var self = this; // Kapsayıcı alanı fonksiyon içinde kullanmak için bir referans
+                
+                // Font yükleme işlemi tamamlandığında
+                fontFace.load().then(function(loadedFont) {
+                    document.fonts.add(loadedFont); // Font'u belgeye ekle
+                    console.log("Content_Date Font Loaded" + fontUrl);
+                    $("#content-" + self.frameUniqueKey + "-span").css("font-family", "'" + self.textFontFamily + "'");
+                    $("#content-" + self.frameUniqueKey).show();
+                }).catch(function(error) {
+                    console.error('Content_Date Font yüklenirken hata oluştu:', error);
+                });
+            }    
+       
+        }
 
         $("#content-" + this.frameUniqueKey).show();
 

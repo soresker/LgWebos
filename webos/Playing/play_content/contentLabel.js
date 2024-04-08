@@ -22,6 +22,7 @@ function Content_Label(contentInfo, parentFrameObject) {
 
         this.actualProvider = 0;
         this.frameUniqueKey = parentFrameObject.uniqueKey;
+        console.log("Content_Label");
 
     }
     catch (exception)
@@ -34,90 +35,99 @@ Content_Label.prototype = Object.create(Content_Abstractor.prototype);
 Content_Label.prototype.constructor = Content_Label;
 
 Content_Label.prototype.showContent = function () {
-
     Content_Abstractor.prototype.showContent.call(this);
     
     try {
-
         Player_Ui_Creator.UIElement.appendHTML("#frame-" + this.frameUniqueKey, this.generateUIElement());
+        var fontPath = Publisher.playerGlobalData.replace(/\\/g, '/').replace("/contents/","/fonts/");
 
-            if (!Tools.isEmptyString(this.backgroundColor)) {
-                $("#content-" + this.frameUniqueKey).css("background-color", "{0}".pxcFormatString(this.backgroundColor));
+        if (!Tools.isEmptyString(this.backgroundColor)) {
+            $("#content-" + this.frameUniqueKey).css("background-color", "{0}".pxcFormatString(this.backgroundColor));
+        }
+
+        if (!Tools.isEmptyString(this.textColor)) {
+            $("#content-" + this.frameUniqueKey).css("color", "{0}".pxcFormatString(this.textColor));
+        }
+        if (this.textSizePixels > 0) {
+            $("#content-" + this.frameUniqueKey).css("font-size", this.textSizePixels + "px");
+        }
+
+        if (!Tools.isEmptyString(this.textHorizontalAlignment)) {
+            var horizontalAlignValue = "";
+
+            if (this.textHorizontalAlignment.toLowerCase().trim() == "center")
+                horizontalAlignValue = "center";
+            else if (this.textHorizontalAlignment.toLowerCase().trim() == "left")
+                horizontalAlignValue = "left";
+            else if (this.textHorizontalAlignment.toLowerCase().trim() == "right")
+                horizontalAlignValue = "right";
+
+            if (!Tools.isEmptyString(horizontalAlignValue)) {
+                $("#content-" + this.frameUniqueKey + "-span").css("text-align", horizontalAlignValue);
             }
-    
-            if (!Tools.isEmptyString(this.textColor)) {
-                $("#content-" + this.frameUniqueKey).css("color", "{0}".pxcFormatString(this.textColor));
+
+        }
+
+        if (!Tools.isEmptyString(this.textVerticalAlignment)) {
+            var verticalAlignValue = "";
+
+            if (this.textVerticalAlignment.toLowerCase().trim() == "center")
+                verticalAlignValue = "middle";
+            else if (this.textVerticalAlignment.toLowerCase().trim() == "bottom")
+                verticalAlignValue = "bottom";
+            else if (this.textVerticalAlignment.toLowerCase().trim() == "top")
+                verticalAlignValue = "top";
+
+            if (!Tools.isEmptyString(verticalAlignValue)) {
+                $("#content-" + this.frameUniqueKey + "-span").css("vertical-align", verticalAlignValue);
             }
-    
-            if (!Tools.isEmptyString(this.textFontFamily)) {
+        }
+
+        var fontWeight = "normal";
+        var fontStyle = "normal";
+        var textDecoration = "none";
+
+        if (this.isBold)
+            fontWeight = "bold";
+
+        if (this.isItalic)
+            fontStyle = "italic";
+
+        if (this.isUnderlined)
+            textDecoration = "underline";
+
+        $("#content-" + this.frameUniqueKey + "-span").css("font-weight", fontWeight);
+        $("#content-" + this.frameUniqueKey + "-span").css("font-style", fontStyle);
+        $("#content-" + this.frameUniqueKey + "-span").css("text-decoration", textDecoration);
+            
+        if (!Tools.isEmptyString(this.textFontFamily)) {
+            if(this.textFontFamily == "verdana") {
                 $("#content-" + this.frameUniqueKey).css("font-family", "{0}".pxcFormatString(this.textFontFamily));
             }
-    
-            if (this.textSizePixels > 0) {
-                $("#content-" + this.frameUniqueKey).css("font-size", this.textSizePixels);
-            }
-    
-            if (!Tools.isEmptyString(this.textHorizontalAlignment)) {
-                var horizontalAlignValue = "";
-    
-                if (this.textHorizontalAlignment.toLowerCase().trim() == "center")
-                    horizontalAlignValue = "center";
-                else if (this.textHorizontalAlignment.toLowerCase().trim() == "left")
-                    horizontalAlignValue = "left";
-                else if (this.textHorizontalAlignment.toLowerCase().trim() == "right")
-                    horizontalAlignValue = "right";
-    
-                if (!Tools.isEmptyString(horizontalAlignValue)) {
-                    $("#content-" + this.frameUniqueKey + "-span").css("text-align", horizontalAlignValue);
-                }
-    
-            }
-    
-            if (!Tools.isEmptyString(this.textVerticalAlignment)) {
-    
-                var verticalAlignValue = "";
-    
-                if (this.textVerticalAlignment.toLowerCase().trim() == "center")
-                    verticalAlignValue = "middle";
-                else if (this.textVerticalAlignment.toLowerCase().trim() == "bottom")
-                    verticalAlignValue = "bottom";
-                else if (this.textVerticalAlignment.toLowerCase().trim() == "top")
-                    verticalAlignValue = "top";
-    
-                if (!Tools.isEmptyString(verticalAlignValue)) {
-                   // $("#content-" + this.frameUniqueKey).css("line-height", this.parentFrameObject + "px");
-                    $("#content-" + this.frameUniqueKey + "-span").css("vertical-align", verticalAlignValue);
-                }
-            }
-    
-            var fontWeight = "normal";
-            var fontStyle = "normal";
-            var textDecoration = "none";
-    
-            if (this.isBold)
-                fontWeight = "bold";
-    
-            if (this.isItalic)
-                fontStyle = "italic";
-    
-            if (this.isUnderlined)
-                textDecoration = "underline";
-    
-            $("#content-" + this.frameUniqueKey + "-span").css("font-weight", fontWeight);
-            $("#content-" + this.frameUniqueKey + "-span").css("font-style", fontStyle);
-            $("#content-" + this.frameUniqueKey + "-span").css("text-decoration", textDecoration);
-    
-            $("#content-" + this.frameUniqueKey).show();
+            else {
+                var fontUrl = fontPath + this.textFontFamily + ".ttf";
+                var fontFace = new FontFace(this.textFontFamily, 'url(' + fontUrl + ')');
+                var self = this;
+                fontFace.load().then(function(loadedFont) {
+                    document.fonts.add(loadedFont);
+                    $("#content-" + self.frameUniqueKey + "-span").css("font-family", "'" + self.textFontFamily + "'");
+                    $("#content-" + self.frameUniqueKey).show();
+                }).catch(function(error) {
+                    console.error('Font yüklenirken hata oluştu:', error);
+                });
+            }    
+        }
+   
+        $("#content-" + this.frameUniqueKey).show();
 
-       
     } catch (exception) {
-
         console.log("Content_Label.ShowContent", exception);
         this.parentFrameObject.setCurrentContentValidity(false);
         this.contentEnded();
         return;
     }
 };
+
 
 Content_Label.prototype.deleteUIElement = function () {
     $("#content-" + this.frameUniqueKey).remove();

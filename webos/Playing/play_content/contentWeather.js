@@ -53,20 +53,17 @@ Content_Weather.prototype = Object.create(Content_Abstractor.prototype);
 Content_Weather.prototype.constructor = Content_Weather;
 
 Content_Weather.prototype.showContent = function () {
-
     Content_Abstractor.prototype.showContent.call(this);
     
     try {
-
         Player_Ui_Creator.UIElement.appendHTML("#frame-" + this.frameUniqueKey, this.generateUIElement());
-
-        if(this.weatherProperty == "icon")
-        {
+        var fontPath = Publisher.playerGlobalData.replace(/\\/g, '/').replace("/contents/","/fonts/");
+        
+        if (this.weatherProperty == "icon") {
             $("#content-" + this.frameUniqueKey).css('background-image', "url('{0}')".pxcFormatString(this.data));
             $("#content-" + this.frameUniqueKey).css("background-size", "{0}px {1}px".pxcFormatString(this.width, this.height));
             $("#content-" + this.frameUniqueKey).css("background-repeat", "no-repeat");
         }
-
         
         if (!Tools.isEmptyString(this.backgroundColor)) {
             $("#content-" + this.frameUniqueKey).css("background-color", "{0}".pxcFormatString(this.backgroundColor));
@@ -75,11 +72,6 @@ Content_Weather.prototype.showContent = function () {
         if (!Tools.isEmptyString(this.textColor)) {
             $("#content-" + this.frameUniqueKey).css("color", "{0}".pxcFormatString(this.textColor));
         }
-
-        if (!Tools.isEmptyString(this.textFontFamily)) {
-            $("#content-" + this.frameUniqueKey).css("font-family", "{0}".pxcFormatString(this.textFontFamily));
-        }
-
         if (this.textSizePixels > 0) {
             $("#content-" + this.frameUniqueKey).css("font-size", this.textSizePixels.toString()+"px");
         }
@@ -114,7 +106,6 @@ Content_Weather.prototype.showContent = function () {
             if (!Tools.isEmptyString(horizontalAlignValue)) {
                 $("#content-" + this.frameUniqueKey + "-span").css("text-align", horizontalAlignValue);
             }
-
         }
 
         if (!Tools.isEmptyString(this.textVerticalAlignment)) {
@@ -134,6 +125,36 @@ Content_Weather.prototype.showContent = function () {
             }
         }
 
+        if (!Tools.isEmptyString(this.textFontFamily)) {
+
+            if(this.textFontFamily == "verdana")
+            {
+                console.log("Content_Weather this.textFontFamily"+this.textFontFamily);
+
+                $("#content-" + this.frameUniqueKey).css("font-family", "{0}".pxcFormatString(this.textFontFamily));
+            }
+            else{
+
+                var fontUrl = fontPath + this.textFontFamily+".ttf"; // Font dosyasının yolu
+                console.log("Content_Weather FONT this.value" + fontUrl);
+
+                var fontFace = new FontFace(this.textFontFamily, 'url(' + fontUrl + ')'); // FontFace nesnesi oluştur
+                var self = this; // Kapsayıcı alanı fonksiyon içinde kullanmak için bir referans
+                
+                // Font yükleme işlemi tamamlandığında
+                fontFace.load().then(function(loadedFont) {
+                    document.fonts.add(loadedFont); // Font'u belgeye ekle
+                    console.log("Content_Weather FONT loaddded" + fontUrl);
+                    $("#content-" + self.frameUniqueKey + "-span").css("font-family", "'" + self.textFontFamily + "'");
+                    $("#content-" + self.frameUniqueKey).show();
+
+                }).catch(function(error) {
+                    console.error('Content_Weather Font yüklenirken hata oluştu:', error);
+                });
+            }    
+       
+        }
+        
         $("#content-" + this.frameUniqueKey).show();
             
     } catch (exception) {
@@ -144,6 +165,7 @@ Content_Weather.prototype.showContent = function () {
         return;
     }
 };
+
 
 Content_Weather.prototype.deleteUIElement = function () {
     $("#content-" + this.frameUniqueKey).remove();

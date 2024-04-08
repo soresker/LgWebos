@@ -60,7 +60,7 @@ Content_Abstractor.prototype.hideFailoverImage = function() {
 Content_Abstractor.prototype.showContent = function() {
 
     this.contentStartDate = Tools.getDateTimeNow().format("YYYY-MM-DD HH:mm:ss.SSS");
-    console.log("Content_Abstractor.showContent","");
+    console.log("Content_Abstractor.showContent"+ this.contentStartDate);
 
     var _this = this;
 

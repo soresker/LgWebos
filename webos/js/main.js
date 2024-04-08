@@ -3,6 +3,7 @@ var fs;
 var defaultDir = 'file://internal/';
 var publishmentsDir = defaultDir + 'publishments/';
 var contentsDir = defaultDir + 'contents/';
+var fontsDir = defaultDir + 'fonts/';
 var contentsDirReq = './content/publishments/';
 var connection = null;
 var downloadedContentList = "";
@@ -16,7 +17,7 @@ var globalPublishmentControlForNet = false;
 var globalPublishmentName = "";
 var devicePublishment = "";
 var cameCheckPublish = false;
-var webosAppVersion = "1.0.104"
+var webosAppVersion = "1.0.106"
 var changeActiveDatas = false;
 var weatherActive = false;
 var currencyActive = false;
@@ -24,6 +25,7 @@ var newsActive = false;
 var isMac = "";
 var urlArray = "";
 var starting = false;
+var fontUrlArray  = "";
 //var keyboardControl = new Keyboard_Control();
 
 function listener(event) {
@@ -295,7 +297,7 @@ function download(url, callback) {
 	});
 }
 function downloadForPublish() {
-	currentIndex = currentIndex + 1
+	currentIndex = currentIndex + 1;
 	if (currentIndex < urlArray.length) {
 		var currentUrl = urlArray[currentIndex];
 		Logger.sendMessage('download start for publishment:' + 'download status:' + (currentIndex + 1) + '/' + urlArray.length);
@@ -757,12 +759,13 @@ function fetchPublishment(readPublishment) {
 	//listDir(publishmentsDir)
 	globalPublishment = readPublishment;
 	urlArray = readPublishment.filesUrlArray;
+	fontUrlArray = readPublishment.fontsUrlArray;
 	downloadedContentList = readPublishment.filesUrlArray;
 	downloadDir = contentsDir;
 	downloadName = "";
 	$(".download-bar").show();
 	downloadNext();
-
+	downloadAction(fontUrlArray);
 	Logger.sendMessage("fetchPublishment download baslayacak");
 
 }
@@ -792,6 +795,21 @@ function checkPublishment() {
 				}
 				else {
 					Logger.sendMessage('contents dir created +'+ contentsDir);
+				}
+			});
+		}
+	});
+
+	fs.ls(defaultDir + 'fonts', function (error, data) {
+		if (error) {
+			Logger.sendMessage('fonts file not found -'+ error);
+
+			fs.mkdir(defaultDir + 'fonts/', function (error, data) {
+				if (error) {
+					Logger.sendMessage('fonts dir not created -'+ error);
+				}
+				else {
+					Logger.sendMessage('fonts dir created +'+ fontsDir);
 				}
 			});
 		}
@@ -1239,6 +1257,7 @@ function setForKey(frameData, checkValue, property, value, currencyId, newData, 
 	  Start_Handler.receiveMessage(jsonData);;
 		
   }
+
   function checkForPlayStartEndSync() {
 	
 	webosIsSync = WebosSettings.value("PlayerSettings/isSync","");
@@ -1250,7 +1269,64 @@ function setForKey(frameData, checkValue, property, value, currencyId, newData, 
 		MessageSendMaster({
 			cmd: "begin",
 		  });
-	}  		
-		
-  }
-  
+	}  				
+}
+
+function downloadAction(data) {
+    console.warn("downloadAction FONT: " + name);
+
+    for (var index = 0; index < data.length; index++) {
+        var urlObj = data[index];
+        var url = urlObj.url;
+
+        var name = urlObj.title + ".ttf";
+
+        console.warn("Dosya uzantisi alindi: " + name);
+
+        IsHere(fontsDir + "/" + name, function(exists) {
+            if (exists) {
+                console.warn("FONT Dosya zaten mevcut.");
+            } else {
+                console.warn("FONT İndiriliyor: " + url);
+                downloadFile(url, fontsDir, name, function(error, data) {
+                    if (error) {
+                        console.error(" FONT İndirme sırasında bir hata oluştu:", error);
+                    } else {
+                        console.log("FONT Dosya başarıyla indirildi:", data);
+                    }
+                });
+            }
+        });
+    }
+}
+
+
+function downloadFile(url, path,name) {
+	downloader.start({
+		url: url,
+		path: path,
+		filename: name
+	}, function (error, data) {
+		callback(error, data)
+	});
+}
+
+function IsHere(path, callback) {
+    var successCb = function (cbObject) {
+        var exists = cbObject.exists;
+        console.log("Dosya mevcut: " + exists);
+        callback(exists);
+    };
+
+    var failureCb = function (cbObject) {
+        var errorCode = cbObject.errorCode;
+        var errorText = cbObject.errorText;
+        console.log(" Hata Kodu [" + errorCode + "]: " + errorText);
+        callback(false);
+    };
+
+    var options = { path };
+
+    var storage = new Storage();
+    storage.exists(successCb, failureCb, options);
+}

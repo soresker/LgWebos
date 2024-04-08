@@ -21,13 +21,6 @@ function Content_Currency(contentInfo, parentFrameObject) {
         this.data = contentInfo.getTypeContentProperty("currencyValue");
       
         this.actualProvider = 0;
-
-        /*
-        if(contentInfo.name == "usd")
-        this.data = Publisher.currencyValues.usd;
-        if(contentInfo.name == "euro")
-        this.data = Publisher.currencyValues.euro;
-*/
         console.log("Content_Currency currencyValue:",this.data);
         this.frameUniqueKey = parentFrameObject.uniqueKey;
 
@@ -42,13 +35,11 @@ Content_Currency.prototype = Object.create(Content_Abstractor.prototype);
 Content_Currency.prototype.constructor = Content_Currency;
 
 Content_Currency.prototype.showContent = function () {
-
     Content_Abstractor.prototype.showContent.call(this);
     
     try {
-
         Player_Ui_Creator.UIElement.appendHTML("#frame-" + this.frameUniqueKey, this.generateUIElement());
-
+        var fontPath = Publisher.playerGlobalData.replace(/\\/g, '/').replace("/contents/","/fonts/");
         
         if (!Tools.isEmptyString(this.backgroundColor)) {
             $("#content-" + this.frameUniqueKey).css("background-color", "{0}".pxcFormatString(this.backgroundColor));
@@ -58,12 +49,8 @@ Content_Currency.prototype.showContent = function () {
             $("#content-" + this.frameUniqueKey).css("color", "{0}".pxcFormatString(this.textColor));
         }
 
-        if (!Tools.isEmptyString(this.textFontFamily)) {
-            $("#content-" + this.frameUniqueKey).css("font-family", "{0}".pxcFormatString(this.textFontFamily));
-        }
-
         if (this.textSizePixels > 0) {
-            $("#content-" + this.frameUniqueKey).css("font-size", this.textSizePixels);
+            $("#content-" + this.frameUniqueKey).css("font-size", this.textSizePixels.toString()+"px");
         }
 
         var fontWeight = "normal";
@@ -83,10 +70,37 @@ Content_Currency.prototype.showContent = function () {
         $("#content-" + this.frameUniqueKey + "-span").css("font-style", fontStyle);
         $("#content-" + this.frameUniqueKey + "-span").css("text-decoration", textDecoration);
 
-        $("#content-" + this.frameUniqueKey).show();
+        if (!Tools.isEmptyString(this.textFontFamily)) {
 
-        
+            if(this.textFontFamily == "verdana")
+            {
+                console.log("Content_Currency this.textFontFamily" + this.textFontFamily);
+                $("#content-" + this.frameUniqueKey).css("font-family", "{0}".pxcFormatString(this.textFontFamily));
+            }
+            else{
+
+                var fontUrl = fontPath + this.textFontFamily + ".ttf"; // Font dosyasının yolu
+                console.log("Content_Currency FONT this.value" + fontUrl);
+
+                var fontFace = new FontFace(this.textFontFamily, 'url(' + fontUrl + ')'); // FontFace nesnesi oluştur
+                var self = this; // Kapsayıcı alanı fonksiyon içinde kullanmak için bir referans
+                
+                // Font yükleme işlemi tamamlandığında
+                fontFace.load().then(function(loadedFont) {
+                    document.fonts.add(loadedFont); // Font'u belgeye ekle
+                    console.log("Content_Currency Font Loaded" + fontUrl);
+                    $("#content-" + self.frameUniqueKey + "-span").css("font-family", "'" + self.textFontFamily + "'");
+                    $("#content-" + self.frameUniqueKey).show();
+
+                }).catch(function(error) {
+                    console.error('Content_Currency Font yüklenirken hata oluştu:', error);
+                });
+            }    
        
+        }
+
+        $("#content-" + this.frameUniqueKey).show();
+               
     } catch (exception) {
 
         console.log("Content_Currency.ShowContent", exception);

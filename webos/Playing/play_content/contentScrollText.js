@@ -1,5 +1,4 @@
 function Content_ScrollText(contentInfo, parentFrameObject) {
-
     Content_Abstractor.call(this, contentInfo, parentFrameObject);
     try {
         this.width = parentFrameObject.width;
@@ -25,8 +24,7 @@ function Content_ScrollText(contentInfo, parentFrameObject) {
         this.frameUniqueKey = parentFrameObject.uniqueKey;
 
     }
-    catch (exception)
-    {
+    catch (exception) {
         console.log("Content_ScrollText EX", + exception);
     }
 }
@@ -35,53 +33,54 @@ Content_ScrollText.prototype = Object.create(Content_Abstractor.prototype);
 Content_ScrollText.prototype.constructor = Content_ScrollText;
 
 Content_ScrollText.prototype.showContent = function () {
-
-    Content_Abstractor.prototype.showContent.call(this);
-    
     try {
-
-        Player_Ui_Creator.UIElement.appendHTML("#frame-" + this.frameUniqueKey, this.generateUIElement());
-
-        console.log("Content_ScrollText this.value" + this.value);
-        console.log("Content_ScrollText this.backgroundColor" + this.backgroundColor);
-        console.log("Content_ScrollText this.speed" + this.speed);
-        console.log("Content_ScrollText this.textColor" + this.textColor);
-        console.log("Content_ScrollText this.textFontFamily" + this.textFontFamily);
-        console.log("Content_ScrollText this.textSizePixels" + this.textSizePixels);
-        console.log("Content_ScrollText this.textFontType" + this.textFontType);
-        console.log("Content_ScrollText this.textHorizontalAlignment" + this.textHorizontalAlignment);
-        console.log("Content_ScrollText this.textVerticalAlignment" + this.textVerticalAlignment);
-
-        var fontWeight =this.textFontType;
-        var fontStyle = "normal";
-        var textDecoration = "none";
-
-        //fontWeight = "bold";
-
-
-        if (this.isUnderlined)
-            textDecoration = "underline";
-
-    
-        var contentArray = JSON.parse(this.value);
-        // Tüm içerikleri birleştirerek bir string oluştur
-        var result = contentArray.reduce(function(acc, item) {
-            return acc + item.replace(/<\/?p>/g, ''); // <p> etiketlerini kaldır
-        }, '');    
-
-        var marqueeStyle = "font-weight:" + fontWeight +";font-style:" +fontStyle + ";font-size:" +this.textSizePixels +";text-decoration:" +textDecoration + ";color:"+this.textColor +";";
+        Content_Abstractor.prototype.showContent.call(this);
         
-        $("#content-" + this.frameUniqueKey).html("");
-        $("#content-" + this.frameUniqueKey).html('<marquee width="100%" direction="left" scrollamount="'+this.speed+'" height="100px" style="'+marqueeStyle+'">'+result+'</marquee>');
-        $("#content-" + this.frameUniqueKey).show();
-    
-    } catch (exception) {
+        var _this = this;
+        Player_Ui_Creator.UIElement.appendHTML("#frame-" + this.frameUniqueKey, this.generateUIElement());
+        var fontPath = Publisher.playerGlobalData.replace(/\\/g, '/').replace("/contents/","/fonts/");
 
+        // Font yükleme işlemi
+        if (!Tools.isEmptyString(this.textFontFamily)) {
+            var fontUrl = fontPath + this.textFontFamily + ".ttf";
+            var fontFace = new FontFace(this.textFontFamily, 'url(' + fontUrl + ')');
+
+            fontFace.load().then(function(loadedFont) {
+                document.fonts.add(loadedFont);
+                _this.createMarquee();
+            }).catch(function(error) {
+                console.error('Content_ScrollText Font yüklenirken hata oluştu:', error);
+            });
+        } else {
+            // Font belirtilmemişse doğrudan marquee oluştur
+            this.createMarquee();
+        }
+    } catch (exception) {
         console.log("Content_ScrollText.ShowContent", exception);
         this.parentFrameObject.setCurrentContentValidity(false);
         this.contentEnded();
         return;
     }
+};
+
+Content_ScrollText.prototype.createMarquee = function () {
+    var fontWeight = this.textFontType;
+    var fontStyle = "normal";
+    var textDecoration = "none";
+
+    if (this.isUnderlined)
+        textDecoration = "underline";
+
+    var contentArray = JSON.parse(this.value);
+    var result = contentArray.reduce(function(acc, item) {
+        return acc + item.replace(/<\/?p>/g, ''); // <p> etiketlerini kaldır
+    }, '');
+
+    var marqueeStyle = "font-weight:" + fontWeight + ";font-style:" + fontStyle + ";font-size:" + this.textSizePixels + ";text-decoration:" + textDecoration + ";color:" + this.textColor + ";";
+
+    $("#content-" + this.frameUniqueKey).html("");
+    $("#content-" + this.frameUniqueKey).html('<marquee width="100%" direction="left" scrollamount="' + this.speed + '" height="100px" style="' + marqueeStyle + '">' + result + '</marquee>');
+    $("#content-" + this.frameUniqueKey).show();
 };
 
 Content_ScrollText.prototype.deleteUIElement = function () {
@@ -94,7 +93,6 @@ Content_ScrollText.prototype.deleteContent = function () {
 };
 
 Content_ScrollText.prototype.generateUIElement = function () {
-
     return '<div id="content-{0}" class="playing-platform-content playing-common-content-datetime" style="top:{1}px;left:{2}px;z-index:{3};width:{4}px; height:{5}px; position: absolute;"><span id="content-{0}-span" style="width:{4}px; height:{5}px;"></span></div>'
         .pxcFormatString(this.frameUniqueKey,
         this.y,
@@ -103,4 +101,3 @@ Content_ScrollText.prototype.generateUIElement = function () {
         this.width,
         this.height);
 };
-
