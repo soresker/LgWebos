@@ -1069,8 +1069,8 @@ function readPublishmentForMessage(publishName) {
   
 	globalPublishment = publishment;
 
-	weatherActive = checkForKey(publishment.templates[0].frames, "weather","locationId");
-	newsActive = checkForKey(publishment.templates[0].frames, "news","tagId");
+	//weatherActive = checkForKey(publishment.templates[0].frames, "weather","locationId");
+	//newsActive = checkForKey(publishment.templates[0].frames, "news","tagId");
 	currencyActive = checkForKey(publishment.templates[0].frames, "currency","currencyId");
 
 	console.log("checkForKey weatherActive:"+weatherActive);
@@ -1232,8 +1232,8 @@ function setForKey(frameData, checkValue, property, value, currencyId, newData, 
 	setInterval(function() {
 	  if (weatherActive === true || newsActive === true || currencyActive === true) {
 		console.log("checkOnlinePeriodDatas gönderildi");
-		weatherActive = checkForKey(globalPublishment.templates[0].frames, "weather", "locationId");
-		newsActive = checkForKey(globalPublishment.templates[0].frames, "news", "tagId");
+		//weatherActive = checkForKey(globalPublishment.templates[0].frames, "weather", "locationId");
+		//newsActive = checkForKey(globalPublishment.templates[0].frames, "news", "tagId");
 		currencyActive = checkForKey(globalPublishment.templates[0].frames, "currency", "currencyId");
   
 		console.log("checkForKey weatherActive:" + weatherActive);
