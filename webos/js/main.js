@@ -17,7 +17,7 @@ var globalPublishmentControlForNet = false;
 var globalPublishmentName = "";
 var devicePublishment = "";
 var cameCheckPublish = false;
-var webosAppVersion = "1.0.106"
+var webosAppVersion = "1.0.107"
 var changeActiveDatas = false;
 var weatherActive = false;
 var currencyActive = false;
@@ -1325,7 +1325,7 @@ function IsHere(path, callback) {
         callback(false);
     };
 
-    var options = { path };
+    var options = path;
 
     var storage = new Storage();
     storage.exists(successCb, failureCb, options);
