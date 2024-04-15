@@ -1279,7 +1279,7 @@ function downloadAction(data) {
         var urlObj = data[index];
         var url = urlObj.url;
 
-        var name = urlObj.title + ".ttf";
+        var name = urlObj.title + ".otf";
 
         console.warn("Dosya uzantisi alindi: " + name);
 

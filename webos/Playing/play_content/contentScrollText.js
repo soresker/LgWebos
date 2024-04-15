@@ -42,7 +42,7 @@ Content_ScrollText.prototype.showContent = function () {
 
         // Font yükleme işlemi
         if (!Tools.isEmptyString(this.textFontFamily)) {
-            var fontUrl = fontPath + this.textFontFamily + ".ttf";
+            var fontUrl = fontPath + this.textFontFamily + ".otf";
             var fontFace = new FontFace(this.textFontFamily, 'url(' + fontUrl + ')');
 
             fontFace.load().then(function(loadedFont) {

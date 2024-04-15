@@ -105,7 +105,7 @@ Content_Label.prototype.showContent = function () {
                 $("#content-" + this.frameUniqueKey).css("font-family", "{0}".pxcFormatString(this.textFontFamily));
             }
             else {
-                var fontUrl = fontPath + this.textFontFamily + ".ttf";
+                var fontUrl = fontPath + this.textFontFamily + ".otf";
                 var fontFace = new FontFace(this.textFontFamily, 'url(' + fontUrl + ')');
                 var self = this;
                 fontFace.load().then(function(loadedFont) {
