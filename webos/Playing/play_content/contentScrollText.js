@@ -42,15 +42,25 @@ Content_ScrollText.prototype.showContent = function () {
 
         // Font yükleme işlemi
         if (!Tools.isEmptyString(this.textFontFamily)) {
-            var fontUrl = fontPath + this.textFontFamily + ".otf";
-            var fontFace = new FontFace(this.textFontFamily, 'url(' + fontUrl + ')');
 
-            fontFace.load().then(function(loadedFont) {
-                document.fonts.add(loadedFont);
-                _this.createMarquee();
-            }).catch(function(error) {
-                console.error('Content_ScrollText Font yüklenirken hata oluştu:', error);
-            });
+            if(this.textFontFamily == "verdana")
+            {
+                console.log("Content_Date this.textFontFamily" + this.textFontFamily);
+                $("#content-" + this.frameUniqueKey).css("font-family", "{0}".pxcFormatString(this.textFontFamily));
+                this.createMarquee();
+
+            }else{
+                var fontUrl = fontPath + this.textFontFamily + ".otf";
+                var fontFace = new FontFace(this.textFontFamily, 'url(' + fontUrl + ')');
+    
+                fontFace.load().then(function(loadedFont) {
+                    document.fonts.add(loadedFont);
+                    _this.createMarquee();
+                }).catch(function(error) {
+                    console.error('Content_ScrollText Font yüklenirken hata oluştu:', error);
+                });
+            }
+
         } else {
             // Font belirtilmemişse doğrudan marquee oluştur
             this.createMarquee();

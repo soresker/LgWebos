@@ -13,9 +13,7 @@ function startSignalSocket() {
     }
     
     connection = new signalR.HubConnectionBuilder()
-        .withUrl(hubUrl, {
-            skipNegotiation: true,
-        })
+        .withUrl(hubUrl)
         .configureLogging(signalR.LogLevel.Information)
         .withAutomaticReconnect()
         .build();
