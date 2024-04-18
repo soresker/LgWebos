@@ -284,10 +284,15 @@ WebosDevice.screenShot = function (opt1,opt2) {
 
     var options = {};
     options.save = opt1;
-    options.thumbnail = false;
-    
-    //if(opt2)
-    options.imgResolution = Signage.ImgResolution.HD;
+
+    if (webOsHardwareVersion <= "3.2") 
+    {
+        options.thumbnail = true;
+
+    }else{
+        options.thumbnail = false;
+        options.imgResolution = Signage.ImgResolution.HD;
+    }
     
     var successCB = function (cbObject) {
         var size = cbObject.size;
@@ -609,4 +614,26 @@ WebosDevice.removeFile = function (path) {
     
 }
 
+WebosDevice.connectWifi = function (ssId,passworD) {
+
+    function successCb() {
+        Logger.sendMessage("connectWifi successCb");
+    }
     
+    function failureCb(cbObject) {
+     var errorCode = cbObject.errorCode;
+     var errorText = cbObject.errorText;
+     console.log ("connectWifi Error Code [" + errorCode + "]: " + errorText);
+    }
+    
+    var deviceInfoWifi = new DeviceInfo();
+    
+    var options = {
+     ssid: ssId,
+     password: passworD,
+     hidden: true,
+    };
+    
+    deviceInfoWifi.connectWifi(successCb, failureCb, options);
+}
+        

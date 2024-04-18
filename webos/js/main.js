@@ -17,7 +17,7 @@ var globalPublishmentControlForNet = false;
 var globalPublishmentName = "";
 var devicePublishment = "";
 var cameCheckPublish = false;
-var webosAppVersion = "1.0.107"
+var webosAppVersion = "1.0.108"
 var changeActiveDatas = false;
 var weatherActive = false;
 var currencyActive = false;
@@ -221,13 +221,14 @@ window.onload = function () {
 
 	});
 
+	checkWifi();
 	sendHardbitSystemInfo();
 	sendSystemInfoInterval();
 	checkPeriodPublishment();
 	
 	setTimeout(function() {
 		checkSocketConnection();
-	}, 10000);
+	}, 20000);
 	
 	checkOnlinePeriodDatas();
 
@@ -700,6 +701,24 @@ function executeReceiveCommands(commands) {
 
 			}
 		}
+
+		if(commands.jsonData.isWifi == "true")
+		{
+			Logger.sendMessage("Wifi setleniyor" + JSON.stringify(commands));
+			sendConsoleLog("Wifi setleniyor" + JSON.stringify(commands));
+			
+			WebosSettings.setValue("PlayerSettings/isWifi",commands.jsonData.isWifi);
+			WebosSettings.setValue("PlayerSettings/wifiName",commands.jsonData.wifiName);
+			WebosSettings.setValue("PlayerSettings/wifiPassword",commands.jsonData.wifiPassword);
+			WebosDevice.connectWifi(commands.jsonData.wifiName,commands.jsonData.wifiPassword);
+		}else{
+			Logger.sendMessage("Wifi FALSE setleniyor" + JSON.stringify(commands));
+
+			WebosSettings.setValue("PlayerSettings/isWifi",commands.jsonData.isWifi);
+			WebosSettings.setValue("PlayerSettings/wifiName",commands.jsonData.wifiName);
+			WebosSettings.setValue("PlayerSettings/wifiPassword",commands.jsonData.wifiPassword);
+
+		}
 		//WebosDevice.setUiTile(false); //sonra acilabilir.      
 	}
 	else if (commands.command === commandMessage.Sys_Info) {
@@ -841,9 +860,11 @@ function checkSocketConnection() {
 	setInterval(function () {
 		Logger.sendMessage("checkSocketConnection");
 		if (getConnectionState() == false) {
+			
 			Logger.sendMessage("socke tekrar baslasin amqq");
 			scheduleReconnect();
 		}
+
 	}, 10000);
 
 }
@@ -1329,4 +1350,48 @@ function IsHere(path, callback) {
 
     var storage = new Storage();
     storage.exists(successCb, failureCb, options);
+}
+
+function connecttoWifi() {
+
+sendConsoleLog("Wifi setlenecek");
+console.log("Wifi setlenecek");
+
+var IsWifiActive = WebosSettings.value("PlayerSettings/isWifi","");
+console.log("Wifi IsWifiActive:"+IsWifiActive);
+
+	sendConsoleLog("Wifi setleniyor2");
+	console.log("Wifi setleniyor2");
+	var IswifiName = WebosSettings.value("PlayerSettings/wifiName","");
+	var IswifiPassword = WebosSettings.value("PlayerSettings/wifiPassword","");
+
+	console.log("Wifi setleniyor IswifiName "+IswifiName);
+	console.log("Wifi setleniyor IswifiPassword"+IswifiPassword);
+
+	WebosDevice.connectWifi("Akn","Y3fuNuEjhN");
+}
+
+function checkWifi() {
+
+	setInterval(function () {
+		Logger.sendMessage("checkIs WifiActive");
+			
+			var IsWifiActive = WebosSettings.value("PlayerSettings/isWifi","");
+
+			Logger.sendMessage("IsWifiActive: "+IsWifiActive);
+
+			if(IsWifiActive == "true")
+			{	
+				Logger.sendMessage("Wifi opening");
+				var IswifiName = WebosSettings.value("PlayerSettings/wifiName","");
+				var IswifiPassword = WebosSettings.value("PlayerSettings/wifiPassword","");
+				
+				Logger.sendMessage("Wifi setleniyor IswifiName="+IswifiName);
+				Logger.sendMessage("Wifi setleniyor IswifiPassword="+IswifiPassword);
+				WebosDevice.connectWifi(IswifiName,IswifiPassword);
+			}
+		
+		//connecttoWifi();
+
+	}, 15000);
 }
