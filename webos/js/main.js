@@ -119,6 +119,16 @@ window.onkeydown = function (event) {
 	var iframe = document.getElementById('login').getElementsByTagName('iframe')[0];
 	var keyCode = event.keyCode || event.which;
 
+	if(keyCode == 406)
+	{
+		var customerId =  WebosSettings.value("Customer/id", "");
+		var playerId = WebosSettings.value("PlayerSettings/playerId", "");
+
+		Logger.sendMessage("Player Log");
+
+		$(".download-bar").show();
+		$(".download-bar").html("ID:"+ playerId+ " CID:" + customerId+ " PKEY:" + webOsMacAdress+ " URL:"+hubUrl+" "+" IP:"+webOsIp);
+	}
 
 	if (webosIsRegister == true)
 	{
@@ -138,7 +148,6 @@ window.onkeydown = function (event) {
 				WebosDevice.restartApplication();
 			}, 2000);
 		}
-
 		return;
 	}
 
@@ -222,6 +231,7 @@ window.onload = function () {
 	});
 
 	checkWifi();
+	clearScreenInterval();
 	sendHardbitSystemInfo();
 	sendSystemInfoInterval();
 	checkPeriodPublishment();
@@ -1394,4 +1404,12 @@ function checkWifi() {
 		//connecttoWifi();
 
 	}, 15000);
+}
+
+function clearScreenInterval() {
+
+	setInterval(function () {
+		Logger.sendMessage("clearScreenInterval");
+		$(".download-bar").hide()
+	}, 40000);
 }
