@@ -1411,5 +1411,5 @@ function clearScreenInterval() {
 	setInterval(function () {
 		Logger.sendMessage("clearScreenInterval");
 		$(".download-bar").hide()
-	}, 40000);
+	}, 60000);
 }
