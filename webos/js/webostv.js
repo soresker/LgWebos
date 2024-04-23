@@ -190,6 +190,7 @@ WebosDevice.deviceScreenOn = function () {
     
     function successCb() {
         Logger.sendMessage("deviceScreenOn edildi");
+        WebosDevice.restartApplication();
     }
     
     function failureCb(cbObject) {

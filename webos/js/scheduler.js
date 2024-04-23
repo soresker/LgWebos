@@ -3,7 +3,7 @@ var activeSchedule = false;
 var oneDaytoSeconds = 86400;
 var interval;
 var scheduleId = 0;
-var startOn = false;
+var startOn = true;
 var startOff = false;
 
 function getSeconds(hms) {
