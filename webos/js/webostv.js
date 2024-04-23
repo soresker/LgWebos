@@ -182,6 +182,9 @@ WebosDevice.deviceShutDown = function () {
 
 WebosDevice.deviceScreenOn = function () {
 
+    startOn = true;
+    startOff = false;
+
     var options = {};
     options.displayMode  = Power.DisplayMode.DISPLAY_ON;
     
@@ -203,11 +206,13 @@ WebosDevice.deviceScreenOn = function () {
 
 WebosDevice.deviceScreenOff = function () {
 
+    startOff = true;
+    startOn = false;
     var options = {};
     options.displayMode  = Power.DisplayMode.DISPLAY_OFF;
     
     function successCb() {
-        Logger.sendMessage("deviceScreenOn edildi");
+        Logger.sendMessage("deviceScreenOff edildi");
     }
     
     function failureCb(cbObject) {

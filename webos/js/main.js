@@ -4,6 +4,7 @@ var defaultDir = 'file://internal/';
 var publishmentsDir = defaultDir + 'publishments/';
 var contentsDir = defaultDir + 'contents/';
 var fontsDir = defaultDir + 'fonts/';
+var scheduleDir = defaultDir + 'schedule/';
 var contentsDirReq = './content/publishments/';
 var connection = null;
 var downloadedContentList = "";
@@ -15,9 +16,10 @@ var webosIsRegister = "";
 var globalKeyCode ="";
 var globalPublishmentControlForNet = false;
 var globalPublishmentName = "";
+var globalScheduleData = "";
 var devicePublishment = "";
 var cameCheckPublish = false;
-var webosAppVersion = "1.0.109"
+var webosAppVersion = "1.0.110"
 var changeActiveDatas = false;
 var weatherActive = false;
 var currencyActive = false;
@@ -246,6 +248,7 @@ window.onload = function () {
 		sendNewDataShowUi();
 	}, 60000);
 	StartSyncAction();
+	startSchedule(true);
 }
 
 function messageCheck(msg) {
@@ -673,6 +676,10 @@ function executeReceiveCommands(commands) {
 	else if (commands.command === commandMessage.HealthCheck) {
 		Logger.sendMessage("HealthCheck");
 	}
+	else if (commands.command === commandMessage.GetSchedules) {
+		Logger.sendMessage("GetSchedules");
+		writefileScheduleJSON(commands.jsonData,"schedule");
+	}
 	else if (commands.command === commandMessage.AppRestart) {
 		sendConsoleLog("Receive Command:" + commands.command);
 
@@ -841,6 +848,44 @@ function checkPublishment() {
 					Logger.sendMessage('fonts dir created +'+ fontsDir);
 				}
 			});
+		}
+	});
+
+	fs.ls(defaultDir + 'schedule', function (error, data) {
+		if (error) {
+			Logger.sendMessage('schedule file not found -'+ error);
+
+			fs.mkdir(defaultDir + 'schedule/', function (error, data) {
+				if (error) {
+					Logger.sendMessage('schedule dir not created -'+ error);
+
+					IsHere(scheduleDir + "/" + "schedule.json", function(exists) {
+						if (exists) {
+							console.warn("schedule Dosya zaten mevcut.");
+							readfileScheduleJSON("schedule");
+						} else {
+							console.warn("schedule create ediiliyor : ");
+							newDefaultSchedule(function(result) {
+								writefileScheduleJSON(result,"schedule");
+								globalScheduleData = JSON.parse(result);
+								console.log(result); 
+							});
+						}
+					});
+				}
+				else {
+					Logger.sendMessage('schedule dir created +'+ fontsDir);
+					console.warn("scheduleç.json create ediiliyor : ");
+					newDefaultSchedule(function(result) {
+						writefileScheduleJSON(result,"schedule");
+						console.log(result); 
+					});
+				}
+			});
+		}else{
+
+			readfileScheduleJSON("schedule");
+
 		}
 	});
 }
@@ -1412,4 +1457,34 @@ function clearScreenInterval() {
 		Logger.sendMessage("clearScreenInterval");
 		$(".download-bar").hide()
 	}, 60000);
+}
+
+function writefileScheduleJSON(data,filename) {
+
+	globalScheduleData = data;
+	Logger.sendMessage("data schedule" + data)
+	var path = scheduleDir + filename + ".json";
+	Logger.sendMessage("data schedule path" + path)
+
+	fs.writeFile(path, JSON.stringify(data), function (error) {
+		if (error)
+			return Logger.sendMessage('error write json:' + error);
+		else
+			Logger.sendMessage('write schedule json data:' + data);
+	})
+}
+
+function readfileScheduleJSON(filename) {
+
+	Logger.sendMessage("readfileScheduleJSON");
+
+	var path = scheduleDir + filename + ".json";
+	Logger.sendMessage('read schedule file path:', path);
+	fs.readFile(path, function (error, data) {
+		if (error)
+			return Logger.sendMessage('error write json:' + error);
+		else
+			Logger.sendMessage('read schedule json data:' + data);
+			globalScheduleData = JSON.parse(data);
+	});
 }

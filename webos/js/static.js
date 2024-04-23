@@ -36,6 +36,7 @@ var commandMessage = {
     Update_Publisment_Date: "updatePublishmentDate",
     GetWeatherForecast :"getWeatherForecast",
     GetCurrencies :"getCurrencyValue",
-    GetNewsData:"getNewsData"
+    GetNewsData:"getNewsData",
+    GetSchedules: "getSchedules"
 
 };

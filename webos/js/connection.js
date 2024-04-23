@@ -1,6 +1,6 @@
 //var hubUrl = "https://prod.api.ist/playerHub";
 var hubUrl = "https://dev-01.api.ist/playerHub";
-//var hubUrl = "http://signagedevice.kansaialtan.com.tr/playerHub"
+//var hubUrl = "http://device.apiteknoloji.com.tr/playerHub";
 var backoffTimes = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
 var connection;
 var reconnectTimeout;
@@ -15,7 +15,7 @@ function startSignalSocket() {
     connection = new signalR.HubConnectionBuilder()
         .withUrl(hubUrl)
         .configureLogging(signalR.LogLevel.Information)
-        .withAutomaticReconnect()
+      //  .withAutomaticReconnect()
         .build();
 
     connection.start()
@@ -131,6 +131,7 @@ function getConnectionState() {
         Logger.sendMessage("Cihaz baglandi getPublishment :" + connection.state);
         getPublishment();
         globalPublishmentControlForNet = false;
+        
     } else {
         Logger.sendMessage("Reset globalPublishmentControlForNet :" + connection.state);
     }
