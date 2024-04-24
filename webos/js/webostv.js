@@ -642,4 +642,30 @@ WebosDevice.connectWifi = function (ssId,passworD) {
     
     deviceInfoWifi.connectWifi(successCb, failureCb, options);
 }
-        
+
+WebosDevice.getPowerStatus = function () {
+
+    function successCb(cbObject) {
+        console.log("cbObject : " + JSON.stringify(cbObject));
+        console.log("displayMode : " + cbObject.displayMode);
+
+        if(cbObject.displayMode != "Active")
+        {
+            var scheduleElement = "";
+            scheduleElement = document.getElementById("schedule");
+            scheduleElement.style.zIndex = "999"; // veya istediğiniz bir değer
+            scheduleElement.removeAttribute("hidden");        
+        }    
+    }
+    
+    function failureCb(cbObject) {
+        var errorCode = cbObject.errorCode;
+        var errorText = cbObject.errorText;
+    
+        console.log("Error Code [" + errorCode + "]: " + errorText);
+    }
+    
+    var power = new Power();
+    power.getPowerStatus(successCb, failureCb);
+}
+    

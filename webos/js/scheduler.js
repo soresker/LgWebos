@@ -118,6 +118,7 @@ function checkSchedule(scheduleData) {
         } else {        
 			Logger.sendMessage("UYKUDAYIM HA");
       
+            WebosDevice.getPowerStatus();
             WebosDevice.deviceScreenOff();
 
         }
