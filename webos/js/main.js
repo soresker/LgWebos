@@ -414,6 +414,12 @@ function downloadNext() {
                         Logger.sendMessage("Download failed:" + (currentIndex + 1) + "");
                         Logger.sendMessage("Download failed error:" + JSON.stringify(downloadError));
                         sendConsoleLog("Download failed error:" + (currentIndex + 1) + JSON.stringify(downloadError));
+
+						currentIndex--;
+						setTimeout(function() {	
+							sendConsoleLog("Tekrar dene indirmeyi:"+currentFile.url);
+							downloadNext();
+						}, 1000);
                     } else {
                         Logger.sendMessage('Download complete: ' + (currentIndex + 1) + '/' + urlArray.length + ' 😃');
                         sendConsoleLog("Download complete: " + (currentIndex + 1) + "/" + urlArray.length);
