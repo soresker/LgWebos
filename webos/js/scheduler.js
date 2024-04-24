@@ -117,10 +117,8 @@ function checkSchedule(scheduleData) {
             Logger.sendMessage("***********UYANIYORUM HA*******");
         } else {        
 			Logger.sendMessage("UYKUDAYIM HA");
-            if(startOff == false)
-            {
-                WebosDevice.deviceScreenOff();
-            }
+      
+            WebosDevice.deviceScreenOff();
 
         }
 
