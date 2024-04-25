@@ -8,7 +8,8 @@ var scheduleDir = defaultDir + 'schedule/';
 var contentsDirReq = './content/publishments/';
 var connection = null;
 var downloadedContentList = "";
-var currentIndex = -1
+var currentIndex = -1;
+var currentPubIndex = -1;
 var globalPublishment = "";
 var downloadDir = "";
 var downloadName = "";
@@ -19,7 +20,7 @@ var globalPublishmentName = "";
 var globalScheduleData = "";
 var devicePublishment = "";
 var cameCheckPublish = false;
-var webosAppVersion = "1.0.101"
+var webosAppVersion = "1.0.103"
 var changeActiveDatas = false;
 var weatherActive = false;
 var currencyActive = false;
@@ -311,36 +312,36 @@ function download(url, callback) {
 	});
 }
 function downloadForPublish() {
-	currentIndex = currentIndex + 1;
-	if (currentIndex < urlArray.length) {
-		var currentUrl = urlArray[currentIndex];
-		Logger.sendMessage('download start for publishment:' + 'download status:' + (currentIndex + 1) + '/' + urlArray.length);
-		sendConsoleLog('download start for publishment:' + 'download status:' + (currentIndex + 1) + '/' + urlArray.length)
+	currentPubIndex = currentPubIndex + 1;
+	if (currentPubIndex < urlArray.length) {
+		var currentUrl = urlArray[currentPubIndex];
+		Logger.sendMessage('download start for publishment:' + 'download status:' + (currentPubIndex + 1) + '/' + urlArray.length);
+		sendConsoleLog('download start for publishment:' + 'download status:' + (currentPubIndex + 1) + '/' + urlArray.length)
 		Logger.sendMessage('download file for publishment url:' + currentUrl)
 		var fileName = currentUrl.split('/').pop();
 		fileExistForPublish(downloadDir + fileName, function (error, data) {
 			if (data != null && data == false) {
 				download(currentUrl, function (err, data) {
 					if (err) {
-						Logger.sendMessage("download  for publishment failed: " + (currentIndex + 1) + '/' + urlArray.length);
+						Logger.sendMessage("download  for publishment failed: " + (currentPubIndex + 1) + '/' + urlArray.length);
 						Logger.sendMessage("download for publishment failed error:" + JSON.stringify(err));
-						sendConsoleLog("download for publishment failed error:" + (currentIndex + 1) + JSON.stringify(err));
+						sendConsoleLog("download for publishment failed error:" + (currentPubIndex + 1) + JSON.stringify(err));
 					} else {
-						Logger.sendMessage('download for publishment complete: ' + (currentIndex + 1) + '/' + urlArray.length + ' 😃');
-						sendConsoleLog("download for publishment complete: " + (currentIndex + 1) + "/" + urlArray.length);			
+						Logger.sendMessage('download for publishment complete: ' + (currentPubIndex + 1) + '/' + urlArray.length + ' 😃');
+						sendConsoleLog("download for publishment complete: " + (currentPubIndex + 1) + "/" + urlArray.length);			
 					}
-					$(".download-bar").html("Downloading " + (currentIndex + 1) + "/" + urlArray.length);
+					$(".download-bar").html("Downloading " + (currentPubIndex + 1) + "/" + urlArray.length);
 					downloadForPublish()
 				})
 			}
 			else {
-				Logger.sendMessage("download file exist! Go Next File: " + (currentIndex + 1) + '/' + urlArray.length)
+				Logger.sendMessage("download file exist! Go Next File: " + (currentPubIndex + 1) + '/' + urlArray.length)
 				downloadForPublish()
 			}
 		});
 	}
 	else {
-		currentIndex = -1;
+		currentPubIndex = -1;
 		Logger.sendMessage("download complated all files ✅");
 
 		setTimeout(function () {
@@ -605,7 +606,7 @@ function executeReceiveCommands(commands) {
 				playerName: webOsModelName,
 				customerId: WebosSettings.value("Customer/id", "")
 			}
-			sendSignal(commandMessage.Check_Publishment, isGetPublishment);
+			sendSignal(commandMessage.Get_Publishment, isGetPublishment);
 		}else{
 
 			Logger.sendMessage("ERRORRRR"+commands.message);
