@@ -23,6 +23,7 @@ function Content_Currency(contentInfo, parentFrameObject) {
         this.actualProvider = 0;
         console.log("Content_Currency currencyValue:",this.data);
         this.frameUniqueKey = parentFrameObject.uniqueKey;
+        this.playlistContentUniqueKey = contentInfo.playlistUniqueKey + '-' + moment().format('HHmmss');
 
     }
     catch (exception)
@@ -34,23 +35,25 @@ function Content_Currency(contentInfo, parentFrameObject) {
 Content_Currency.prototype = Object.create(Content_Abstractor.prototype);
 Content_Currency.prototype.constructor = Content_Currency;
 
-Content_Currency.prototype.showContent = function () {
+Content_Currency.prototype.showContent = function (func) {
     Content_Abstractor.prototype.showContent.call(this);
     
     try {
+        var _this = this;
+
         Player_Ui_Creator.UIElement.appendHTML("#frame-" + this.frameUniqueKey, this.generateUIElement());
         var fontPath = Publisher.playerGlobalData.replace(/\\/g, '/').replace("/contents/","/fonts/");
         
         if (!Tools.isEmptyString(this.backgroundColor)) {
-            $("#content-" + this.frameUniqueKey).css("background-color", "{0}".pxcFormatString(this.backgroundColor));
+            $("#content-" + _this.playlistContentUniqueKey).css("background-color", "{0}".pxcFormatString(this.backgroundColor));
         }
 
         if (!Tools.isEmptyString(this.textColor)) {
-            $("#content-" + this.frameUniqueKey).css("color", "{0}".pxcFormatString(this.textColor));
+            $("#content-" + _this.playlistContentUniqueKey).css("color", "{0}".pxcFormatString(this.textColor));
         }
 
         if (this.textSizePixels > 0) {
-            $("#content-" + this.frameUniqueKey).css("font-size", this.textSizePixels.toString()+"px");
+            $("#content-" + _this.playlistContentUniqueKey).css("font-size", this.textSizePixels.toString()+"px");
         }
 
         var fontWeight = "normal";
@@ -66,16 +69,16 @@ Content_Currency.prototype.showContent = function () {
         if (this.isUnderlined)
             textDecoration = "underline";
 
-        $("#content-" + this.frameUniqueKey + "-span").css("font-weight", fontWeight);
-        $("#content-" + this.frameUniqueKey + "-span").css("font-style", fontStyle);
-        $("#content-" + this.frameUniqueKey + "-span").css("text-decoration", textDecoration);
+        $("#content-" + _this.playlistContentUniqueKey + "-span").css("font-weight", fontWeight);
+        $("#content-" + _this.playlistContentUniqueKey + "-span").css("font-style", fontStyle);
+        $("#content-" + _this.playlistContentUniqueKey + "-span").css("text-decoration", textDecoration);
 
         if (!Tools.isEmptyString(this.textFontFamily)) {
 
             if(this.textFontFamily == "verdana")
             {
                 console.log("Content_Currency this.textFontFamily" + this.textFontFamily);
-                $("#content-" + this.frameUniqueKey).css("font-family", "{0}".pxcFormatString(this.textFontFamily));
+                $("#content-" + _this.playlistContentUniqueKey).css("font-family", "{0}".pxcFormatString(this.textFontFamily));
             }
             else{
 
@@ -99,7 +102,10 @@ Content_Currency.prototype.showContent = function () {
        
         }
 
-        $("#content-" + this.frameUniqueKey).show();
+        $("#content-" + _this.playlistContentUniqueKey).show();
+
+        if (func)
+        func();
                
     } catch (exception) {
 
@@ -111,7 +117,8 @@ Content_Currency.prototype.showContent = function () {
 };
 
 Content_Currency.prototype.deleteUIElement = function () {
-    $("#content-" + this.frameUniqueKey).remove();
+    $("#content-" + this.playlistContentUniqueKey+"-span").remove();
+    $("#content-" + this.playlistContentUniqueKey).remove();
 };
 
 Content_Currency.prototype.deleteContent = function () {
@@ -125,7 +132,7 @@ Content_Currency.prototype.generateUIElement = function () {
     this.value = this.data;
 
     return '<div id="content-{0}" class="playing-platform-content playing-common-content-datetime" style="top:{1}px;left:{2}px;z-index:{3};width:{4}px; height:{5}px; position: absolute;"><span id="content-{0}-span" style="width:{4}px; height:{5}px; display:table-cell;">{6}</span></div>'
-        .pxcFormatString(this.frameUniqueKey,
+        .pxcFormatString(this.playlistContentUniqueKey,
         this.y,
         this.x,
         Tools.defaultValue(this.z, 0),

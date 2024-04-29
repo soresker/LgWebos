@@ -21,7 +21,6 @@ function Content_Weather(contentInfo, parentFrameObject) {
         if(this.weatherProperty == "icon")
         {
             this.uniqueKey = contentInfo.fileUniqId; //buraya uniqId gelmeli
-            this.playlistContentUniqueKey = contentInfo.playlistUniqueKey + '-' + moment().format('HHmmss');    
             this.data = Publisher.playerGlobalData.replace(/\\/g, '/')  + contentInfo.getTypeContentProperty("weatherValue");
 
         }else{
@@ -41,6 +40,7 @@ function Content_Weather(contentInfo, parentFrameObject) {
         console.log("Content_Weather Value:",this.data);
 
         this.frameUniqueKey = parentFrameObject.uniqueKey;
+        this.playlistContentUniqueKey = contentInfo.playlistUniqueKey + '-' + moment().format('HHmmss');
 
     }
     catch (exception)
@@ -52,28 +52,30 @@ function Content_Weather(contentInfo, parentFrameObject) {
 Content_Weather.prototype = Object.create(Content_Abstractor.prototype);
 Content_Weather.prototype.constructor = Content_Weather;
 
-Content_Weather.prototype.showContent = function () {
+Content_Weather.prototype.showContent = function (func) {
     Content_Abstractor.prototype.showContent.call(this);
     
     try {
+
+        var _this = this;
         Player_Ui_Creator.UIElement.appendHTML("#frame-" + this.frameUniqueKey, this.generateUIElement());
         var fontPath = Publisher.playerGlobalData.replace(/\\/g, '/').replace("/contents/","/fonts/");
         
         if (this.weatherProperty == "icon") {
-            $("#content-" + this.frameUniqueKey).css('background-image', "url('{0}')".pxcFormatString(this.data));
-            $("#content-" + this.frameUniqueKey).css("background-size", "{0}px {1}px".pxcFormatString(this.width, this.height));
-            $("#content-" + this.frameUniqueKey).css("background-repeat", "no-repeat");
+            $("#content-" + _this.playlistContentUniqueKey).css('background-image', "url('{0}')".pxcFormatString(this.data));
+            $("#content-" + _this.playlistContentUniqueKey).css("background-size", "{0}px {1}px".pxcFormatString(this.width, this.height));
+            $("#content-" + _this.playlistContentUniqueKey).css("background-repeat", "no-repeat");
         }
         
         if (!Tools.isEmptyString(this.backgroundColor)) {
-            $("#content-" + this.frameUniqueKey).css("background-color", "{0}".pxcFormatString(this.backgroundColor));
+            $("#content-" + _this.playlistContentUniqueKey).css("background-color", "{0}".pxcFormatString(this.backgroundColor));
         }
 
         if (!Tools.isEmptyString(this.textColor)) {
-            $("#content-" + this.frameUniqueKey).css("color", "{0}".pxcFormatString(this.textColor));
+            $("#content-" + _this.playlistContentUniqueKey).css("color", "{0}".pxcFormatString(this.textColor));
         }
         if (this.textSizePixels > 0) {
-            $("#content-" + this.frameUniqueKey).css("font-size", this.textSizePixels.toString()+"px");
+            $("#content-" + _this.playlistContentUniqueKey).css("font-size", this.textSizePixels.toString()+"px");
         }
 
         var fontWeight = "normal";
@@ -89,9 +91,9 @@ Content_Weather.prototype.showContent = function () {
         if (this.isUnderlined)
             textDecoration = "underline";
 
-        $("#content-" + this.frameUniqueKey + "-span").css("font-weight", fontWeight);
-        $("#content-" + this.frameUniqueKey + "-span").css("font-style", fontStyle);
-        $("#content-" + this.frameUniqueKey + "-span").css("text-decoration", textDecoration);
+        $("#content-" + _this.playlistContentUniqueKey + "-span").css("font-weight", fontWeight);
+        $("#content-" + _this.playlistContentUniqueKey + "-span").css("font-style", fontStyle);
+        $("#content-" + _this.playlistContentUniqueKey + "-span").css("text-decoration", textDecoration);
 
         if (!Tools.isEmptyString(this.textHorizontalAlignment)) {
             var horizontalAlignValue = "";
@@ -104,7 +106,7 @@ Content_Weather.prototype.showContent = function () {
                 horizontalAlignValue = "right";
 
             if (!Tools.isEmptyString(horizontalAlignValue)) {
-                $("#content-" + this.frameUniqueKey + "-span").css("text-align", horizontalAlignValue);
+                $("#content-" + _this.playlistContentUniqueKey + "-span").css("text-align", horizontalAlignValue);
             }
         }
 
@@ -120,8 +122,8 @@ Content_Weather.prototype.showContent = function () {
                 verticalAlignValue = "top";
 
             if (!Tools.isEmptyString(verticalAlignValue)) {
-               // $("#content-" + this.frameUniqueKey).css("line-height", this.parentFrameObject + "px");
-                $("#content-" + this.frameUniqueKey + "-span").css("vertical-align", verticalAlignValue);
+               // $("#content-" + _this.playlistContentUniqueKey).css("line-height", this.parentFrameObject + "px");
+                $("#content-" + _this.playlistContentUniqueKey + "-span").css("vertical-align", verticalAlignValue);
             }
         }
 
@@ -131,7 +133,7 @@ Content_Weather.prototype.showContent = function () {
             {
                 console.log("Content_Weather this.textFontFamily"+this.textFontFamily);
 
-                $("#content-" + this.frameUniqueKey).css("font-family", "{0}".pxcFormatString(this.textFontFamily));
+                $("#content-" + _this.playlistContentUniqueKey).css("font-family", "{0}".pxcFormatString(this.textFontFamily));
             }
             else{
 
@@ -155,7 +157,10 @@ Content_Weather.prototype.showContent = function () {
        
         }
         
-        $("#content-" + this.frameUniqueKey).show();
+        $("#content-" + _this.playlistContentUniqueKey).show();
+
+        if (func)
+        func();
             
     } catch (exception) {
 
@@ -168,7 +173,7 @@ Content_Weather.prototype.showContent = function () {
 
 
 Content_Weather.prototype.deleteUIElement = function () {
-    $("#content-" + this.frameUniqueKey).remove();
+    $("#content-" + this.playlistContentUniqueKey).remove();
 };
 
 Content_Weather.prototype.deleteContent = function () {
@@ -182,10 +187,10 @@ Content_Weather.prototype.generateUIElement = function () {
     this.value = this.data;
 
     if(this.weatherProperty == "icon")
-        return '<div id="content-{0}" class="playing-platform-content playing-common-content-image" style="z-index:{1};width:{2}px; height:{3}px;"></div>'.pxcFormatString(this.frameUniqueKey, Tools.defaultValue(this.z, 0), this.width, this.height);   
+        return '<div id="content-{0}" class="playing-platform-content playing-common-content-image" style="z-index:{1};width:{2}px; height:{3}px;"></div>'.pxcFormatString(this.playlistContentUniqueKey, Tools.defaultValue(this.z, 0), this.width, this.height);   
     else
         return '<div id="content-{0}" class="playing-platform-content playing-common-content-datetime" style="top:{1}px;left:{2}px;z-index:{3};width:{4}px; height:{5}px; position: absolute;"><span id="content-{0}-span" style="width:{4}px; height:{5}px; display:table-cell;">{6}</span></div>'
-        .pxcFormatString(this.frameUniqueKey,
+        .pxcFormatString(this.playlistContentUniqueKey,
         this.y,
         this.x,
         Tools.defaultValue(this.z, 0),

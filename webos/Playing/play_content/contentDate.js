@@ -23,6 +23,7 @@ function Content_Date(contentInfo, parentFrameObject) {
         this.textVerticalAlignment = contentInfo.getTypeContentProperty("verticalAlign");
         
         this.frameUniqueKey = parentFrameObject.uniqueKey;
+        this.playlistContentUniqueKey = contentInfo.playlistUniqueKey + '-' + moment().format('HHmmss');
 
     }
     catch (exception)
@@ -34,17 +35,18 @@ function Content_Date(contentInfo, parentFrameObject) {
 Content_Date.prototype = Object.create(Content_Abstractor.prototype);
 Content_Date.prototype.constructor = Content_Date;
 
-Content_Date.prototype.showContent = function () {
+Content_Date.prototype.showContent = function (func) {
     if (this.currentDtPending === false) {
         Content_Abstractor.prototype.showContent.call(this);
     }
+
+    var _this = this;
 
     try {
         var currentDt = Tools.getDateTimeNow();
         if (currentDt.isBefore(moment([1980, 1, 1]))) {
             this.currentDtPending = true;
             if (this.timerCurrentDt === 0) {
-                var _this = this;
                 this.timerCurrentDt = setInterval(function () {
                     _this.showContent();
                 }, 1000);
@@ -67,19 +69,19 @@ Content_Date.prototype.showContent = function () {
         var fontPath = Publisher.playerGlobalData.replace(/\\/g, '/').replace("/contents/","/fonts/");
 
         if (!Tools.isEmptyString(this.backgroundColor)) {
-            $("#content-" + this.frameUniqueKey).css("background-color", "{0}".pxcFormatString(this.backgroundColor));
+            $("#content-" + _this.playlistContentUniqueKey).css("background-color", "{0}".pxcFormatString(this.backgroundColor));
         }
 
         if (!Tools.isEmptyString(this.textColor)) {
-            $("#content-" + this.frameUniqueKey).css("color", "{0}".pxcFormatString(this.textColor));
+            $("#content-" + _this.playlistContentUniqueKey).css("color", "{0}".pxcFormatString(this.textColor));
         }
 
         if (!Tools.isEmptyString(this.textFontFamily)) {
-            $("#content-" + this.frameUniqueKey).css("font-family", "{0}".pxcFormatString(this.textFontFamily));
+            $("#content-" + _this.playlistContentUniqueKey).css("font-family", "{0}".pxcFormatString(this.textFontFamily));
         }
 
         if (this.textSizePixels > 0) {
-            $("#content-" + this.frameUniqueKey).css("font-size", this.textSizePixels.toString()+"px");
+            $("#content-" + _this.playlistContentUniqueKey).css("font-size", this.textSizePixels.toString()+"px");
         }
 
         if (!Tools.isEmptyString(this.textHorizontalAlignment)) {
@@ -93,7 +95,7 @@ Content_Date.prototype.showContent = function () {
                 horizontalAlignValue = "right";
 
             if (!Tools.isEmptyString(horizontalAlignValue)) {
-                $("#content-" + this.frameUniqueKey + "-span").css("text-align", horizontalAlignValue);
+                $("#content-" + _this.playlistContentUniqueKey + "-span").css("text-align", horizontalAlignValue);
             }
 
         }
@@ -110,16 +112,16 @@ Content_Date.prototype.showContent = function () {
                 verticalAlignValue = "top";
 
             if (!Tools.isEmptyString(verticalAlignValue)) {
-               // $("#content-" + this.frameUniqueKey).css("line-height", this.parentFrameObject + "px");
-                $("#content-" + this.frameUniqueKey + "-span").css("vertical-align", verticalAlignValue);
+               // $("#content-" + _this.playlistContentUniqueKey).css("line-height", this.parentFrameObject + "px");
+                $("#content-" + _this.playlistContentUniqueKey + "-span").css("vertical-align", verticalAlignValue);
             }
         }
 
-        $("#content-" + this.frameUniqueKey + "-span").html(Tools.getDateTimeNow().locale("tr-TR").format(this.format));
+        $("#content-" + _this.playlistContentUniqueKey + "-span").html(Tools.getDateTimeNow().locale("tr-TR").format(this.format));
         var _this = this;
         this.refreshTimer = setInterval(function () {
             var currentDateTime = Tools.getDateTimeNow().locale("tr-TR").format(_this.format);
-            $("#content-" + _this.frameUniqueKey + "-span").html(currentDateTime);
+            $("#content-" + _this.playlistContentUniqueKey + "-span").html(currentDateTime);
         }, 1000);
 
 
@@ -136,16 +138,16 @@ Content_Date.prototype.showContent = function () {
         if (this.isUnderlined)
             textDecoration = "underline";
 
-        $("#content-" + this.frameUniqueKey + "-span").css("font-weight", fontWeight);
-        $("#content-" + this.frameUniqueKey + "-span").css("font-style", fontStyle);
-        $("#content-" + this.frameUniqueKey + "-span").css("text-decoration", textDecoration);
+        $("#content-" + _this.playlistContentUniqueKey + "-span").css("font-weight", fontWeight);
+        $("#content-" + _this.playlistContentUniqueKey + "-span").css("font-style", fontStyle);
+        $("#content-" + _this.playlistContentUniqueKey + "-span").css("text-decoration", textDecoration);
 
         if (!Tools.isEmptyString(this.textFontFamily)) {
 
             if(this.textFontFamily == "verdana")
             {
                 console.log("Content_Date this.textFontFamily" + this.textFontFamily);
-                $("#content-" + this.frameUniqueKey).css("font-family", "{0}".pxcFormatString(this.textFontFamily));
+                $("#content-" + _this.playlistContentUniqueKey).css("font-family", "{0}".pxcFormatString(this.textFontFamily));
             }
             else{
 
@@ -168,7 +170,9 @@ Content_Date.prototype.showContent = function () {
        
         }
 
-        $("#content-" + this.frameUniqueKey).show();
+        $("#content-" + _this.playlistContentUniqueKey).show();
+        if (func)
+        func();
 
     } catch (exception) {
 
@@ -181,7 +185,7 @@ Content_Date.prototype.showContent = function () {
 
 
 Content_Date.prototype.deleteUIElement = function () {
-    $("#content-" + this.frameUniqueKey).remove();
+    $("#content-" + this.playlistContentUniqueKey).remove();
 };
 
 Content_Date.prototype.deleteContent = function () {
@@ -203,7 +207,7 @@ Content_Date.prototype.deleteContent = function () {
 Content_Date.prototype.generateUIElement = function () {
 
     return '<div id="content-{0}" class="playing-platform-content playing-common-content-datetime" style="top:{1}px;left:{2}px;z-index:{3};width:{4}px; height:{5}px;"><span id="content-{0}-span" style="width:{4}px; height:{5}px; display:table-cell;">{6}</span></div>'
-        .pxcFormatString(this.frameUniqueKey,
+        .pxcFormatString(this.playlistContentUniqueKey,
         this.y,
         this.x,
         Tools.defaultValue(this.z, 0),

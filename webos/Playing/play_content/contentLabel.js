@@ -22,6 +22,8 @@ function Content_Label(contentInfo, parentFrameObject) {
 
         this.actualProvider = 0;
         this.frameUniqueKey = parentFrameObject.uniqueKey;
+        this.playlistContentUniqueKey = contentInfo.playlistUniqueKey + '-' + moment().format('HHmmss');
+
         console.log("Content_Label");
 
     }
@@ -34,22 +36,24 @@ function Content_Label(contentInfo, parentFrameObject) {
 Content_Label.prototype = Object.create(Content_Abstractor.prototype);
 Content_Label.prototype.constructor = Content_Label;
 
-Content_Label.prototype.showContent = function () {
+Content_Label.prototype.showContent = function (func) {
     Content_Abstractor.prototype.showContent.call(this);
     
     try {
+        var _this = this;
+
         Player_Ui_Creator.UIElement.appendHTML("#frame-" + this.frameUniqueKey, this.generateUIElement());
         var fontPath = Publisher.playerGlobalData.replace(/\\/g, '/').replace("/contents/","/fonts/");
 
         if (!Tools.isEmptyString(this.backgroundColor)) {
-            $("#content-" + this.frameUniqueKey).css("background-color", "{0}".pxcFormatString(this.backgroundColor));
+            $("#content-" + _this.playlistContentUniqueKey).css("background-color", "{0}".pxcFormatString(this.backgroundColor));
         }
 
         if (!Tools.isEmptyString(this.textColor)) {
-            $("#content-" + this.frameUniqueKey).css("color", "{0}".pxcFormatString(this.textColor));
+            $("#content-" + _this.playlistContentUniqueKey).css("color", "{0}".pxcFormatString(this.textColor));
         }
         if (this.textSizePixels > 0) {
-            $("#content-" + this.frameUniqueKey).css("font-size", this.textSizePixels + "px");
+            $("#content-" + _this.playlistContentUniqueKey).css("font-size", this.textSizePixels + "px");
         }
 
         if (!Tools.isEmptyString(this.textHorizontalAlignment)) {
@@ -63,7 +67,7 @@ Content_Label.prototype.showContent = function () {
                 horizontalAlignValue = "right";
 
             if (!Tools.isEmptyString(horizontalAlignValue)) {
-                $("#content-" + this.frameUniqueKey + "-span").css("text-align", horizontalAlignValue);
+                $("#content-" + _this.playlistContentUniqueKey + "-span").css("text-align", horizontalAlignValue);
             }
 
         }
@@ -79,7 +83,7 @@ Content_Label.prototype.showContent = function () {
                 verticalAlignValue = "top";
 
             if (!Tools.isEmptyString(verticalAlignValue)) {
-                $("#content-" + this.frameUniqueKey + "-span").css("vertical-align", verticalAlignValue);
+                $("#content-" + _this.playlistContentUniqueKey + "-span").css("vertical-align", verticalAlignValue);
             }
         }
 
@@ -96,13 +100,13 @@ Content_Label.prototype.showContent = function () {
         if (this.isUnderlined)
             textDecoration = "underline";
 
-        $("#content-" + this.frameUniqueKey + "-span").css("font-weight", fontWeight);
-        $("#content-" + this.frameUniqueKey + "-span").css("font-style", fontStyle);
-        $("#content-" + this.frameUniqueKey + "-span").css("text-decoration", textDecoration);
+        $("#content-" + _this.playlistContentUniqueKey + "-span").css("font-weight", fontWeight);
+        $("#content-" + _this.playlistContentUniqueKey + "-span").css("font-style", fontStyle);
+        $("#content-" + _this.playlistContentUniqueKey + "-span").css("text-decoration", textDecoration);
             
         if (!Tools.isEmptyString(this.textFontFamily)) {
             if(this.textFontFamily == "verdana") {
-                $("#content-" + this.frameUniqueKey).css("font-family", "{0}".pxcFormatString(this.textFontFamily));
+                $("#content-" + _this.playlistContentUniqueKey).css("font-family", "{0}".pxcFormatString(this.textFontFamily));
             }
             else {
                 var fontUrl = fontPath + this.textFontFamily + ".otf";
@@ -118,7 +122,9 @@ Content_Label.prototype.showContent = function () {
             }    
         }
    
-        $("#content-" + this.frameUniqueKey).show();
+        $("#content-" + _this.playlistContentUniqueKey).show();
+        if (func)
+        func();
 
     } catch (exception) {
         console.log("Content_Label.ShowContent", exception);
@@ -130,7 +136,9 @@ Content_Label.prototype.showContent = function () {
 
 
 Content_Label.prototype.deleteUIElement = function () {
-    $("#content-" + this.frameUniqueKey).remove();
+    console.log("*********Content_Label.prototype.deleteUIElement: ",this.playlistContentUniqueKey);
+    $("#content-" + this.playlistContentUniqueKey+"-span").remove();
+    $("#content-" + this.playlistContentUniqueKey).remove();
 };
 
 Content_Label.prototype.deleteContent = function () {
@@ -142,7 +150,7 @@ Content_Label.prototype.deleteContent = function () {
 Content_Label.prototype.generateUIElement = function () {
 
     return '<div id="content-{0}" class="playing-platform-content playing-common-content-datetime" style="top:{1}px;left:{2}px;z-index:{3};width:{4}px; height:{5}px; position: absolute;"><span id="content-{0}-span" style="width:{4}px; height:{5}px; display:table-cell;">{6}</span></div>'
-        .pxcFormatString(this.frameUniqueKey,
+        .pxcFormatString(this.playlistContentUniqueKey,
         this.y,
         this.x,
         Tools.defaultValue(this.z, 0),

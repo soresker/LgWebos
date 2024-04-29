@@ -22,6 +22,7 @@ function Content_ScrollText(contentInfo, parentFrameObject) {
 
         this.actualProvider = 0;
         this.frameUniqueKey = parentFrameObject.uniqueKey;
+        this.playlistContentUniqueKey = contentInfo.playlistUniqueKey + '-' + moment().format('HHmmss');
 
     }
     catch (exception) {
@@ -32,7 +33,7 @@ function Content_ScrollText(contentInfo, parentFrameObject) {
 Content_ScrollText.prototype = Object.create(Content_Abstractor.prototype);
 Content_ScrollText.prototype.constructor = Content_ScrollText;
 
-Content_ScrollText.prototype.showContent = function () {
+Content_ScrollText.prototype.showContent = function (func) {
     try {
         Content_Abstractor.prototype.showContent.call(this);
         
@@ -46,7 +47,7 @@ Content_ScrollText.prototype.showContent = function () {
             if(this.textFontFamily == "verdana")
             {
                 console.log("Content_Date this.textFontFamily" + this.textFontFamily);
-                $("#content-" + this.frameUniqueKey).css("font-family", "{0}".pxcFormatString(this.textFontFamily));
+                $("#content-" + _this.playlistContentUniqueKey).css("font-family", "{0}".pxcFormatString(this.textFontFamily));
                 this.createMarquee();
 
             }else{
@@ -55,7 +56,7 @@ Content_ScrollText.prototype.showContent = function () {
     
                 fontFace.load().then(function(loadedFont) {
                     document.fonts.add(loadedFont);
-                    _this.createMarquee();
+                    _this.createMarquee(_this);
                 }).catch(function(error) {
                     console.error('Content_ScrollText Font yüklenirken hata oluştu:', error);
                 });
@@ -63,8 +64,12 @@ Content_ScrollText.prototype.showContent = function () {
 
         } else {
             // Font belirtilmemişse doğrudan marquee oluştur
-            this.createMarquee();
+            _this.createMarquee(_this);
         }
+
+        if (func)
+        func();
+
     } catch (exception) {
         console.log("Content_ScrollText.ShowContent", exception);
         this.parentFrameObject.setCurrentContentValidity(false);
@@ -73,7 +78,7 @@ Content_ScrollText.prototype.showContent = function () {
     }
 };
 
-Content_ScrollText.prototype.createMarquee = function () {
+Content_ScrollText.prototype.createMarquee = function (_this) {
     var fontWeight = this.textFontType;
     var fontStyle = "normal";
     var textDecoration = "none";
@@ -88,13 +93,13 @@ Content_ScrollText.prototype.createMarquee = function () {
 
     var marqueeStyle = "font-weight:" + fontWeight + ";font-style:" + fontStyle + ";font-size:" + this.textSizePixels + ";text-decoration:" + textDecoration + ";color:" + this.textColor + ";";
 
-    $("#content-" + this.frameUniqueKey).html("");
-    $("#content-" + this.frameUniqueKey).html('<marquee width="100%" direction="left" scrollamount="' + this.speed + '" height="100px" style="' + marqueeStyle + '">' + result + '</marquee>');
-    $("#content-" + this.frameUniqueKey).show();
+    $("#content-" + _this.playlistContentUniqueKey).html("");
+    $("#content-" + _this.playlistContentUniqueKey).html('<marquee width="100%" direction="left" scrollamount="' + this.speed + '" height="100px" style="' + marqueeStyle + '">' + result + '</marquee>');
+    $("#content-" + _this.playlistContentUniqueKey).show();
 };
 
 Content_ScrollText.prototype.deleteUIElement = function () {
-    $("#content-" + this.frameUniqueKey).remove();
+    $("#content-" + this.playlistContentUniqueKey).remove();
 };
 
 Content_ScrollText.prototype.deleteContent = function () {
@@ -104,7 +109,7 @@ Content_ScrollText.prototype.deleteContent = function () {
 
 Content_ScrollText.prototype.generateUIElement = function () {
     return '<div id="content-{0}" class="playing-platform-content playing-common-content-datetime" style="top:{1}px;left:{2}px;z-index:{3};width:{4}px; height:{5}px; position: absolute;"><span id="content-{0}-span" style="width:{4}px; height:{5}px;"></span></div>'
-        .pxcFormatString(this.frameUniqueKey,
+        .pxcFormatString(this.playlistContentUniqueKey,
         this.y,
         this.x,
         Tools.defaultValue(this.z, 0),

@@ -169,27 +169,10 @@ Content_Stream.prototype.deleteUIElement = function () {
 
 Content_Stream.prototype.deleteContent = function () {
     console.log("Content_Stream.prototype.deleteContent", this.videoType);
-    if (Publisher.videoType == 0) {
-        this.deleteUIElement();
-        $('#content-' + this.playlistContentUniqueKey).remove();
-        Content_Abstractor.prototype.deleteContent.call(this);
-    }
-    else {
+    this.deleteUIElement();
+    $('#content-' + this.playlistContentUniqueKey).remove();
+    Content_Abstractor.prototype.deleteContent.call(this);
 
-        this.deleteUIElement();
-        $('#content-' + this.playlistContentUniqueKey).remove();
-        Content_Abstractor.prototype.deleteContent.call(this);
-
-        var fileUrlEdits = Publisher.playerGlobalData.replace(/\\/g, '/') + this.fileName;
-
-        var message = {
-            Type: "closeFFMpeg",
-            Path: fileUrlEdits
-        }
-        //window.parent.postMessage(JSON.stringify(message));
-
-        console.log("FFMPEG close path:", fileUrlEdits);
-    }
 };
 
 Content_Stream.prototype.generateUIElement = function () {
