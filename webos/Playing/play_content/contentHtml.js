@@ -6,31 +6,11 @@ function Content_Html(contentInfo, parentFrameObject) {
         this.frameWidth = parentFrameObject.width;
         this.frameHeight = parentFrameObject.height;
         this.uniqueKey = contentInfo.uniqueKey;
-        this.playlistContentUniqueKey = contentInfo.playlistContentUniqueKey+ moment().format('HHmmss');
+        this.playlistContentUniqueKey = contentInfo.playlistUniqueKey + '-' + Math.floor(Math.random() * 10000); // Değişiklik burada
         this.fileUrl = contentInfo.fileUrl;
         this.fileUniqueKey = contentInfo.fileUniqueKey;
-        this.isCacheable = contentInfo.isCacheable;
-        this.cacheExpireMinute = contentInfo.cacheExpireMinute;
-        var fileFolderPath = "" //globalden al bunu
         this.name = contentInfo.name;
 
-    
-        this.htmlPath = "{0}/{1}/index.html?{2}".pxcFormatString(
-            fileFolderPath,
-            this.fileUniqueKey,
-            Tools.guid()
-        );
-
-        this.widgetFolderPath = "{0}/{1}".pxcFormatString(
-            fileFolderPath,
-            this.fileUniqueKey
-        );
-
-        console.log(this.htmlPath)
-
-        this.contentSelector = "#content-" + this.playlistContentUniqueKey;
-        this.contentIframeSelector = "#iframe-content-" + this.playlistContentUniqueKey;
-        this.contentIframeLoaded = 0;
         this.contentInfo = contentInfo;
 
         this.isWebPageWidget = this.contentInfo.getTypeContentProperty('url');
@@ -51,33 +31,22 @@ Content_Html.prototype.showContent = function(func) {
 
     try {
       
+        var _this = this;
+
         Player_Ui_Creator.UIElement.appendHTML(
             "#frame-" + this.frameUniqueKey,
             this.generateUIElement()
         );
 
-        setTimeout(function() {
-            if (func)
-                func();
-        }, 1000);
-
-
-        var message = {
-            Type : "openWebPage",
-            Url :  this.contentInfo.getTypeContentProperty('url'),
-            Duration: this.duration,
-            Width: this.parentFrameObject.width,
-            Height: this.parentFrameObject.height,
-            X: this.parentFrameObject.x,
-            Y: this.parentFrameObject.y,
-            Z: this.parentFrameObject.z
-        }
-
+       
         var iframe = document.createElement('iframe');
         iframe.src = this.contentInfo.getTypeContentProperty('url');
+        iframe.id = "#frame-" + _this.frameUniqueKey;
         iframe.style.width = '100%';
         iframe.style.height = '100%';
         iframe.style.border = 'none';
+
+        console.log("Frame element iframe.id:"+ "#frame-" + _this.frameUniqueKey);
 
         iframe.addEventListener('click', function(event) {
             event.stopPropagation(); // Tıklamayı durdur
@@ -85,15 +54,19 @@ Content_Html.prototype.showContent = function(func) {
           });
 
         // İlgili frame'e iframe'i ekleyin
-        document.querySelector("#frame-" + this.frameUniqueKey).appendChild(iframe);
-       
+            var frameElement = document.querySelector("#frame-" + _this.frameUniqueKey);
+            if (frameElement) {
+                frameElement.appendChild(iframe);
+            } else {
+                console.log("Frame element bulunamadı.");
+            }
+
+        if (func)
+            func();
     
     } catch (exception) {
 
         console.log("EXCEPTION:" + exception);
-
-        console.log(this.contentIframeSelector);
-
         this.contentEnded();
         return;
     }
@@ -102,21 +75,20 @@ Content_Html.prototype.showContent = function(func) {
 Content_Html.prototype.deleteUIElement = function() {
 
     try {
+        console.log("deleteUIElement Frame element iframe.id:"+ "#frame-" + this.frameUniqueKey);
 
-        var message = {
-            Type : "closeWebPage",
-            Url :  this.contentInfo.getTypeContentProperty('url'),
-            Duration: this.duration,
-            Width: this.parentFrameObject.width,
-            Height: this.parentFrameObject.height,
-            X: this.parentFrameObject.x,
-            Y: this.parentFrameObject.y,
-            Z: this.parentFrameObject.z
+        //$("#frame-" + this.playlistContentUniqueKey).remove();
+        var iframeId = "#frame-" + this.frameUniqueKey; // Silinecek iframe'in id'si
+        var iframe = document.getElementById(iframeId); // İlgili iframe'i seç
+        if (iframe) {
+            console.log("Silindi iframe:"+iframeId);
+            iframe.remove(); // İframe'i belgeden kaldır
+        } else {
+            console.log("Silinecek iframe bulunamadı.");
         }
 
-        ///window.parent.postMessage(JSON.stringify(message));
-
-        $(this.contentSelector).remove();
+        $("#content-" + this.playlistContentUniqueKey).remove();
+        //$("#frame-" + this.frameUniqueKey).remove();
     } catch (exception) {
         console.log("*******WIDGET DELETEUIELEMENT ERROR");
         console.log(exception);
@@ -125,7 +97,7 @@ Content_Html.prototype.deleteUIElement = function() {
 
 Content_Html.prototype.deleteContent = function() {
     try {
-        this.contentIframeLoaded = 0;
+
         this.deleteUIElement();
         Content_Abstractor.prototype.deleteContent.call(this);
     } catch (exception) {
