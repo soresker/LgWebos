@@ -1437,6 +1437,9 @@ function checkWifi() {
 
 	setInterval(function () {
 		Logger.sendMessage("checkIs WifiActive");
+
+		Logger.sendMessage("**************SAAT***********:"+moment().format());
+
 			
 			var IsWifiActive = WebosSettings.value("PlayerSettings/isWifi","");
 
@@ -1463,6 +1466,7 @@ function clearScreenInterval() {
 	setInterval(function () {
 		Logger.sendMessage("clearScreenInterval");
 		$(".download-bar").hide()
+		Logger.sendMessage("**************SAAT***********:"+moment().format());
 	}, 60000);
 }
 
