@@ -13,14 +13,13 @@ function Content_Image(contentInfo, parentFrameObject) {
         this.name = contentInfo.name;
 
         this.uniqueKey = contentInfo.uniqId;
-        this.playlistContentUniqueKey = contentInfo.playlistUniqueKey + '-' + moment().format('HHmmss');
 
         this.x = contentInfo.x;
         this.y = contentInfo.y;
         this.z = contentInfo.z;
 
         this.uniqueKey = contentInfo.fileUniqId; //buraya uniqId gelmeli
-        this.playlistContentUniqueKey = contentInfo.playlistUniqueKey + '-' + moment().format('HHmmss');
+        this.playlistContentUniqueKey = contentInfo.playlistUniqueKey + '-' +Math.floor(Math.random() * 10000);
 
         console.log("function Content_Image contentInfo: " +JSON.stringify(this.playlistContentUniqueKey) ,'Info');
         console.log("function Content_Image this.fileName: " +JSON.stringify(this.fileName) ,'Info');

@@ -300,8 +300,9 @@ WebosDevice.screenShot = function (opt1,opt2) {
         options.imgResolution = Signage.ImgResolution.HD;
     }
 
-    options.thumbnail = false;
-    options.imgResolution = Signage.ImgResolution.HD;
+    //for kansaiii
+    //options.thumbnail = false;
+    //options.imgResolution = Signage.ImgResolution.HD;
     
     var successCB = function (cbObject) {
         var size = cbObject.size;

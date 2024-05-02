@@ -23,7 +23,7 @@ function Content_Date(contentInfo, parentFrameObject) {
         this.textVerticalAlignment = contentInfo.getTypeContentProperty("verticalAlign");
         
         this.frameUniqueKey = parentFrameObject.uniqueKey;
-        this.playlistContentUniqueKey = contentInfo.playlistUniqueKey + '-' + moment().format('HHmmss');
+        this.playlistContentUniqueKey = contentInfo.playlistUniqueKey + '-' + Math.floor(Math.random() * 10000);
 
     }
     catch (exception)

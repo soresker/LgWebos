@@ -22,8 +22,7 @@ function Content_Label(contentInfo, parentFrameObject) {
 
         this.actualProvider = 0;
         this.frameUniqueKey = parentFrameObject.uniqueKey;
-        this.playlistContentUniqueKey = contentInfo.playlistUniqueKey + '-' + moment().format('HHmmss');
-
+        this.playlistContentUniqueKey = contentInfo.playlistUniqueKey + '-' +Math.floor(Math.random() * 10000);
         console.log("Content_Label");
 
     }

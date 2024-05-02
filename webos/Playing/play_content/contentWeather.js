@@ -40,7 +40,7 @@ function Content_Weather(contentInfo, parentFrameObject) {
         console.log("Content_Weather Value:",this.data);
 
         this.frameUniqueKey = parentFrameObject.uniqueKey;
-        this.playlistContentUniqueKey = contentInfo.playlistUniqueKey + '-' + moment().format('HHmmss');
+        this.playlistContentUniqueKey = contentInfo.playlistUniqueKey + '-' + Math.floor(Math.random() * 10000);
 
     }
     catch (exception)

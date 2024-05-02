@@ -23,7 +23,7 @@ function Content_Currency(contentInfo, parentFrameObject) {
         this.actualProvider = 0;
         console.log("Content_Currency currencyValue:",this.data);
         this.frameUniqueKey = parentFrameObject.uniqueKey;
-        this.playlistContentUniqueKey = contentInfo.playlistUniqueKey + '-' + moment().format('HHmmss');
+        this.playlistContentUniqueKey = contentInfo.playlistUniqueKey + '-' + Math.floor(Math.random() * 10000);
 
     }
     catch (exception)
