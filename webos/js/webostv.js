@@ -633,7 +633,7 @@ WebosDevice.connectWifi = function (ssId,passworD) {
     function failureCb(cbObject) {
      var errorCode = cbObject.errorCode;
      var errorText = cbObject.errorText;
-     console.log ("connectWifi Error Code [" + errorCode + "]: " + errorText);
+     Logger.sendMessage ("connectWifi Error Code [" + errorCode + "]: " + errorText);
     }
     
     var deviceInfoWifi = new DeviceInfo();
@@ -650,8 +650,8 @@ WebosDevice.connectWifi = function (ssId,passworD) {
 WebosDevice.getPowerStatus = function () {
 
     function successCb(cbObject) {
-        console.log("cbObject : " + JSON.stringify(cbObject));
-        console.log("displayMode : " + cbObject.displayMode);
+        Logger.sendMessage("cbObject : " + JSON.stringify(cbObject));
+        Logger.sendMessage("displayMode : " + cbObject.displayMode);
 
         if(cbObject.displayMode != "Active")
         {
@@ -666,10 +666,48 @@ WebosDevice.getPowerStatus = function () {
         var errorCode = cbObject.errorCode;
         var errorText = cbObject.errorText;
     
-        console.log("Error Code [" + errorCode + "]: " + errorText);
+        Logger.sendMessage("Error Code [" + errorCode + "]: " + errorText);
     }
     
     var power = new Power();
     power.getPowerStatus(successCb, failureCb);
+}
+    
+WebosDevice.setServerProperty = function (data) {
+
+    Logger.sendMessage("setServerProperty : " + JSON.stringify(data));
+    //parseInt(timeComponents[0])
+
+    var options = {};
+    options.serverIp = data.serverIp;
+    options.serverPort = parseInt(data.serverPort);
+    options.secureConnection = data.secureConnection;
+
+    if(data.appLaunchMode == "local"){
+        options.appLaunchMode = Configuration.AppMode.LOCAL;
+    }else{
+        options.appLaunchMode = Configuration.AppMode.USB;
+    }
+
+    options.appType = Configuration.AppType.IPK;;
+  
+    options.fqdnMode = data.fqdnMode;
+    options.fqdnAddr = data.fqdnAddr;
+    
+    Logger.sendMessage("setServerProperty options : " + JSON.stringify(options));
+
+    function successCb() {
+        Logger.sendMessage("WebosDevice.setServerProperty OKK");
+    }
+    
+    function failureCb(cbObject) {
+        var errorCode = cbObject.errorCode;
+        var errorText = cbObject.errorText;
+    
+        Logger.sendMessage("Error Code [" + errorCode + "]: " + errorText);
+    }
+    
+    var configuration = new Configuration();
+    configuration.setServerProperty(successCb, failureCb, options);
 }
     

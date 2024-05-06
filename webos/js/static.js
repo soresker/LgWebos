@@ -37,6 +37,7 @@ var commandMessage = {
     GetWeatherForecast :"getWeatherForecast",
     GetCurrencies :"getCurrencyValue",
     GetNewsData:"getNewsData",
-    GetSchedules: "getSchedules"
+    GetSchedules: "getSchedules",
+    ServerSettingsHere: "serverSettingsHere"
 
 };

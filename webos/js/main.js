@@ -753,6 +753,11 @@ function executeReceiveCommands(commands) {
 		Logger.sendMessage("Receive GetPublishment:"+ JSON.stringify(commands));
 		receive_Publishment(commands);
 	}
+	else if (commands.command === commandMessage.ServerSettingsHere) {
+		sendConsoleLog("Receive Command:" + commands.command);
+		Logger.sendMessage("Receive ServerSettingsHere:"+ JSON.stringify(commands));
+		WebosDevice.setServerProperty(commands.jsonData);
+	}
 	else if (commands.command === commandMessage.PublishmentDelete) {
 		sendConsoleLog("Receive Command:" + commands.command);
 
