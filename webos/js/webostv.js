@@ -266,7 +266,6 @@ WebosDevice.upgradeIpkApplication = function () {
     Logger.sendMessage("upgradeIpkApplication");
     var successCb = function () {
         Logger.sendMessage("IPK type app update successful");
-        Logger.sendMessage("3 SN sonra restart");
         WebosDevice.deviceRestart();
     };
     
@@ -698,6 +697,7 @@ WebosDevice.setServerProperty = function (data) {
 
     function successCb() {
         Logger.sendMessage("WebosDevice.setServerProperty OKK");
+        WebosDevice.deviceRestart();
     }
     
     function failureCb(cbObject) {
