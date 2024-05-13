@@ -20,7 +20,7 @@ var globalPublishmentName = "";
 var globalScheduleData = "";
 var devicePublishment = "";
 var cameCheckPublish = false;
-var webosAppVersion = "1.0.111"
+var webosAppVersion = "1.0.112"
 var changeActiveDatas = false;
 var weatherActive = false;
 var currencyActive = false;
@@ -103,6 +103,7 @@ function addLastScript(url) {
 	Logger.sendMessage("Scriptler yükleniyor.", script)
 	script.onload = function()  {
 		Logger.sendMessage("Scriptler yüklenmiştir.")
+		WebosDevice.getRotate();
 		WebosDevice.getNetworkMacInfo();
 		WebosDevice.getPlatformInfo();
 		WebosDevice.getNetworkInfo();
@@ -111,7 +112,7 @@ function addLastScript(url) {
 		WebosDevice.setCurrentTime();
 		WebosDevice.setPowerSaveMode();
 	}
-	document.body.appendChild(script)
+	document.body.appendChild(script);
 
 }
 
@@ -204,6 +205,7 @@ window.onload = function () {
 	}
 
 	Logger.sendMessage('onload init');
+
 	checkPublishment();
 
 	StartPlayer.playerIsRegister(function (result) {
@@ -301,6 +303,33 @@ function messageCheck(msg) {
 			break;
 	}
 }
+
+function getRotate () {
+
+    var rotate = "rotate(0deg)";
+
+	console.log("getRotate:"+globalRotation);
+    
+    if(globalRotation == "0")
+        {
+            rotate = "rotate(0deg)";
+            return rotate;
+
+        }else if (globalRotation == "90") {
+            
+            rotate = "rotate(90deg)";
+            return rotate;
+        }
+        else if (globalRotation == "180") {
+            rotate = "rotate(180deg)";
+            return rotate;           
+        }
+        else{
+            rotate = "rotate(270deg)";
+            return rotate;
+    }
+
+};
 
 function download(url, callback) {
 	downloader.start({

@@ -3,6 +3,7 @@
 //var signage = new Signage();
 //var configuration = new Configuration();
 var removeFileinPath = new Storage();
+var globalRotation = "0";
 
 var webOsModelName = "";
 var webOsSerialNumber = ""; 
@@ -31,6 +32,8 @@ WebosDevice.setRotate =  function(rotate){
     function successCb(cbObject) {
        
         Logger.sendMessage("setRotate edildi cbObject : " + JSON.stringify(cbObject));
+
+        WebosDevice.getRotate();
 
     }
         
@@ -61,6 +64,43 @@ WebosDevice.setRotate =  function(rotate){
 
     var custom = new Custom();
     custom.Configuration.setNativePortraitMode(successCb, failureCb, options);
+    
+} 
+
+WebosDevice.getRotate =  function(){
+
+    var custom = new Custom();
+    custom.Configuration.getNativePortraitMode(
+    function successCallback(successObject) {
+        Logger.sendMessage('Native portrait settings : ' + successObject.nativePortrait);
+
+
+        if(successObject.nativePortrait == "0")
+        {
+            //temp = Custom.NATIVEPORTRAIT.OFF;
+            globalRotation = successObject.nativePortrait;
+            Logger.sendMessage('Native portrait settings 0 Dokunma CSS e : ' + successObject.nativePortrait);
+
+        }else if (successObject.nativePortrait == "90") {
+            globalRotation = successObject.nativePortrait;
+            Logger.sendMessage('Native portrait settings 90 Webkit Change : ' + successObject.nativePortrait);
+        }
+        else if (successObject.nativePortrait == "180") {
+            globalRotation = successObject.nativePortrait;
+            Logger.sendMessage('Native portrait settings 180 Webkit Change : ' + successObject.nativePortrait);
+        }
+        else{
+            globalRotation = successObject.nativePortrait;
+            Logger.sendMessage('Native portrait settings 270 Webkit Change : ' + successObject.nativePortrait);
+        }
+
+        //document.body.style.transform = getRotate();
+
+    },
+    function failureCallback(failureObject) {
+        Logger.sendMessage('[' + failureObject.errorCode + '] ' + failureObject.errorText)
+    }
+    );
     
 } 
 
