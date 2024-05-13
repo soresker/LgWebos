@@ -119,27 +119,6 @@ Content_Video.prototype.deleteUIElement = function() {
 
    console.log("Video deleteUIElement "+ "info");
     try {
-
-        if (this.attachedErrorHandler === true) {
-            $(this.videoSelector)[0].removeEventListener('error', this.errorHandler, true);
-        }
-
-        if (this.attachedMetaDataHandler === true) {
-            $(this.videoSelector)[0].removeEventListener('loadedmetadata', this.metaDataHandler, true);
-        }
-
-        if (this.attachedPlayHandler === true) {
-            $(this.videoSelector)[0].removeEventListener('play', this.playHandler, true);
-        }
-
-        if (this.attachedTimeUpdateHandler === true) {
-            $(this.videoSelector)[0].removeEventListener('timeupdate', this.timeUpdateHandler, true);
-        }
-
-        if (this.attachedPauseHandler === true) {
-            $(this.videoSelector)[0].removeEventListener('pause', this.pauseHandler, true);
-        }
-
         var video = document.getElementById("content-" + this.playlistContentUniqueKey + "-video");
         this.removeAllListeners(video, 'timeupdate');
 
@@ -163,21 +142,11 @@ Content_Video.prototype.deleteContent = function() {
         this.deleteUIElement();
         $('#content-' + this.playlistContentUniqueKey).remove();
         Content_Abstractor.prototype.deleteContent.call(this);
-
-        var fileUrlEdits = Publisher.playerGlobalData.replace(/\\/g, '/')  + this.fileName;
-
-        var message = {
-            Type : "closeFFMpeg",
-            Path : fileUrlEdits
-        }
-        //window.parent.postMessage(JSON.stringify(message));
-
-        console.log("FFMPEG close path:",fileUrlEdits);
     }
 };
 
 Content_Video.prototype.generateUIElement = function() {
-    return '<div id="content-{0}" style="z-index:{3};width:{4}px; height:{5}px; position:relative"><video muted onloadeddata="this.muted={7}" onloadstart="this.volume={6}" id="content-{0}-video" class="playing-platform-content playing-platform-content-video" style="width:{4}px; height:{5}px; object-fit: fill; background-color:black; display:none" data-videorepeatcount="1"></video></div>'.pxcFormatString(this.playlistContentUniqueKey, this.y, this.x, Tools.defaultValue(this.z, 0), this.width, this.height, this.volume * 1.0 / 100, this.volume==0?"true":"false");
+    return '<div id="content-{0}" style="z-index:{3};width:{4}px; height:{5}px; transform:{6}; transform-origin:center center; position:relative"><video  id="content-{0}-video" class="playing-platform-content playing-platform-content-video" style="width:{4}px; height:{5}px; object-fit: fill; background-color:black; display:none" data-videorepeatcount="1"></video></div>'.pxcFormatString(this.playlistContentUniqueKey, this.y, this.x, Tools.defaultValue(this.z, 0), this.width, this.height,getRotate());
 };
 Content_Video.prototype.generateScreenShotElement = function() {
     return '<div id="player-image">' +
