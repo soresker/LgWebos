@@ -1,6 +1,6 @@
 function Content_Video(contentInfo, parentFrameObject) {
 
-    console.log("Content_Video" ,'Info');
+    //console.log("Content_Video" ,'Info');
 
     Content_Abstractor.call(this, contentInfo, parentFrameObject);
 
@@ -86,7 +86,7 @@ Content_Video.prototype.showContent = function(func) {
 
         $(this.videoSelector).attr('src',fileUrlEdits);
         var video = document.getElementById("content-" + this.playlistContentUniqueKey + "-video");
-        console.log("Video.basePath2:" +fileUrlEdits);
+        //console.log("Video.basePath2:" +fileUrlEdits);
 
         if (this.settingSeekStart)
             this.settingSeekStart = false;
@@ -105,7 +105,7 @@ Content_Video.prototype.showContent = function(func) {
         this_.videoPlayed = true;
 
     } catch (exception) {
-        console.log("[Video][Error]", exception)
+        //console.log("[Video][Error]", exception)
         this.parentFrameObject.setCurrentContentValidity(false);
         if (func)
             func();
@@ -117,20 +117,20 @@ Content_Video.prototype.showContent = function(func) {
 
 Content_Video.prototype.deleteUIElement = function() {
 
-   console.log("Video deleteUIElement "+ "info");
+   //console.log("Video deleteUIElement "+ "info");
     try {
         var video = document.getElementById("content-" + this.playlistContentUniqueKey + "-video");
         this.removeAllListeners(video, 'timeupdate');
 
     } catch (exception) {
-       console.log(" exception Video deleteUIElement :" + exception, "error");
-       console.log("exception  Content_Video.deleteUIElement",  + exception,"error");
+       //console.log(" exception Video deleteUIElement :" + exception, "error");
+       //console.log("exception  Content_Video.deleteUIElement",  + exception,"error");
         this.parentFrameObject.setCurrentContentValidity(false);
     } finally {}
 };
 
 Content_Video.prototype.deleteContent = function() {
-    console.log("Content_Video.prototype.deleteContent",this.videoType);
+    //console.log("Content_Video.prototype.deleteContent",this.videoType);
     if(Publisher.videoType == 0) 
     {
         this.deleteUIElement();
@@ -146,7 +146,7 @@ Content_Video.prototype.deleteContent = function() {
 };
 
 Content_Video.prototype.generateUIElement = function() {
-    return '<div id="content-{0}" style="z-index:{3};width:{4}px; height:{5}px; position:relative"><video  id="content-{0}-video" class="playing-platform-content playing-platform-content-video" style="width:{4}px; height:{5}px; object-fit: fill; background-color:black; display:none" data-videorepeatcount="1"></video></div>'.pxcFormatString(this.playlistContentUniqueKey, this.y, this.x, Tools.defaultValue(this.z, 0), this.width, this.height,getRotate());
+    return '<div id="content-{0}" style="z-index:{3};width:{4}px; height:{5}px; position:relative"><video  id="content-{0}-video" class="playing-platform-content playing-platform-content-video" style="width:{4}px; height:{5}px; object-fit: fill; background-color:black; display:none" data-videorepeatcount="1"></video></div>'.pxcFormatString(this.playlistContentUniqueKey, this.y, this.x, Tools.defaultValue(this.z, 0), this.width, this.height);
 };
 Content_Video.prototype.generateScreenShotElement = function() {
     return '<div id="player-image">' +

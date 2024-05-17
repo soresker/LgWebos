@@ -16,7 +16,7 @@ function Content_Weather(contentInfo, parentFrameObject) {
 
         this.weatherProperty = contentInfo.getTypeContentProperty("type");
 
-        console.log("Content_Weather weatherProperty :",this.weatherProperty);
+        //console.log("Content_Weather weatherProperty :",this.weatherProperty);
 
         if(this.weatherProperty == "icon")
         {
@@ -37,7 +37,7 @@ function Content_Weather(contentInfo, parentFrameObject) {
       
         this.actualProvider = 0;
 
-        console.log("Content_Weather Value:",this.data);
+        //console.log("Content_Weather Value:",this.data);
 
         this.frameUniqueKey = parentFrameObject.uniqueKey;
         this.playlistContentUniqueKey = contentInfo.playlistUniqueKey + '-' + Math.floor(Math.random() * 10000);
@@ -45,7 +45,7 @@ function Content_Weather(contentInfo, parentFrameObject) {
     }
     catch (exception)
     {
-        console.log("Content_Weather EX", + exception);
+        //console.log("Content_Weather EX", + exception);
     }
 }
 
@@ -131,14 +131,14 @@ Content_Weather.prototype.showContent = function (func) {
 
             if(this.textFontFamily == "verdana")
             {
-                console.log("Content_Weather this.textFontFamily"+this.textFontFamily);
+                //console.log("Content_Weather this.textFontFamily"+this.textFontFamily);
 
                 $("#content-" + _this.playlistContentUniqueKey).css("font-family", "{0}".pxcFormatString(this.textFontFamily));
             }
             else{
 
                 var fontUrl = fontPath + this.textFontFamily+".otf"; // Font dosyasının yolu
-                console.log("Content_Weather FONT this.value" + fontUrl);
+                //console.log("Content_Weather FONT this.value" + fontUrl);
 
                 var fontFace = new FontFace(this.textFontFamily, 'url(' + fontUrl + ')'); // FontFace nesnesi oluştur
                 var self = this; // Kapsayıcı alanı fonksiyon içinde kullanmak için bir referans
@@ -146,7 +146,7 @@ Content_Weather.prototype.showContent = function (func) {
                 // Font yükleme işlemi tamamlandığında
                 fontFace.load().then(function(loadedFont) {
                     document.fonts.add(loadedFont); // Font'u belgeye ekle
-                    console.log("Content_Weather FONT loaddded" + fontUrl);
+                    //console.log("Content_Weather FONT loaddded" + fontUrl);
                     $("#content-" + self.frameUniqueKey + "-span").css("font-family", "'" + self.textFontFamily + "'");
                     $("#content-" + self.frameUniqueKey).show();
 
@@ -164,7 +164,7 @@ Content_Weather.prototype.showContent = function (func) {
             
     } catch (exception) {
 
-        console.log("Content_Weather.ShowContent", exception);
+        //console.log("Content_Weather.ShowContent", exception);
         this.parentFrameObject.setCurrentContentValidity(false);
         this.contentEnded();
         return;

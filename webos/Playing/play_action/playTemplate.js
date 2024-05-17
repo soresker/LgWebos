@@ -14,14 +14,14 @@ Play_Template.prototype.startTemplate = function (templateInfo) {
     this.height = templateInfo.height; //manuel verildi düzeltilecek
     this.position = templateInfo.position;
 
-    console.log("Play_Template name: " + templateInfo.name, 'Info');
-    console.log("Play_Template duration: " + templateInfo.duration, 'Info');
-    console.log("Play_Template uniqueKey: " + this.uniqueKey, 'Info');
-    console.log("Play_Template width: " + templateInfo.width, 'Info');
-    console.log("Play_Template height: " + templateInfo.height, 'Info');
-    console.log("Play_Template position: " + templateInfo.position, 'Info');
+    //console.log("Play_Template name: " + templateInfo.name, 'Info');
+    //console.log("Play_Template duration: " + templateInfo.duration, 'Info');
+    //console.log("Play_Template uniqueKey: " + this.uniqueKey, 'Info');
+    //console.log("Play_Template width: " + templateInfo.width, 'Info');
+    //console.log("Play_Template height: " + templateInfo.height, 'Info');
+    //console.log("Play_Template position: " + templateInfo.position, 'Info');
 
-    console.log("templateInfo.frameInfoList.lengtht: " + templateInfo.frameInfoList.length, 'Info');
+    //console.log("templateInfo.frameInfoList.lengtht: " + templateInfo.frameInfoList.length, 'Info');
 
     $(".pixage-platform-template").remove();
     Player_Ui_Creator.UIElement.appendHTML("body", this.generateUIElement());
@@ -39,7 +39,7 @@ Play_Template.prototype.startTemplate = function (templateInfo) {
 
     for (var frameInfoKey in templateInfo.frameInfoList) {
         var frameInfo = templateInfo.frameInfoList[frameInfoKey];
-        console.log("Template6", "Creating new Frame Widget. Frame Id:{0}".pxcFormatString(frameInfo.id));
+        //console.log("Template6", "Creating new Frame Widget. Frame Id:{0}".pxcFormatString(frameInfo.id));
         frameInfo.templateUniqueKey = this.uniqueKey;
         var newFrame = new Play_Frame(frameInfo, this);
         this.frameList.push(newFrame);
@@ -47,7 +47,7 @@ Play_Template.prototype.startTemplate = function (templateInfo) {
 
     this.startAllFrames();
 
-    console.log("Template:{0}. Starting all frames.".pxcFormatString(this.uniqueKey));
+    //console.log("Template:{0}. Starting all frames.".pxcFormatString(this.uniqueKey));
 };
 
 Play_Template.prototype.deleteTemplate = function () {
@@ -70,7 +70,7 @@ Play_Template.prototype.addToFrameList = function (frame) {
 };
 
 Play_Template.prototype.startAllFrames = function () {
-    console.log("startAllFrames  this.frameList.length: " + this.frameList.length, 'Info');
+    //console.log("startAllFrames  this.frameList.length: " + this.frameList.length, 'Info');
     for (var i = 0; i < this.frameList.length; i++) {
         this.frameList[i].startFrame();
     }

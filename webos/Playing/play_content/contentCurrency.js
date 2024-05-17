@@ -21,14 +21,14 @@ function Content_Currency(contentInfo, parentFrameObject) {
         this.data = contentInfo.getTypeContentProperty("currencyValue");
       
         this.actualProvider = 0;
-        console.log("Content_Currency currencyValue:",this.data);
+        //console.log("Content_Currency currencyValue:",this.data);
         this.frameUniqueKey = parentFrameObject.uniqueKey;
         this.playlistContentUniqueKey = contentInfo.playlistUniqueKey + '-' + Math.floor(Math.random() * 10000);
 
     }
     catch (exception)
     {
-        console.log("Content_Currency EX", + exception);
+        //console.log("Content_Currency EX", + exception);
     }
 }
 
@@ -77,13 +77,13 @@ Content_Currency.prototype.showContent = function (func) {
 
             if(this.textFontFamily == "verdana")
             {
-                console.log("Content_Currency this.textFontFamily" + this.textFontFamily);
+                //console.log("Content_Currency this.textFontFamily" + this.textFontFamily);
                 $("#content-" + _this.playlistContentUniqueKey).css("font-family", "{0}".pxcFormatString(this.textFontFamily));
             }
             else{
 
                 var fontUrl = fontPath + this.textFontFamily + ".otf"; // Font dosyasının yolu
-                console.log("Content_Currency FONT this.value" + fontUrl);
+                //console.log("Content_Currency FONT this.value" + fontUrl);
 
                 var fontFace = new FontFace(this.textFontFamily, 'url(' + fontUrl + ')'); // FontFace nesnesi oluştur
                 var self = this; // Kapsayıcı alanı fonksiyon içinde kullanmak için bir referans
@@ -91,7 +91,7 @@ Content_Currency.prototype.showContent = function (func) {
                 // Font yükleme işlemi tamamlandığında
                 fontFace.load().then(function(loadedFont) {
                     document.fonts.add(loadedFont); // Font'u belgeye ekle
-                    console.log("Content_Currency Font Loaded" + fontUrl);
+                    //console.log("Content_Currency Font Loaded" + fontUrl);
                     $("#content-" + self.frameUniqueKey + "-span").css("font-family", "'" + self.textFontFamily + "'");
                     $("#content-" + self.frameUniqueKey).show();
 
@@ -109,7 +109,7 @@ Content_Currency.prototype.showContent = function (func) {
                
     } catch (exception) {
 
-        console.log("Content_Currency.ShowContent", exception);
+        //console.log("Content_Currency.ShowContent", exception);
         this.parentFrameObject.setCurrentContentValidity(false);
         this.contentEnded();
         return;

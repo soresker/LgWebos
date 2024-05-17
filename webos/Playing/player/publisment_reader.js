@@ -8,7 +8,7 @@ var currentTemplate = 0;
 var templateInfo = "";
 
 Publishment_Reader.parseLatestPublishment = function (data) {
-    console.log("parseLatestPublishment");
+    //console.log("parseLatestPublishment");
 
     Publishment_Reader.clearPublisment();
     Publishment_Reader.clearCurrentTemplate();
@@ -19,16 +19,16 @@ Publishment_Reader.parseLatestPublishment = function (data) {
         (!currentPublishment.calendar || currentPublishment.calendar.length == 0) &&
         (!currentPublishment.templates || currentPublishment.templates.length == 0)
     ) {
-        console.log("Publishmentta SORUN VAR templates: "+currentPublishment.templates);
+        //console.log("Publishmentta SORUN VAR templates: "+currentPublishment.templates);
         setTimeout(function() {sendConsoleLog("Publishmentta SORUN VAR templates yok bos yayin: ");}, 5000);
         //Tools.showImage(); //error durumu aslinda
     }else if (!currentPublishment.templates[0].frames || currentPublishment.templates[0].frames.length == 0 )
     {
-        console.log("Publishmentta SORUN VAR frame yok bos yayin: ");
+        //console.log("Publishmentta SORUN VAR frame yok bos yayin: ");
         setTimeout(function() {sendConsoleLog("Publishmentta SORUN VAR frame yok bos yayin: ");}, 5000);
     }
     else {
-        console.log("Publishment_Reader:Hide Image:", "Info");
+        //console.log("Publishment_Reader:Hide Image:", "Info");
         Tools.hideImage();
     }
 
@@ -42,7 +42,7 @@ Publishment_Reader.parseLatestPublishment = function (data) {
 };
 
 Publishment_Reader.parseCalendars = function () {
-    console.log("parseCalendars", "Info");
+    //console.log("parseCalendars", "Info");
     if (!currentPublishment.calendar) {
         calendarList = [];
     } else {
@@ -74,7 +74,7 @@ Publishment_Reader.parseCalendars = function () {
             templateCalendarInfo.setEndTime(Tools.defaultValue(endTime, ""));
 
             templateCalendarInfo.setTemplateId(Tools.defaultValue(currentTemplateCalendarToParse.id, ""));
-            console.log("parseCalendars: function() = > " + JSON.stringify(templateCalendarInfo), "Info");
+            //console.log("parseCalendars: function() = > " + JSON.stringify(templateCalendarInfo), "Info");
 
             calendarList.push(templateCalendarInfo);
         }
@@ -98,7 +98,7 @@ Publishment_Reader.parseTemplates = function () {
             Publishment_Reader.parseFrames(templateInfo, currentTemplateInfoToParse);
 
             templateInfo.templateUniqId = currentTemplateInfoToParse.templateUniqId;
-            console.log("parseTemplates: function() = > " + JSON.stringify(templateInfo), "Info");
+            //console.log("parseTemplates: function() = > " + JSON.stringify(templateInfo), "Info");
 
             templateList.push(templateInfo);
         }
@@ -115,7 +115,7 @@ Publishment_Reader.parseFrames = function (templateInfo, templateInfoToParse) {
         var currentFrameInfoToParse = templateInfoToParse.frames[index];
         Publishment_Reader.parseBasicAttributes(frameInfo, currentFrameInfoToParse, currentFrameInfoToParse.frameUniqId);
         Publishment_Reader.parsePlaylists(frameInfo, currentFrameInfoToParse);
-        console.log("parseFrames: function() = > " + JSON.stringify(frameInfo), "Info");
+        //console.log("parseFrames: function() = > " + JSON.stringify(frameInfo), "Info");
         templateInfo.addToFrameInfoList(frameInfo);
     }
 };
@@ -131,7 +131,7 @@ Publishment_Reader.parsePlaylists = function (templateInfo, templateInfoToParse)
             var currentPlaylistInfoToParse = templateInfoToParse.playlists[index];
             Publishment_Reader.parseBasicAttributes(playlistInfo, currentPlaylistInfoToParse, currentPlaylistInfoToParse.playlistUniqId);
             Publishment_Reader.parseContents(playlistInfo, currentPlaylistInfoToParse);
-            console.log("parsePlaylists: function() = > " + JSON.stringify(playlistInfo), "Info");
+            //console.log("parsePlaylists: function() = > " + JSON.stringify(playlistInfo), "Info");
             templateInfo.addToPlaylistInfoList(playlistInfo);
         }
     }
@@ -180,7 +180,7 @@ Publishment_Reader.parseContents = function (playlistInfo, playlistInfoToParse) 
         if (currentContentInfoToParse.contentProperties) {
             for (var i = 0; i < currentContentInfoToParse.contentProperties.length; i++) {
                 var element = currentContentInfoToParse.contentProperties[i];
-                console.log("contentArray element:", element);
+                //console.log("contentArray element:", element);
 
                 contentInfo.setTypeContentProperty(element.name, element.value);
             }
@@ -189,7 +189,7 @@ Publishment_Reader.parseContents = function (playlistInfo, playlistInfoToParse) 
         contentArray.push(contentInfo);
     }
 
-    console.log(contentArray);
+    //console.log(contentArray);
     for (var i = 0; i < contentArray.length; i++) {
         playlistInfo.addToContentInfoList(contentArray[i]);
     }
@@ -206,7 +206,7 @@ Publishment_Reader.parseBasicAttributes = function (info, object, uniqId) {
     info.y = Tools.defaultValue(object.y, 0);
     info.z = Tools.defaultValue(object.z, 0);
     info.position = Tools.defaultValue(object.position, 0);
-    console.log("parseBasicAttributes:", info);
+    //console.log("parseBasicAttributes:", info);
 };
 
 Publishment_Reader.clearPublisment = function () {

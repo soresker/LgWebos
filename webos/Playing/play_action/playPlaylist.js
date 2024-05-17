@@ -1,7 +1,7 @@
 function Play_Playlist(playlistInfo) {
 
 
-    console.log("Play_Playlist - PLAYLIST");
+    //console.log("Play_Playlist - PLAYLIST");
 
     this.playlistInfo = playlistInfo;
     
@@ -17,7 +17,7 @@ function Play_Playlist(playlistInfo) {
     this.stopPlaylistOperations = false;
 
     Player_Ui_Creator.UIElement.appendHTML("body", this.generateUIElement());
-    console.log("Play_Playlist - END");
+    //console.log("Play_Playlist - END");
 
 }
 
@@ -27,7 +27,7 @@ Play_Playlist.prototype.generateUIElement = function() {
 
 Play_Playlist.prototype.continuePlaylist = function() {
 
-    console.log("CONTINUE PLAYLIST - PLAYLIST");
+    //console.log("CONTINUE PLAYLIST - PLAYLIST");
 
     if (this.stopPlaylistOperations) return;
 
@@ -77,7 +77,7 @@ Play_Playlist.prototype.deletePlaylist = function() {
 
 Play_Playlist.prototype.playNextContent = function() {
 
-    console.log("PLAY NEXT CONTENT");
+    //console.log("PLAY NEXT CONTENT");
 
     if (this.playlistInfo.contentInfoList.length == 0) {
         return;
@@ -116,7 +116,7 @@ Play_Playlist.prototype.playNextContent = function() {
         }
 
     } catch (error) {
-        console.log("error:" + error.stack);
+        //console.log("error:" + error.stack);
     }
 };
 
@@ -146,7 +146,7 @@ Play_Playlist.prototype.deleteCurrentContent = function() {
             this.currentContent.deleteContent();
             this.currentContent = null;
         } catch (error) {
-            console.log("deleteCurrentContent: error" + error.stack);
+            //console.log("deleteCurrentContent: error" + error.stack);
 
         }
     }
