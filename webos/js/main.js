@@ -392,7 +392,7 @@ function downloadForPublish() {
 
 				Logger.sendMessage("SHOWWW PLAYERE publishmentsDir✅");
 				showPlayer();
-				deleteNonListedFiles(downloadedContentList,contentsDir);
+				//deleteNonListedFiles(downloadedContentList,contentsDir);
 				cameCheckPublish = false;
 				this.updatePublishmentDate();
 			}
@@ -476,7 +476,7 @@ function downloadNext() {
                 Logger.sendMessage("Showing player starting ✅");
 				starting = false;
                 showPlayer();
-                deleteNonListedFiles(downloadedContentList, contentsDir);
+                //deleteNonListedFiles(downloadedContentList, contentsDir);
                 this.updatePublishmentDate();
             } 
 			else if(cameCheckPublish == false)
@@ -486,7 +486,7 @@ function downloadNext() {
                 getPublishment();
 				starting = false;
                 showPlayer();
-                deleteNonListedFiles(downloadedContentList, contentsDir);
+                //deleteNonListedFiles(downloadedContentList, contentsDir);
                 this.updatePublishmentDate();
 			}
 			else {
