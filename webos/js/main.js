@@ -17,10 +17,11 @@ var webosIsRegister = "";
 var globalKeyCode ="";
 var globalPublishmentControlForNet = false;
 var globalPublishmentName = "";
+var globalPublishmentUrl = "";
 var globalScheduleData = "";
 var devicePublishment = "";
 var cameCheckPublish = false;
-var webosAppVersion = "1.0.113"
+var webosAppVersion = "1.0.114"
 var changeActiveDatas = false;
 var weatherActive = false;
 var currencyActive = false;
@@ -340,7 +341,7 @@ function download(url, callback) {
 		callback(error, data)
 	});
 }
-function downloadForPublish() {
+function downloadForPublish(camePeriod) {
 	currentPubIndex = currentPubIndex + 1;
 	if (currentPubIndex < urlArray.length) {
 		var currentUrl = urlArray[currentPubIndex];
@@ -348,8 +349,8 @@ function downloadForPublish() {
 		sendConsoleLog('download start for publishment:' + 'download status:' + (currentPubIndex + 1) + '/' + urlArray.length)
 		Logger.sendMessage('download file for publishment url:' + currentUrl)
 		var fileName = currentUrl.split('/').pop();
-		fileExistForPublish(downloadDir + fileName, function (error, data) {
-			if (data != null && data == false) {
+		//fileExistForPublish(downloadDir + fileName, function (error, data) {
+			//if (data != null && data == true) {
 				download(currentUrl, function (err, data) {
 					if (err) {
 						Logger.sendMessage("download  for publishment failed: " + (currentPubIndex + 1) + '/' + urlArray.length);
@@ -360,44 +361,98 @@ function downloadForPublish() {
 						sendConsoleLog("download for publishment complete: " + (currentPubIndex + 1) + "/" + urlArray.length);			
 					}
 					$(".download-bar").html("Downloading " + (currentPubIndex + 1) + "/" + urlArray.length);
-					downloadForPublish()
+					downloadForPublish(camePeriod);
 				})
-			}
-			else {
+			//}
+			/*else {
 				Logger.sendMessage("download file exist! Go Next File: " + (currentPubIndex + 1) + '/' + urlArray.length)
-				downloadForPublish()
-			}
-		});
+				downloadForPublish(false)
+			}*/
+		//});
 	}
 	else {
 		currentPubIndex = -1;
 		Logger.sendMessage("download complated all files ✅");
 
+		//this.fsync();
 		setTimeout(function () {
 			$("#screen-shot-image").hide();
 		}, 2000);
 
-		if (downloadDir == publishmentsDir) {
+		if(camePeriod == true)
+		{
 
-			WebosSettings.setValue("Publishment/NewVersion", globalPublishmentName);
-			WebosSettings.setValue("Publishment/OldVersion", globalPublishmentName);
+			this.readPulishmentFile("xxxyyyzzz"+".json").then(function (publishmentContent) {
 
-			Logger.sendMessage("YENI Publisment Download edildi ✅" +globalPublishmentName);
+				globalPublishment = JSON.parse(publishmentContent);
+				
+				var devicePublishmentName =  WebosSettings.value("Publishment/NewVersion","");
+				
+				if(devicePublishmentName == globalPublishment.publishmentName)
+				{
+					console.info("HERSEY YOLUNDA PUBLISHMENT ESIT");
+					console.info("devicePublishmentName:",devicePublishmentName);
+					console.info("globalPublishment.publishmentName:",globalPublishment.publishmentName);
+					return;	
+				}else{
 
-			if(cameCheckPublish == false)
-			{
-				Logger.sendMessage("YENI PUBLISMENT VAR ONUN DA ICERIKLERINI INDIRMEYE BASLAYAK✅");
-				getLastPublishment();
-			}else{
+					Logger.sendMessage("publishmentContent" + publishmentContent);
+					urlArray = globalPublishment.filesUrlArray;
+					Logger.sendMessage("publishmentContent urlArray" + urlArray);
+					downloadedContentList = globalPublishment.filesUrlArray;
+					downloadDir = contentsDir;
+					downloadName = "";
+					starting = false;
+					$(".download-bar").show();
+					downloadNext();
 
-				Logger.sendMessage("SHOWWW PLAYERE publishmentsDir✅");
-				showPlayer();
-				//deleteNonListedFiles(downloadedContentList,contentsDir);
-				cameCheckPublish = false;
-				this.updatePublishmentDate();
-			}
+				}		
+
+			})
+
+		}else{
+
+			if (downloadDir == publishmentsDir) {
+
+				WebosSettings.setValue("Publishment/NewVersion", globalPublishmentName);
+				WebosSettings.setValue("Publishment/OldVersion", globalPublishmentName);
+				WebosSettings.setValue("Publishment/PublishmentUrl", globalPublishmentUrl);
+
+				Logger.sendMessage("YENI PublishmentUrl ✅" +globalPublishmentUrl);
+				Logger.sendMessage("YENI Publisment Download edildi ✅" +globalPublishmentName);
+
+				if(cameCheckPublish == false)
+				{
+
+					Logger.sendMessage("YENI PUBLISMENT VAR ONUN DA ICERIKLERINI INDIRMEYE BASLAYAK✅");
+					//getLastPublishment();
+					this.readPulishmentFile(globalPublishmentName+".json").then(function (publishmentContent) {
+
+						globalPublishment = JSON.parse(publishmentContent);
+						Logger.sendMessage("publishmentContent" + publishmentContent);
+						urlArray = globalPublishment.filesUrlArray;
+						Logger.sendMessage("publishmentContent urlArray" + urlArray);
+						downloadedContentList = globalPublishment.filesUrlArray;
+						downloadDir = contentsDir;
+						downloadName = "";
+						starting = false;
+						$(".download-bar").show();
+						downloadNext();
 		
-		} 
+						//showPlayer();
+					})
+
+				}else{
+
+					Logger.sendMessage("SHOWWW PLAYERE publishmentsDir✅");
+					showPlayer();
+					//deleteNonListedFiles(downloadedContentList,contentsDir);
+					cameCheckPublish = false;
+					this.updatePublishmentDate();
+				}
+			
+			} 
+		}
 
 		$(".download-bar").hide()
 		listDir(publishmentsDir);
@@ -1023,10 +1078,11 @@ function receive_Publishment(publishment) {
 
 	if(devicePublishment != publishment.jsonData.publishmentName)
 	{
+		globalPublishmentUrl = publishment.jsonData.publishmentUrl;
 		globalPublishmentName = publishment.jsonData.publishmentName;
 		downloadDir = publishmentsDir;
 		downloadName = publishment.jsonData.publishmentName + ".json";
-		downloadForPublish();
+		downloadForPublish(false);
 	}else{
 		Logger.sendMessage("Get Publishment sonrasi DEVAM KE : " + devicePublishment);
 	}
@@ -1035,10 +1091,10 @@ function receive_Publishment(publishment) {
 
 function readPulishmentFile(fileName) {
 	return new Promise(function (resolve, reject) {
-		listDir(publishmentsDir);
+		//listDir(publishmentsDir);
 
 		var rawFile = new XMLHttpRequest();
-		rawFile.open("GET", "./content/publishments/" + fileName, false);
+		rawFile.open("GET", "./content/publishments/" + fileName, true);
 		rawFile.overrideMimeType('text/plain; charset=utf-8');
 
 		rawFile.onreadystatechange = function () {
@@ -1134,8 +1190,19 @@ function checkPeriodPublishment() {
 
 	setInterval(function () {
 		Logger.sendMessage("checkPeriodPublishment ----getPublishment");
-		getPublishment();
-	}, 5*60*1000); //5dk da bir
+		//getPublishment();
+
+		var temp = [];
+		temp[0] = WebosSettings.value("Publishment/PublishmentUrl","");
+		urlArray = temp; //guncelle
+
+		Logger.sendMessage("checkPeriodPublishment ----getPublishment"+urlArray);
+
+		downloadDir = publishmentsDir;
+		downloadName = "xxxyyyzzz" + ".json";
+		downloadForPublish(true);
+
+	}, 6*60*1000); //5dk da bir
 }
 
 function getFileExtensionUrl(url) {
@@ -1417,7 +1484,26 @@ function downloadAction(data) {
     }
 }
 
+function fsync() {
+	// Failure callback function for copyFile() method.
+	var failureCb = function (cbObject) {
+		var errorCode = cbObject.errorCode;
+		var errorText = cbObject.errorText;
+		console.log(" Error Code [" + errorCode + "]: " + errorText);
+	};
+	
+	var storage = new Storage();
 
+	storage.fsync(
+		// Success callback function of fsync() method
+		function () {
+			console.log("File synched!!!!!!!!!!");
+		},
+		failureCb, {} // No parameter given to fsync()
+	);
+
+}
+	
 function downloadFile(url, path,name) {
 	downloader.start({
 		url: url,

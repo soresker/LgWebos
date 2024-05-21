@@ -1,6 +1,6 @@
 function Content_Image(contentInfo, parentFrameObject) {
 
-    console.log("function Content_Image contentInfo: " +JSON.stringify(contentInfo) ,'Info');
+    //console.log("function Content_Image contentInfo: " +JSON.stringify(contentInfo) ,'Info');
 
     Content_Abstractor.call(this, contentInfo, parentFrameObject);
     try {
@@ -21,14 +21,14 @@ function Content_Image(contentInfo, parentFrameObject) {
         this.uniqueKey = contentInfo.fileUniqId; //buraya uniqId gelmeli
         this.playlistContentUniqueKey = contentInfo.playlistUniqueKey + '-' +Math.floor(Math.random() * 10000);
 
-        console.log("function Content_Image contentInfo: " +JSON.stringify(this.playlistContentUniqueKey) ,'Info');
-        console.log("function Content_Image this.fileName: " +JSON.stringify(this.fileName) ,'Info');
-        console.log("function Content_Image this.width: " +JSON.stringify(this.width) ,'Info');
-        console.log("function Content_Image this.height: " +JSON.stringify(this.height) ,'Info');
-        console.log("function Content_Image this.frameUniqueKey: " +JSON.stringify(this.frameUniqueKey) ,'Info');
-        console.log("function Content_Image this.uniqueKey: " +JSON.stringify(this.uniqueKey) ,'Info');
+        //console.log("function Content_Image contentInfo: " +JSON.stringify(this.playlistContentUniqueKey) ,'Info');
+        //console.log("function Content_Image this.fileName: " +JSON.stringify(this.fileName) ,'Info');
+        //console.log("function Content_Image this.width: " +JSON.stringify(this.width) ,'Info');
+        //console.log("function Content_Image this.height: " +JSON.stringify(this.height) ,'Info');
+        //console.log("function Content_Image this.frameUniqueKey: " +JSON.stringify(this.frameUniqueKey) ,'Info');
+        //console.log("function Content_Image this.uniqueKey: " +JSON.stringify(this.uniqueKey) ,'Info');
 
-        console.log("function Content_Image this.fileName:" +this.fileName ,'Info');
+        //console.log("function Content_Image this.fileName:" +this.fileName ,'Info');
 
     } catch (exception) {
          console.log("Content_Image"+ exception, "error");
@@ -54,7 +54,7 @@ Content_Image.prototype.showContent = function(func) {
         //buraya path local path verilmeli    
         
         var fileUrlEdits = Publisher.playerGlobalData.replace(/\\/g, '/')  + _this.fileName;
-        console.log("Image.basePath2:" +fileUrlEdits);
+        //console.log("Image.basePath2:" +fileUrlEdits);
 
         $("#content-" + _this.playlistContentUniqueKey).css('background-image', "url('{0}')".pxcFormatString(fileUrlEdits));
 
@@ -91,7 +91,7 @@ Content_Image.prototype.showContent = function(func) {
 };
 
 Content_Image.prototype.deleteUIElement = function() {
-    console.log("*********Content_Image.prototype.deleteUIElement: ",this.playlistContentUniqueKey);
+    //console.log("*********Content_Image.prototype.deleteUIElement: ",this.playlistContentUniqueKey);
     $("#content-" + this.playlistContentUniqueKey).remove();
 };
 
