@@ -146,7 +146,7 @@ Content_Video.prototype.deleteContent = function() {
 };
 
 Content_Video.prototype.generateUIElement = function() {
-    return '<div id="content-{0}" style="z-index:{3};width:{4}px; height:{5}px; position:relative"><video  id="content-{0}-video" class="playing-platform-content playing-platform-content-video" style="width:{4}px; height:{5}px; object-fit: fill; background-color:black; display:none" data-videorepeatcount="1"></video></div>'.pxcFormatString(this.playlistContentUniqueKey, this.y, this.x, Tools.defaultValue(this.z, 0), this.width, this.height);
+    return '<div id="content-{0}" style="z-index:{3};width:{4}px; height:{5}px; position:relative"><video muted id="content-{0}-video" class="playing-platform-content playing-platform-content-video" style="width:{4}px; height:{5}px; object-fit: fill; background-color:black; display:none" data-videorepeatcount="1"></video></div>'.pxcFormatString(this.playlistContentUniqueKey, this.y, this.x, Tools.defaultValue(this.z, 0), this.width, this.height);
 };
 Content_Video.prototype.generateScreenShotElement = function() {
     return '<div id="player-image">' +
