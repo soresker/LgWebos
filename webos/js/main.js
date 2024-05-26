@@ -294,9 +294,12 @@ function messageCheck(msg) {
 					downloadDir = contentsDir;
 					downloadName = "";
 					starting = true;
+					fontUrlArray = globalPublishment.fontsUrlArray;
+					downloadAction(fontUrlArray);
+
 					$(".download-bar").show();
 					downloadNext();
-	
+					
 					//showPlayer();
 				})
 
@@ -791,7 +794,7 @@ function executeReceiveCommands(commands) {
 	{
 		console.info("Player GetNewsData geldi"); 
 		setForKey(globalPublishment.templates[0].frames, "news",  "tagId","contents",commands.jsonData.tagId, commands.jsonData.content, function(response) {
-		if (response.success) {
+		if (response) {
 			console.log("Okk GetNewsData kardi");
 			changeActiveDatas = true;
 		} else {
@@ -808,7 +811,7 @@ function executeReceiveCommands(commands) {
 	{
 		console.info("Player GetCurrencies Ayarlari geldi"); 
 		setForKey(globalPublishment.templates[0].frames, "currency",  "currencyId","currencyValue",commands.jsonData.currencyId, commands.jsonData.currencyValue, function(response) {
-		if (response.success) {
+		if (response) {
 			console.log("Okk GetCurrencies kardi");
 			changeActiveDatas = true;
 		} else {
@@ -1517,7 +1520,7 @@ function setWeatherForecast(weatherArray) {
 
 	// "date" degeri icin ayarlama
 	SetForKeyWeather(globalPublishment.templates[0].frames, "weather", "weatherValue", date, "date", dayValue, function(response) {
-		if (response.success) {
+		if (response) {
 			console.log("date WeatherForecast degeri degistirildi");
 			changeActiveDatas = true;
 		} else {
@@ -1527,7 +1530,7 @@ function setWeatherForecast(weatherArray) {
 
 	// "min" degeri icin ayarlama
 	SetForKeyWeather(globalPublishment.templates[0].frames, "weather", "weatherValue", min, "min", dayValue, function(response) {
-		if (response.success) {
+		if (response) {
 			console.log("min WeatherForecast degeri degistirildi");
 			changeActiveDatas = true;
 		} else {
@@ -1537,7 +1540,7 @@ function setWeatherForecast(weatherArray) {
 
 	// "max" degeri icin ayarlama
 	SetForKeyWeather(globalPublishment.templates[0].frames, "weather", "weatherValue", max, "max", dayValue, function(response) {
-		if (response.success) {
+		if (response) {
 			console.log("max WeatherForecast degeri degistirildi");
 			changeActiveDatas = true;
 		} else {
@@ -1547,7 +1550,7 @@ function setWeatherForecast(weatherArray) {
 
 	// "icon" degeri icin ayarlama
 	SetForKeyWeather(globalPublishment.templates[0].frames, "weather", "weatherValue", icon, "icon", dayValue, function(response) {
-		if (response.success) {
+		if (response) {
 			console.log("icon WeatherForecast degeri degistirildi");
 			changeActiveDatas = true;
 		} else {
