@@ -6,11 +6,7 @@ function Content_Label(contentInfo, parentFrameObject) {
         this.height = parentFrameObject.height;
         this.x = 0;
         this.y = 0;
-        this.refreshTimer = 0;
-        this.isCurrentDtSet = false;
-        this.currentDtPending = false;
-        this.timerCurrentDt = 0;
-
+  
 
         this.value = contentInfo.getTypeContentProperty("content");
         this.backgroundColor = contentInfo.getTypeContentProperty("backgroundColor");
@@ -126,7 +122,7 @@ Content_Label.prototype.showContent = function (func) {
         func();
 
     } catch (exception) {
-        console.log("Content_Label.ShowContent", exception);
+        console.log("ERRRO Content_Label.ShowContent", exception);
         this.parentFrameObject.setCurrentContentValidity(false);
         this.contentEnded();
         return;
