@@ -151,7 +151,7 @@ Content_Date.prototype.showContent = function (func) {
             }
             else{
 
-                var fontUrl = fontPath + this.textFontFamily + ".otf"; // Font dosyasının yolu
+                var fontUrl = fontPath + this.textFontFamily + "."+fontExtension; // Font dosyasının yolu
                 //console.log("Content_Date FONT this.value" + fontUrl);
 
                 var fontFace = new FontFace(this.textFontFamily, 'url(' + fontUrl + ')'); // FontFace nesnesi oluştur

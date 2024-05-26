@@ -82,7 +82,7 @@ Content_Currency.prototype.showContent = function (func) {
             }
             else{
 
-                var fontUrl = fontPath + this.textFontFamily + ".otf"; // Font dosyasının yolu
+                var fontUrl = fontPath + this.textFontFamily + "."+fontExtension; // Font dosyasının yolu
                 //console.log("Content_Currency FONT this.value" + fontUrl);
 
                 var fontFace = new FontFace(this.textFontFamily, 'url(' + fontUrl + ')'); // FontFace nesnesi oluştur

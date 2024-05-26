@@ -32,6 +32,7 @@ var starting = false;
 var fontUrlArray  = "";
 var weatherOneRequest = false;
 var changeActiveDatas = false;
+var fontExtension = "";
 
 //var keyboardControl = new Keyboard_Control();
 
@@ -241,7 +242,7 @@ window.onload = function () {
 
 	checkWifi();
 	clearScreenInterval();
-	sendHardbitSystemInfo();
+	//sendHardbitSystemInfo();
 	sendSystemInfoInterval();
 	checkPeriodPublishment();
 	
@@ -404,11 +405,13 @@ function downloadForPublish(camePeriod) {
 					urlArray = globalPublishment.filesUrlArray;
 					Logger.sendMessage("publishmentContent urlArray" + urlArray);
 					downloadedContentList = globalPublishment.filesUrlArray;
+					fontUrlArray = globalPublishment.fontsUrlArray;
 					downloadDir = contentsDir;
 					downloadName = "";
 					starting = false;
 					$(".download-bar").show();
 					downloadNext();
+					downloadAction(fontUrlArray);
 
 				}		
 
@@ -437,12 +440,13 @@ function downloadForPublish(camePeriod) {
 						urlArray = globalPublishment.filesUrlArray;
 						Logger.sendMessage("publishmentContent urlArray" + urlArray);
 						downloadedContentList = globalPublishment.filesUrlArray;
+						fontUrlArray = globalPublishment.fontsUrlArray;
 						downloadDir = contentsDir;
 						downloadName = "";
 						starting = false;
 						$(".download-bar").show();
 						downloadNext();
-		
+						downloadAction(fontUrlArray);
 						//showPlayer();
 					})
 
@@ -557,6 +561,8 @@ function downloadNext() {
 
         $(".download-bar").hide();
         listDir(publishmentsDir);
+		listDir(fontsDir);
+
     }
 }
 
@@ -1055,10 +1061,12 @@ function checkSocketConnection() {
 }
 
 function sendSystemInfoInterval() {
+	
+	sendSystemInfo();
 
 	setInterval(function () {
 		sendSystemInfo()
-	}, 60000);
+	},  30*60*1000);
 
 }
 
@@ -1105,6 +1113,11 @@ function receive_Publishment(publishment) {
 	var temp = [];
 	temp[0] = publishment.jsonData.publishmentUrl;
 	urlArray = temp; //guncelle
+
+	var temp2 = [];
+	temp2[0] = publishment.jsonData.fontsUrlArray;
+	fontUrlArray = temp2; //guncelle
+
 	Logger.sendMessage("BURASI ONEMLI receive_Publishment URL: " + urlArray);
 
 	devicePublishment = WebosSettings.value("Publishment/NewVersion", "");
@@ -1117,6 +1130,7 @@ function receive_Publishment(publishment) {
 		downloadDir = publishmentsDir;
 		downloadName = publishment.jsonData.publishmentName + ".json";
 		downloadForPublish(false);
+		downloadAction(fontUrlArray);
 	}else{
 		Logger.sendMessage("Get Publishment sonrasi DEVAM KE : " + devicePublishment);
 	}
@@ -1627,15 +1641,18 @@ function setWeatherForecast(weatherArray) {
 }
 
 function downloadAction(data) {
-    console.warn("downloadAction FONT: " + name);
+    console.warn("downloadAction FONT: " + data);
 
     for (var index = 0; index < data.length; index++) {
         var urlObj = data[index];
         var url = urlObj.url;
 
-        var name = urlObj.title + ".otf";
+		var parts = url.split(".");
+		fontExtension = parts[parts.length - 1];
 
-        console.warn("Dosya uzantisi alindi: " + name);
+		var name = urlObj.title + "."+fontExtension;
+
+        console.warn("Font Dosya uzantisi adi: " + name);
 
         IsHere(fontsDir + "/" + name, function(exists) {
             if (exists) {
@@ -1644,9 +1661,9 @@ function downloadAction(data) {
                 console.warn("FONT İndiriliyor: " + url);
                 downloadFile(url, fontsDir, name, function(error, data) {
                     if (error) {
-                        console.error(" FONT İndirme sırasında bir hata oluştu:", error);
+                        console.error("FONT İndirme sirasinda bir hata oluştu:", error);
                     } else {
-                        console.log("FONT Dosya başarıyla indirildi:", data);
+                        console.log("FONT Dosya başariyla indirildi:", data);
                     }
                 });
             }

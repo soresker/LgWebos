@@ -5,11 +5,7 @@ function Content_ScrollText(contentInfo, parentFrameObject) {
         this.height = parentFrameObject.height;
         this.x = 0;
         this.y = 0;
-        this.refreshTimer = 0;
-        this.isCurrentDtSet = false;
-        this.currentDtPending = false;
-        this.timerCurrentDt = 0;
-
+     
         this.value = contentInfo.getTypeContentProperty("contents");
         this.backgroundColor = contentInfo.getTypeContentProperty("backgroundColor");
         this.textColor = contentInfo.getTypeContentProperty("color");
@@ -18,9 +14,8 @@ function Content_ScrollText(contentInfo, parentFrameObject) {
         this.textHorizontalAlignment = contentInfo.getTypeContentProperty("align");
         this.textVerticalAlignment = contentInfo.getTypeContentProperty("verticalAlign");
         this.textFontType = contentInfo.getTypeContentProperty("fontType");
-        this.speed = contentInfo.getTypeSpecificProperty("speed");
+        this.speed = 10;//contentInfo.getTypeSpecificProperty("speed");
 
-        this.actualProvider = 0;
         this.frameUniqueKey = parentFrameObject.uniqueKey;
         this.playlistContentUniqueKey = contentInfo.playlistUniqueKey + '-' + Math.floor(Math.random() * 10000);
 
@@ -46,12 +41,12 @@ Content_ScrollText.prototype.showContent = function (func) {
 
             if(this.textFontFamily == "verdana")
             {
-                console.log("Content_Date this.textFontFamily" + this.textFontFamily);
+                console.log("Content_ScrollText this.textFontFamily" + this.textFontFamily);
                 $("#content-" + _this.playlistContentUniqueKey).css("font-family", "{0}".pxcFormatString(this.textFontFamily));
                 _this.createMarquee(_this);
 
             }else{
-                var fontUrl = fontPath + this.textFontFamily + ".otf";
+                var fontUrl = fontPath + this.textFontFamily + "."+fontExtension;
                 var fontFace = new FontFace(this.textFontFamily, 'url(' + fontUrl + ')');
     
                 fontFace.load().then(function(loadedFont) {
@@ -71,7 +66,7 @@ Content_ScrollText.prototype.showContent = function (func) {
         func();
 
     } catch (exception) {
-        console.log("Content_ScrollText.ShowContent", exception);
+        console.log("ERORR Content_ScrollText.ShowContent", exception);
         this.parentFrameObject.setCurrentContentValidity(false);
         this.contentEnded();
         return;
