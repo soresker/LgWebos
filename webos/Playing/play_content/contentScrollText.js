@@ -47,14 +47,29 @@ Content_ScrollText.prototype.showContent = function (func) {
 
             }else{
                 var fontUrl = fontPath + this.textFontFamily + "."+fontExtension;
-                var fontFace = new FontFace(this.textFontFamily, 'url(' + fontUrl + ')');
+
+                if(webOsHardwareVersion <= "2.0")
+                {
     
-                fontFace.load().then(function(loadedFont) {
-                    document.fonts.add(loadedFont);
-                    _this.createMarquee(_this);
-                }).catch(function(error) {
-                    console.error('Content_ScrollText Font yüklenirken hata oluştu:', error);
-                });
+                    var style = document.createElement('style');
+                    style.appendChild(document.createTextNode("@font-face { font-family: '" + this.textFontFamily + "'; src: url('" + fontUrl + "'); }"));
+                    document.head.appendChild(style);
+
+                    // Font-family ayarı
+                    $("#content-" + _this.playlistContentUniqueKey).css("font-family", "'" + this.textFontFamily + "'");
+                    $("#content-" + _this.playlistContentUniqueKey).show();
+    
+                }else{
+
+                    var fontFace = new FontFace(this.textFontFamily, 'url(' + fontUrl + ')');
+        
+                    fontFace.load().then(function(loadedFont) {
+                        document.fonts.add(loadedFont);
+                        _this.createMarquee(_this);
+                    }).catch(function(error) {
+                        console.error('Content_ScrollText Font yüklenirken hata oluştu:', error);
+                    });
+                }
             }
 
         } else {

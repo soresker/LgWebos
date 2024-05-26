@@ -151,9 +151,7 @@ Content_Weather.prototype.showContent = function (func) {
                     });
 
                 }
-                /*
-            
-                */
+                
             }    
        
         }

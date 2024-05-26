@@ -153,6 +153,18 @@ Content_Date.prototype.showContent = function (func) {
 
                 var fontUrl = fontPath + this.textFontFamily + "."+fontExtension; // Font dosyasının yolu
                 //console.log("Content_Date FONT this.value" + fontUrl);
+            if(webOsHardwareVersion <= "2.0")
+            {
+    
+                var style = document.createElement('style');
+                style.appendChild(document.createTextNode("@font-face { font-family: '" + this.textFontFamily + "'; src: url('" + fontUrl + "'); }"));
+                document.head.appendChild(style);
+
+                // Font-family ayarı
+                $("#content-" + _this.playlistContentUniqueKey).css("font-family", "'" + this.textFontFamily + "'");
+                $("#content-" + _this.playlistContentUniqueKey).show();
+
+                }else{    
 
                 var fontFace = new FontFace(this.textFontFamily, 'url(' + fontUrl + ')'); // FontFace nesnesi oluştur
                 var self = this; // Kapsayıcı alanı fonksiyon içinde kullanmak için bir referans
@@ -166,6 +178,7 @@ Content_Date.prototype.showContent = function (func) {
                 }).catch(function(error) {
                     console.error('Content_Date Font yüklenirken hata oluştu:', error);
                 });
+            }
             }    
        
         }

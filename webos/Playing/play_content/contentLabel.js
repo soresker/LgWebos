@@ -105,6 +105,20 @@ Content_Label.prototype.showContent = function (func) {
             }
             else {
                 var fontUrl = fontPath + this.textFontFamily + "."+fontExtension;
+
+            if(webOsHardwareVersion <= "2.0")
+            {
+
+                var style = document.createElement('style');
+                style.appendChild(document.createTextNode("@font-face { font-family: '" + this.textFontFamily + "'; src: url('" + fontUrl + "'); }"));
+                document.head.appendChild(style);
+
+                // Font-family ayarı
+                $("#content-" + _this.playlistContentUniqueKey).css("font-family", "'" + this.textFontFamily + "'");
+                $("#content-" + _this.playlistContentUniqueKey).show();
+    
+               }else{
+
                 var fontFace = new FontFace(this.textFontFamily, 'url(' + fontUrl + ')');
                 var self = this;
                 fontFace.load().then(function(loadedFont) {
@@ -114,6 +128,7 @@ Content_Label.prototype.showContent = function (func) {
                 }).catch(function(error) {
                     console.error('Font yüklenirken hata oluştu:', error);
                 });
+            }
             }    
         }
    
