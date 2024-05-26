@@ -114,7 +114,7 @@ Content_Weather.prototype.showContent = function (func) {
 
             if(this.textFontFamily == "verdana")
             {
-                console.log("Content_Weather this.textFontFamily"+this.textFontFamily);
+                //console.log("Content_Weather this.textFontFamily"+this.textFontFamily);
 
                 $("#content-" + _this.playlistContentUniqueKey).css("font-family", "{0}".pxcFormatString(this.textFontFamily));
             }
@@ -142,7 +142,7 @@ Content_Weather.prototype.showContent = function (func) {
                     // Font yükleme işlemi tamamlandığında
                     fontFace.load().then(function(loadedFont) {
                         document.fonts.add(loadedFont); // Font'u belgeye ekle
-                        console.log("Content_Weather FONT loaddded" + fontUrl);
+                        //console.log("Content_Weather FONT loaddded" + fontUrl);
                         $("#content-" + self.frameUniqueKey + "-span").css("font-family", "'" + self.textFontFamily + "'");
                         $("#content-" + self.frameUniqueKey).show();
     

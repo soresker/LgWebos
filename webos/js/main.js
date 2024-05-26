@@ -21,7 +21,7 @@ var globalPublishmentUrl = "";
 var globalScheduleData = "";
 var devicePublishment = "";
 var cameCheckPublish = false;
-var webosAppVersion = "1.0.117"
+var webosAppVersion = "1.0.118"
 var changeActiveDatas = false;
 var weatherActive = false;
 var currencyActive = false;
@@ -1160,7 +1160,7 @@ function readPulishmentFile(fileName) {
 				}
 			}
 			else {
-				Logger.sendMessage("readFile Error" + rawFile.responseText, "");
+				//Logger.sendMessage("readFile Error" + rawFile.responseText, "");
 			}
 		}
 		rawFile.send(null);
