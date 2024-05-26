@@ -1340,7 +1340,7 @@ function getCurrency(id) {
 	sendSignal(commandMessage.GetNewsData, getNewsData);
   }
 
-function checkForKey(frameData, checkValue, property) {
+  function checkForKey(frameData, checkValue, property) {
     var found = false;
     for (var i = 0; i < frameData.length; i++) {
         var frame = frameData[i];
@@ -1350,13 +1350,11 @@ function checkForKey(frameData, checkValue, property) {
                 if (playlist.contents) {
                     for (var k = 0; k < playlist.contents.length; k++) {
                         var content = playlist.contents[k];
-                        if (content.type && content.type === checkValue) {
-                            if (content.contentProperties) {
-                                var prop = content.contentProperties.find(function(prop) {
-                                    return prop.name === property;
-                                });
-                                if (prop) {
-									console.log("Found " + property + ": " + prop.value);
+                        if (content.type && content.type === checkValue && content.contentProperties) {
+                            for (var l = 0; l < content.contentProperties.length; l++) {
+                                var prop = content.contentProperties[l];
+                                if (prop.name === property) {
+                                    console.log("Found " + property + ": " + prop.value);
                                     if (checkValue == "weather") {
                                         setTimeout(function() {
                                             if (!weatherOneRequest) {
@@ -1376,13 +1374,17 @@ function checkForKey(frameData, checkValue, property) {
                                         }, randomInRange(5, 15) * 1000);
                                     }
                                     found = true;
+                                    break;
                                 }
                             }
                         }
+                        if (found) break;
                     }
                 }
+                if (found) break;
             }
         }
+        if (found) break;
     }
     return found;
 }
@@ -1397,25 +1399,28 @@ function setForKey(frameData, checkValue, property, value, currencyId, newData, 
                 if (playlist.contents) {
                     for (var k = 0; k < playlist.contents.length; k++) {
                         var content = playlist.contents[k];
-                        if (content.type && content.type === checkValue) {
-                            if (content.contentProperties) {
-                                var propId = content.contentProperties.find(function(prop) {
-                                    return prop.name === property && prop.value === currencyId;
-                                });
-                                var propValue = content.contentProperties.find(function(prop) {
-                                    return prop.name === value;
-                                });
-                                if (propId && propValue) {
-									console.log("Found " + property + ": " + propId.value);
-                                    // Değerin kontrolü
-                                    if (propValue.value !== newData) {
-                                        // Yeni değerin atanması
-                                        propValue.value = newData;
-										console.log("Set " + value + " to " + newData);
-                                        success = true;
-                                    } else {
-										console.log("CurrencyValue is already equal to " + newData + ". No change made.");
-                                    }
+                        if (content.type && content.type === checkValue && content.contentProperties) {
+                            var propId = null;
+                            var propValue = null;
+                            for (var l = 0; l < content.contentProperties.length; l++) {
+                                var prop = content.contentProperties[l];
+                                if (prop.name === property && prop.value === currencyId) {
+                                    propId = prop;
+                                }
+                                if (prop.name === value) {
+                                    propValue = prop;
+                                }
+                            }
+                            if (propId && propValue) {
+                                console.log("Found " + property + ": " + propId.value);
+                                // Değerin kontrolü
+                                if (propValue.value !== newData) {
+                                    // Yeni değerin atanması
+                                    propValue.value = newData;
+                                    console.log("Set " + value + " to " + newData);
+                                    success = true;
+                                } else {
+                                    console.log("CurrencyValue is already equal to " + newData + ". No change made.");
                                 }
                             }
                         }
@@ -1441,36 +1446,40 @@ function SetForKeyWeather(frameData, contentType, contentPropName, changeValue, 
                     for (var k = 0; k < playlist.contents.length; k++) {
                         var content = playlist.contents[k];
                         if (content.type && content.type === contentType) {
-							console.log("Playlist '" + playlist.name + "' icinde '" + contentType + "' turunde icerik bulundu.");
+                            //console.log("Playlist '" + playlist.name + "' icinde '" + contentType + "' turunde icerik bulundu.");
                             if (content.contentProperties) {
-                                var propValue = content.contentProperties.find(function(prop) {
-                                    return prop.name === contentPropName;
-                                });
-                                var propType = content.contentProperties.find(function(prop) {
-                                    return prop.name === 'type' && prop.value === changeType;
-                                });
-                                var propDay = content.contentProperties.find(function(prop) {
-                                    return prop.name === 'day' && prop.value === dayValue;
-                                });
+                                var propValue = null;
+                                var propType = null;
+                                var propDay = null;
+                                for (var l = 0; l < content.contentProperties.length; l++) {
+                                    var prop = content.contentProperties[l];
+                                    if (prop.name === contentPropName) {
+                                        propValue = prop;
+                                    } else if (prop.name === 'type' && prop.value === changeType) {
+                                        propType = prop;
+                                    } else if (prop.name === 'day' && prop.value === dayValue) {
+                                        propDay = prop;
+                                    }
+                                }
                                 if (propValue && propType && propDay) {
-									console.log("Ozellik bulundu: '" + propValue.name + "' degeri '" + propValue.value + "', type '" + propType.value + "' ve day '" + propDay.value + "'");
+                                    console.log("Ozellik bulundu: '" + propValue.name + "' degeri '" + propValue.value + "', type '" + propType.value + "' ve day '" + propDay.value + "'");
                                     if (propValue.value !== changeValue) {
                                         propValue.value = changeValue;
-										console.log("'" + contentPropName + "' degeri '" + changeValue + "' olarak ayarlandi.");
+                                        console.log("'" + contentPropName + "' degeri '" + changeValue + "' olarak ayarlandi.");
                                         success = true;
                                     } else {
-										console.log("'" + contentPropName + "' zaten '" + changeValue + "' degerine esit. Degisiklik yapilmadi.");
+                                        console.log("'" + contentPropName + "' zaten '" + changeValue + "' degerine esit. Degisiklik yapilmadi.");
                                     }
                                 } else {
-									if (!propType) {
-										console.log("type '" + changeType + "' degeri bulunamadi.");
-									}
-									if (!propValue) {
-										console.log("contentPropName '" + contentPropName + "' degeri bulunamadi.");
-									}
-									if (!propDay) {
-										console.log("day '" + dayValue + "' degeri bulunamadi.");
-									}									
+                                    if (!propType) {
+                                        //console.log("type '" + changeType + "' degeri bulunamadi.");
+                                    }
+                                    if (!propValue) {
+                                        //console.log("contentPropName '" + contentPropName + "' degeri bulunamadi.");
+                                    }
+                                    if (!propDay) {
+                                        //console.log("day '" + dayValue + "' degeri bulunamadi.");
+                                    }
                                 }
                             }
                         }
@@ -1479,8 +1488,9 @@ function SetForKeyWeather(frameData, contentType, contentPropName, changeValue, 
             }
         }
     }
-    callback( success );
+    callback(success);
 }
+
 
 function setWeatherForecast(weatherArray) {
     for (var index = 0; index < weatherArray.length; index++) {
