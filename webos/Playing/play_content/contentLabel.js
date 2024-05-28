@@ -104,31 +104,14 @@ Content_Label.prototype.showContent = function (func) {
                 $("#content-" + _this.playlistContentUniqueKey).css("font-family", "{0}".pxcFormatString(this.textFontFamily));
             }
             else {
-                var fontUrl = fontPath + this.textFontFamily + "."+fontExtension;
-
-            if(webOsHardwareVersion <= "2.0")
-            {
-
+                var fontUrl = fontPath + this.textFontFamily + "."+fontExtension;           
                 var style = document.createElement('style');
                 style.appendChild(document.createTextNode("@font-face { font-family: '" + this.textFontFamily + "'; src: url('" + fontUrl + "'); }"));
                 document.head.appendChild(style);
-
                 // Font-family ayarı
                 $("#content-" + _this.playlistContentUniqueKey).css("font-family", "'" + this.textFontFamily + "'");
                 $("#content-" + _this.playlistContentUniqueKey).show();
-    
-               }else{
 
-                var fontFace = new FontFace(this.textFontFamily, 'url(' + fontUrl + ')');
-                var self = this;
-                fontFace.load().then(function(loadedFont) {
-                    document.fonts.add(loadedFont);
-                    $("#content-" + self.frameUniqueKey + "-span").css("font-family", "'" + self.textFontFamily + "'");
-                    $("#content-" + self.frameUniqueKey).show();
-                }).catch(function(error) {
-                    console.error('Font yüklenirken hata oluştu:', error);
-                });
-            }
             }    
         }
    
