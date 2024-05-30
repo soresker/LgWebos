@@ -1,3 +1,5 @@
+var result = "";
+
 function Content_ScrollText(contentInfo, parentFrameObject) {
     Content_Abstractor.call(this, contentInfo, parentFrameObject);
     try {
@@ -5,7 +7,8 @@ function Content_ScrollText(contentInfo, parentFrameObject) {
         this.height = parentFrameObject.height;
         this.x = 0;
         this.y = 0;
-     
+
+        this.speed = contentInfo.getTypeContentProperty("speed");     
         this.value = contentInfo.getTypeContentProperty("contents");
         this.backgroundColor = contentInfo.getTypeContentProperty("backgroundColor");
         this.textColor = contentInfo.getTypeContentProperty("color");
@@ -14,10 +17,11 @@ function Content_ScrollText(contentInfo, parentFrameObject) {
         this.textHorizontalAlignment = contentInfo.getTypeContentProperty("align");
         this.textVerticalAlignment = contentInfo.getTypeContentProperty("verticalAlign");
         this.textFontType = contentInfo.getTypeContentProperty("fontType");
-        this.speed = 10;//contentInfo.getTypeSpecificProperty("speed");
 
         this.frameUniqueKey = parentFrameObject.uniqueKey;
         this.playlistContentUniqueKey = contentInfo.playlistUniqueKey + '-' + Math.floor(Math.random() * 10000);
+
+        console.log("Content_ScrollText this.count ", + this.speed);
 
     }
     catch (exception) {
@@ -33,7 +37,18 @@ Content_ScrollText.prototype.showContent = function (func) {
         Content_Abstractor.prototype.showContent.call(this);
         
         var _this = this;
-        Player_Ui_Creator.UIElement.appendHTML("#frame-" + this.frameUniqueKey, this.generateUIElement());
+
+        if(this.speed == "0")
+        {
+            var contentArray = JSON.parse(this.value);
+            result = contentArray.reduce(function(acc, item) {
+                return acc + item.replace(/<\/?p>/g, ''); // <p> etiketlerini kaldır
+            }, '');
+            Player_Ui_Creator.UIElement.appendHTML("#frame-" + this.frameUniqueKey, this.generateUIElementNoSpeed());
+        }
+        else
+            Player_Ui_Creator.UIElement.appendHTML("#frame-" + this.frameUniqueKey, this.generateUIElement());
+
         var fontPath = Publisher.playerGlobalData.replace(/\\/g, '/').replace("/contents/","/fonts/");
 
         // Font yükleme işlemi
@@ -43,7 +58,13 @@ Content_ScrollText.prototype.showContent = function (func) {
             {
                 console.log("Content_ScrollText this.textFontFamily" + this.textFontFamily);
                 $("#content-" + _this.playlistContentUniqueKey).css("font-family", "{0}".pxcFormatString(this.textFontFamily));
-                _this.createMarquee(_this);
+                if(this.speed == "0")
+                {
+                    _this.createMarquee(_this,false);
+
+                }else{
+                    _this.createMarquee(_this,true);
+                }
 
             }else{
                 var fontUrl = fontPath + this.textFontFamily + "."+fontExtension;
@@ -65,7 +86,15 @@ Content_ScrollText.prototype.showContent = function (func) {
         
                     fontFace.load().then(function(loadedFont) {
                         document.fonts.add(loadedFont);
-                        _this.createMarquee(_this);
+
+                        if(this.speed == "0")
+                        {
+                            _this.createMarquee(_this,false);
+        
+                        }else{
+                            _this.createMarquee(_this,true);
+                        }
+
                     }).catch(function(error) {
                         console.error('Content_ScrollText Font yüklenirken hata oluştu:', error);
                     });
@@ -74,7 +103,13 @@ Content_ScrollText.prototype.showContent = function (func) {
 
         } else {
             // Font belirtilmemişse doğrudan marquee oluştur
-            _this.createMarquee(_this);
+            if(this.speed == "0")
+            {
+                _this.createMarquee(_this,false);
+
+            }else{
+                _this.createMarquee(_this,true);
+            }
         }
 
         if (func)
@@ -88,7 +123,7 @@ Content_ScrollText.prototype.showContent = function (func) {
     }
 };
 
-Content_ScrollText.prototype.createMarquee = function (_this) {
+Content_ScrollText.prototype.createMarquee = function (_this,active) {
     var fontWeight = this.textFontType;
     var fontStyle = "normal";
     var textDecoration = "none";
@@ -96,16 +131,26 @@ Content_ScrollText.prototype.createMarquee = function (_this) {
     if (this.isUnderlined)
         textDecoration = "underline";
 
-    var contentArray = JSON.parse(this.value);
-    var result = contentArray.reduce(function(acc, item) {
-        return acc + item.replace(/<\/?p>/g, ''); // <p> etiketlerini kaldır
-    }, '');
-
     var marqueeStyle = "font-weight:" + fontWeight + ";font-style:" + fontStyle + ";font-size:" + this.textSizePixels + ";text-decoration:" + textDecoration + ";color:" + this.textColor + ";";
 
-    $("#content-" + _this.playlistContentUniqueKey).html("");
-    $("#content-" + _this.playlistContentUniqueKey).html('<marquee width="100%" direction="left" scrollamount="' + this.speed + '" height="100px" style="' + marqueeStyle + '">' + result + '</marquee>');
-    $("#content-" + _this.playlistContentUniqueKey).show();
+    if(active)
+    {
+        var contentArray = JSON.parse(this.value);
+        result = contentArray.reduce(function(acc, item) {
+            return acc + item.replace(/<\/?p>/g, ''); // <p> etiketlerini kaldır
+        }, '');
+        
+        $("#content-" + _this.playlistContentUniqueKey).html("");
+        $("#content-" + _this.playlistContentUniqueKey).html('<marquee width="100%" direction="left" scrollamount="' + this.speed + '" height="100px" style="' + marqueeStyle + '">' + result + '</marquee>');
+        $("#content-" + _this.playlistContentUniqueKey).show();
+    }else{
+
+        console.log("result",result);
+
+        $("#content-" + _this.playlistContentUniqueKey).css(marqueeStyle);
+        $("#content-" + _this.playlistContentUniqueKey).show();
+
+    }
 };
 
 Content_ScrollText.prototype.deleteUIElement = function () {
@@ -125,4 +170,15 @@ Content_ScrollText.prototype.generateUIElement = function () {
         Tools.defaultValue(this.z, 0),
         this.width,
         this.height);
+};
+Content_ScrollText.prototype.generateUIElementNoSpeed = function () {
+    console.log("generateUIElementNoSpeed:"+result);
+    return '<div id="content-{0}" class="playing-platform-content playing-common-content-datetime" style="top:{1}px;left:{2}px;z-index:{3};width:{4}px; height:{5}px;"><span id="content-{0}-span" style="width:{4}px; height:{5}px; display:table-cell;">{6}</span></div>'
+        .pxcFormatString(this.playlistContentUniqueKey,
+        this.y,
+        this.x,
+        Tools.defaultValue(this.z, 0),
+        this.width,
+        this.height,
+        result);
 };
