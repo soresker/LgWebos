@@ -57,9 +57,13 @@ Content_ScrollText.prototype.showContent = function (func) {
             if(this.textFontFamily == "verdana")
             {
                 console.log("Content_ScrollText this.textFontFamily" + this.textFontFamily);
-                $("#content-" + _this.playlistContentUniqueKey).css("font-family", "{0}".pxcFormatString(this.textFontFamily));
                 if(this.speed == "0")
                 {
+                    $("#content-" + _this.playlistContentUniqueKey).css("font-family", "{0}".pxcFormatString(this.textFontFamily));
+                    $("#content-" + _this.playlistContentUniqueKey).css("background-color", "{0}".pxcFormatString(this.backgroundColor));
+                    $("#content-" + _this.playlistContentUniqueKey).css("color", "{0}".pxcFormatString(this.textColor));
+                    $("#content-" + _this.playlistContentUniqueKey).css("font-size", this.textSizePixels + "px");
+                    
                     _this.createMarquee(_this,false);
 
                 }else{
