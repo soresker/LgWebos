@@ -494,6 +494,12 @@ Play_Frame.prototype.playNextContent = function (isComeFromEndOfAContent) {
                 this.currentContent = new Content_Stream(contentInfo, this );
             }
            break;   
+           case Player.Content.Type.Price:    
+           {
+               console.log("new Content.Price : "+ contentInfo)
+               this.currentContent = new Content_Price(contentInfo, this );
+           }
+           break;            
             
             default:
                 break;

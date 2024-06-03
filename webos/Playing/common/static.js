@@ -15,7 +15,8 @@ var Player = {
             Yandex : "yandex",
             Audio : "audio",
             News : "news",
-            Stream : "stream"
+            Stream : "stream",
+            Price: "price",
         }
     },
 
