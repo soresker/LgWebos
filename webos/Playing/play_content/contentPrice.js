@@ -42,7 +42,7 @@ Content_Price.prototype.showContent = function (func) {
         var _this = this;
 
         Player_Ui_Creator.UIElement.appendHTML("#frame-" + this.frameUniqueKey, this.generateUIElement());
-        let fontPath = Publisher.playerGlobalData.replace(/\\/g, '/').replace("/Files/","/Fonts/");
+        var fontPath = Publisher.playerGlobalData.replace(/\\/g, '/').replace("/contents/","/fonts/");
 
         if (!Tools.isEmptyString(this.backgroundColor)) {
             $("#content-" + _this.playlistContentUniqueKey).css("background-color", "{0}".pxcFormatString(this.backgroundColor));
