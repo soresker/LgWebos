@@ -258,7 +258,41 @@ window.onload = function () {
 	setTimeout(function() {
 		readPublishmentForMessage();
 	}, 10000);
+
+	/*var timeoutDuration = getMillisecondsUntilFourAM();
+
+	// Zamanlayıcıyı ayarla ve 4 AM'e kadar olan süreyi hesapla
+	setTimeout(function() {
+		restartDevice();
+
+		// Yeniden başlatma komutunu her 24 saatte bir tekrar çalıştır
+		setInterval(restartDevice, 24 * 60 * 60 * 1000);
+	}, timeoutDuration);
+
+	console.log(`Yeniden başlatma komutu ${timeoutDuration / 1000 / 60} dakika sonra çalışacak.`);
+	*/
 }
+
+function restartDevice() {
+	WebosDevice.deviceRestart();
+}
+
+// Şu anki zamanı al ve gece 4'e kadar olan süreyi hesapla
+function getMillisecondsUntilFourAM() {
+    var now = new Date();
+    var nextFourAM = new Date(now.getTime());
+    
+    // Sabaha karşı 4'ü ayarla
+    nextFourAM.setHours(4, 0, 0, 0);
+
+    // Eğer şu anki zaman sabah 4'ü geçtiyse, bir sonraki günün sabah 4'ünü hedefle
+    if (now.getTime() > nextFourAM.getTime()) {
+        nextFourAM.setDate(nextFourAM.getDate() + 1);
+    }
+
+    return nextFourAM.getTime() - now.getTime(); // Mili saniye cinsinden süre
+}
+
 
 function messageCheck(msg) {
 
