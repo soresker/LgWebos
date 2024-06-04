@@ -8,12 +8,12 @@ function Content_ScrollText(contentInfo, parentFrameObject) {
         this.x = 0;
         this.y = 0;
 
-        this.speed = contentInfo.getTypeContentProperty("speed");     
+        this.speed = Number(contentInfo.getTypeContentProperty("speed"));
         this.value = contentInfo.getTypeContentProperty("contents");
         this.backgroundColor = contentInfo.getTypeContentProperty("backgroundColor");
         this.textColor = contentInfo.getTypeContentProperty("color");
         this.textFontFamily = contentInfo.getTypeContentProperty("fontFamily");
-        this.textSizePixels = contentInfo.getTypeContentProperty("fontSize");
+        this.textSizePixels = Number(contentInfo.getTypeContentProperty("fontSize"));
         this.textHorizontalAlignment = contentInfo.getTypeContentProperty("align");
         this.textVerticalAlignment = contentInfo.getTypeContentProperty("verticalAlign");
         this.textFontType = contentInfo.getTypeContentProperty("fontType");
@@ -21,13 +21,15 @@ function Content_ScrollText(contentInfo, parentFrameObject) {
         this.frameUniqueKey = parentFrameObject.uniqueKey;
         this.playlistContentUniqueKey = contentInfo.playlistUniqueKey + '-' + Math.floor(Math.random() * 10000);
 
-        console.log("Content_ScrollText this.count ", + this.speed);
-
+        console.log("Content_ScrollText this.textFontFamily: "+this.textFontFamily);
+        console.log("Content_ScrollText this.textFontType"+ this.textFontType);
+        console.log("Content_ScrollText this.speed" + this.speed);
     }
     catch (exception) {
-        console.log("Content_ScrollText EX", + exception);
+        console.log("Content_ScrollText EX", exception);
     }
 }
+
 
 Content_ScrollText.prototype = Object.create(Content_Abstractor.prototype);
 Content_ScrollText.prototype.constructor = Content_ScrollText;
@@ -38,44 +40,38 @@ Content_ScrollText.prototype.showContent = function (func) {
         
         var _this = this;
 
-        if(this.speed == "0")
-        {
+        if(this.speed === 0) {
             var contentArray = JSON.parse(this.value);
             result = contentArray.reduce(function(acc, item) {
                 return acc + item.replace(/<\/?p>/g, ''); // <p> etiketlerini kaldır
             }, '');
             Player_Ui_Creator.UIElement.appendHTML("#frame-" + this.frameUniqueKey, this.generateUIElementNoSpeed());
-        }
-        else
+        } else {
             Player_Ui_Creator.UIElement.appendHTML("#frame-" + this.frameUniqueKey, this.generateUIElement());
+        }
 
         var fontPath = Publisher.playerGlobalData.replace(/\\/g, '/').replace("/contents/","/fonts/");
 
         // Font yükleme işlemi
         if (!Tools.isEmptyString(this.textFontFamily)) {
 
-            if(this.textFontFamily == "verdana")
-            {
-                console.log("Content_ScrollText this.textFontFamily" + this.textFontFamily);
-                if(this.speed == "0")
-                {
-                    $("#content-" + _this.playlistContentUniqueKey).css("font-family", "{0}".pxcFormatString(this.textFontFamily));
-                    $("#content-" + _this.playlistContentUniqueKey).css("background-color", "{0}".pxcFormatString(this.backgroundColor));
-                    $("#content-" + _this.playlistContentUniqueKey).css("color", "{0}".pxcFormatString(this.textColor));
+            if(this.textFontFamily === "verdana") {
+                console.log("Content_ScrollText this.textFontFamily", this.textFontFamily);
+                if(this.speed === 0) {
+                    $("#content-" + _this.playlistContentUniqueKey).css("font-weight", this.textFontType);
+                    $("#content-" + _this.playlistContentUniqueKey).css("font-family", this.textFontFamily);
+                    $("#content-" + _this.playlistContentUniqueKey).css("background-color", this.backgroundColor);
+                    $("#content-" + _this.playlistContentUniqueKey).css("color", this.textColor);
                     $("#content-" + _this.playlistContentUniqueKey).css("font-size", this.textSizePixels + "px");
                     
-                    _this.createMarquee(_this,false);
-
-                }else{
-                    _this.createMarquee(_this,true);
+                    _this.createMarquee(_this, false);
+                } else {
+                    _this.createMarquee(_this, true);
                 }
+            } else {
+                var fontUrl = fontPath + this.textFontFamily + "." + fontExtension;
 
-            }else{
-                var fontUrl = fontPath + this.textFontFamily + "."+fontExtension;
-
-                if(webOsHardwareVersion <= "2.0")
-                {
-    
+                if(webOsHardwareVersion <= "2.0") {
                     var style = document.createElement('style');
                     style.appendChild(document.createTextNode("@font-face { font-family: '" + this.textFontFamily + "'; src: url('" + fontUrl + "'); }"));
                     document.head.appendChild(style);
@@ -83,51 +79,42 @@ Content_ScrollText.prototype.showContent = function (func) {
                     // Font-family ayarı
                     $("#content-" + _this.playlistContentUniqueKey).css("font-family", "'" + this.textFontFamily + "'");
                     $("#content-" + _this.playlistContentUniqueKey).show();
-    
-                }else{
-
+                } else {
                     var fontFace = new FontFace(this.textFontFamily, 'url(' + fontUrl + ')');
-        
+
                     fontFace.load().then(function(loadedFont) {
                         document.fonts.add(loadedFont);
 
-                        if(this.speed == "0")
-                        {
-                            _this.createMarquee(_this,false);
-        
-                        }else{
-                            _this.createMarquee(_this,true);
+                        if(_this.speed === 0) {
+                            _this.createMarquee(_this, false);
+                        } else {
+                            _this.createMarquee(_this, true);
                         }
-
                     }).catch(function(error) {
                         console.error('Content_ScrollText Font yüklenirken hata oluştu:', error);
                     });
                 }
             }
-
         } else {
             // Font belirtilmemişse doğrudan marquee oluştur
-            if(this.speed == "0")
-            {
-                _this.createMarquee(_this,false);
-
-            }else{
-                _this.createMarquee(_this,true);
+            if(this.speed === 0) {
+                _this.createMarquee(_this, false);
+            } else {
+                _this.createMarquee(_this, true);
             }
         }
 
-        if (func)
-        func();
-
+        if (func) func();
     } catch (exception) {
-        console.log("ERORR Content_ScrollText.ShowContent", exception);
+        console.log("ERROR Content_ScrollText.ShowContent", exception);
         this.parentFrameObject.setCurrentContentValidity(false);
         this.contentEnded();
         return;
     }
 };
 
-Content_ScrollText.prototype.createMarquee = function (_this,active) {
+
+Content_ScrollText.prototype.createMarquee = function (_this, active) {
     var fontWeight = this.textFontType;
     var fontStyle = "normal";
     var textDecoration = "none";
@@ -135,10 +122,9 @@ Content_ScrollText.prototype.createMarquee = function (_this,active) {
     if (this.isUnderlined)
         textDecoration = "underline";
 
-    var marqueeStyle = "font-weight:" + fontWeight + ";font-style:" + fontStyle + ";font-size:" + this.textSizePixels + ";text-decoration:" + textDecoration + ";color:" + this.textColor + ";";
+    var marqueeStyle = "font-weight:" + fontWeight + ";font-style:" + fontStyle + ";font-size:" + this.textSizePixels + "px;text-decoration:" + textDecoration + ";color:" + this.textColor + ";";
 
-    if(active)
-    {
+    if(active) {
         var contentArray = JSON.parse(this.value);
         result = contentArray.reduce(function(acc, item) {
             return acc + item.replace(/<\/?p>/g, ''); // <p> etiketlerini kaldır
@@ -147,13 +133,15 @@ Content_ScrollText.prototype.createMarquee = function (_this,active) {
         $("#content-" + _this.playlistContentUniqueKey).html("");
         $("#content-" + _this.playlistContentUniqueKey).html('<marquee width="100%" direction="left" scrollamount="' + this.speed + '" height="100px" style="' + marqueeStyle + '">' + result + '</marquee>');
         $("#content-" + _this.playlistContentUniqueKey).show();
-    }else{
+    } else {
+        console.log("result", result);
 
-        console.log("result",result);
-
-        $("#content-" + _this.playlistContentUniqueKey).css(marqueeStyle);
+        $("#content-" + _this.playlistContentUniqueKey).css("font-weight", _this.textFontType);
+        $("#content-" + _this.playlistContentUniqueKey).css("font-family", _this.textFontFamily);
+        $("#content-" + _this.playlistContentUniqueKey).css("background-color", _this.backgroundColor);
+        $("#content-" + _this.playlistContentUniqueKey).css("color", _this.textColor);
+        $("#content-" + _this.playlistContentUniqueKey).css("font-size", _this.textSizePixels + "px");
         $("#content-" + _this.playlistContentUniqueKey).show();
-
     }
 };
 
