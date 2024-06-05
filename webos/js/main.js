@@ -417,10 +417,11 @@ function downloadForPublish(camePeriod) {
 		Logger.sendMessage("download complated all files ✅");
 
 		//this.fsync();
+		/*
 		setTimeout(function () {
 			$("#screen-shot-image").hide();
 		}, 2000);
-
+		*/
 		if(camePeriod == true)
 		{
 
