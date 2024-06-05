@@ -19,8 +19,6 @@ Publishment_Reader.parseLatestPublishment = function (data) {
         (!currentPublishment.calendar || currentPublishment.calendar.length == 0) &&
         (!currentPublishment.templates || currentPublishment.templates.length == 0)
     ) {
-        Tools.showImage(); // Error durumu aslında
-
         //console.log("Publishmentta SORUN VAR templates: "+currentPublishment.templates);
         setTimeout(function() {sendConsoleLog("Publishmentta SORUN VAR templates yok bos yayin: ");}, 5000);
         //Tools.showImage(); //error durumu aslinda

@@ -105,17 +105,21 @@ function startSchedule(shouldStart) {
     }
 }
 
-function createDefaultSchedule(callback) {
+function newDefaultSchedule(callback) {
+    var allData = [];
+    // Sets days
     var days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-    var defaultSchedule = [];
 
-    for (var i = 0; i < days.length; i++) {
-        defaultSchedule.push({
-            startTime: "08:00:00",
-            endTime: "01:00:00",
-            day: days[i]
-        });
+    for (var index = 0; index < days.length; index++) {
+        // Sets data
+        var data = {
+            startTime: "00:00:00",
+            endTime: "23:59:00",
+            day: days[index]
+        };
+        // pushing data to empty array
+        allData.push(data);
     }
 
-    callback(defaultSchedule);
+    callback(allData);
 }
