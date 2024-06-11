@@ -329,7 +329,9 @@ function messageCheck(msg) {
 					downloadName = "";
 					starting = true;
 					fontUrlArray = globalPublishment.fontsUrlArray;
-					downloadAction(fontUrlArray);
+
+					if (fontUrlArray.length > 0)
+						downloadAction(fontUrlArray);
 
 					$(".download-bar").show();
 					downloadNext();
@@ -449,7 +451,8 @@ function downloadForPublish(camePeriod) {
 					starting = false;
 					$(".download-bar").show();
 					downloadNext();
-					downloadAction(fontUrlArray);
+					if (fontUrlArray.length > 0)
+						downloadAction(fontUrlArray);
 
 				}		
 
@@ -484,7 +487,8 @@ function downloadForPublish(camePeriod) {
 						starting = false;
 						$(".download-bar").show();
 						downloadNext();
-						downloadAction(fontUrlArray);
+						if (fontUrlArray.length > 0)
+							downloadAction(fontUrlArray);
 						//showPlayer();
 					})
 
@@ -975,7 +979,8 @@ function fetchPublishment(readPublishment) {
 	downloadName = "";
 	$(".download-bar").show();
 	downloadNext();
-	downloadAction(fontUrlArray);
+	if (fontUrlArray.length > 0)
+		downloadAction(fontUrlArray);
 	Logger.sendMessage("fetchPublishment download baslayacak");
 
 }
@@ -1168,7 +1173,8 @@ function receive_Publishment(publishment) {
 		downloadDir = publishmentsDir;
 		downloadName = publishment.jsonData.publishmentName + ".json";
 		downloadForPublish(false);
-		downloadAction(fontUrlArray);
+		if (fontUrlArray.length > 0)
+			downloadAction(fontUrlArray);
 	}else{
 		Logger.sendMessage("Get Publishment sonrasi DEVAM KE : " + devicePublishment);
 	}
