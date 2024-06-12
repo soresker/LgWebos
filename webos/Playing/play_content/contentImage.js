@@ -41,7 +41,7 @@ Content_Image.prototype.constructor = Content_Image;
 
 Content_Image.prototype.showContent = function(func) {
 
-    setTimeout(function() { $("#frame-" + this.frameUniqueKey).addClass('bg-black'); }, 2000)
+    //setTimeout(function() { $("#frame-" + this.frameUniqueKey).addClass('bg-black'); }, 2000)
 
     Content_Abstractor.prototype.showContent.call(this);
 
