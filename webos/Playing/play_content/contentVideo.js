@@ -85,7 +85,7 @@ Content_Video.prototype.showContent = function(func) {
         var fileUrlEdits = Publisher.playerGlobalData.replace(/\\/g, '/')  + this.fileName;
 
         $(this.videoSelector).attr('src',fileUrlEdits);
-        var video = document.getElementById("content-" + this.playlistContentUniqueKey + "-video");
+        //var video = document.getElementById("content-" + this.playlistContentUniqueKey + "-video");
         //console.log("Video.basePath2:" +fileUrlEdits);
 
         if (this.settingSeekStart)
@@ -119,12 +119,12 @@ Content_Video.prototype.deleteUIElement = function() {
 
    //console.log("Video deleteUIElement "+ "info");
     try {
-        var video = document.getElementById("content-" + this.playlistContentUniqueKey + "-video");
-        this.removeAllListeners(video, 'timeupdate');
+        //var video = document.getElementById("content-" + this.playlistContentUniqueKey + "-video");
+        //this.removeAllListeners(video, 'timeupdate');
 
     } catch (exception) {
-       //console.log(" exception Video deleteUIElement :" + exception, "error");
-       //console.log("exception  Content_Video.deleteUIElement",  + exception,"error");
+       console.log(" exception Video deleteUIElement :" + exception, "error");
+       console.log("exception  Content_Video.deleteUIElement",  + exception,"error");
         this.parentFrameObject.setCurrentContentValidity(false);
     } finally {}
 };
