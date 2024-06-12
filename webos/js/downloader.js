@@ -83,9 +83,9 @@
             destination: normalizePath(TO_PATH) + '.tmp'
         };
 
-        Logger.sendMessage("extractFileFromPathtTO_PATH5:"+options.source);
-        Logger.sendMessage("extractFileFromPathtFROM_URL5:"+options.destination);
-        Logger.sendMessage("extractFileFromPatht5:"+filename);
+        //Logger.sendMessage("extractFileFromPathtTO_PATH5:"+options.source);
+        //Logger.sendMessage("extractFileFromPathtFROM_URL5:"+options.destination);
+        //Logger.sendMessage("extractFileFromPatht5:"+filename);
 
         that.STORAGE.copyFile( onSuccessDownload , onErrorDownload , options );
     }

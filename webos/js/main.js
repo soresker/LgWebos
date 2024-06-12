@@ -21,7 +21,7 @@ var globalPublishmentUrl = "";
 var globalScheduleData = "";
 var devicePublishment = "";
 var cameCheckPublish = false;
-var webosAppVersion = "1.0.126"
+var webosAppVersion = "1.0.127"
 var changeActiveDatas = false;
 var weatherActive = false;
 var currencyActive = false;
@@ -321,9 +321,9 @@ function messageCheck(msg) {
 				
 				this.readPulishmentFile(path).then(function (publishmentContent) {
 					globalPublishment = JSON.parse(publishmentContent);
-					Logger.sendMessage("publishmentContent" + publishmentContent);
+					//Logger.sendMessage("publishmentContent" + publishmentContent);
 					urlArray = globalPublishment.filesUrlArray;
-					Logger.sendMessage("publishmentContent urlArray" + urlArray);
+					//Logger.sendMessage("publishmentContent urlArray" + urlArray);
 					downloadedContentList = globalPublishment.filesUrlArray;
 					downloadDir = contentsDir;
 					downloadName = "";
@@ -441,9 +441,9 @@ function downloadForPublish(camePeriod) {
 					return;	
 				}else{
 
-					Logger.sendMessage("publishmentContent" + publishmentContent);
+					//Logger.sendMessage("publishmentContent" + publishmentContent);
 					urlArray = globalPublishment.filesUrlArray;
-					Logger.sendMessage("publishmentContent urlArray" + urlArray);
+					//Logger.sendMessage("publishmentContent urlArray" + urlArray);
 					downloadedContentList = globalPublishment.filesUrlArray;
 					fontUrlArray = globalPublishment.fontsUrlArray;
 					downloadDir = contentsDir;
@@ -466,7 +466,7 @@ function downloadForPublish(camePeriod) {
 				WebosSettings.setValue("Publishment/OldVersion", globalPublishmentName);
 				WebosSettings.setValue("Publishment/PublishmentUrl", globalPublishmentUrl);
 
-				Logger.sendMessage("YENI PublishmentUrl ✅" +globalPublishmentUrl);
+				//Logger.sendMessage("YENI PublishmentUrl ✅" +globalPublishmentUrl);
 				Logger.sendMessage("YENI Publisment Download edildi ✅" +globalPublishmentName);
 
 				if(cameCheckPublish == false)
@@ -477,9 +477,9 @@ function downloadForPublish(camePeriod) {
 					this.readPulishmentFile(globalPublishmentName+".json").then(function (publishmentContent) {
 
 						globalPublishment = JSON.parse(publishmentContent);
-						Logger.sendMessage("publishmentContent" + publishmentContent);
+						//Logger.sendMessage("publishmentContent" + publishmentContent);
 						urlArray = globalPublishment.filesUrlArray;
-						Logger.sendMessage("publishmentContent urlArray" + urlArray);
+						//Logger.sendMessage("publishmentContent urlArray" + urlArray);
 						downloadedContentList = globalPublishment.filesUrlArray;
 						fontUrlArray = globalPublishment.fontsUrlArray;
 						downloadDir = contentsDir;
@@ -537,8 +537,8 @@ function downloadNext() {
         var fileName = getFileExtensionUrl(currentFile.url);
         var filePath = downloadDir + fileName;
 
-		Logger.sendMessage('download fileName:' +fileName);
-		Logger.sendMessage('download filePath:' +filePath);
+		//Logger.sendMessage('download fileName:' +fileName);
+		//Logger.sendMessage('download filePath:' +filePath);
 
         fileExists(filePath, currentFile.fileSize, function (fileExistsError, exists, mismatch) {
             if (fileExistsError || !exists || mismatch) {
@@ -556,8 +556,8 @@ function downloadNext() {
 							downloadNext();
 						}, 1000);
                     } else {
-                        Logger.sendMessage('Download complete: ' + (currentIndex + 1) + '/' + urlArray.length + ' 😃');
-                        sendConsoleLog("Download complete: " + (currentIndex + 1) + "/" + urlArray.length);
+                        //Logger.sendMessage('Download complete: ' + (currentIndex + 1) + '/' + urlArray.length + ' 😃');
+                        //sendConsoleLog("Download complete: " + (currentIndex + 1) + "/" + urlArray.length);
                     }
                     $(".download-bar").html("Downloading " + (currentIndex + 1) + "/" + urlArray.length);
                     downloadNext();
