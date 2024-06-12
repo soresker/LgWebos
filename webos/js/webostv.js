@@ -748,4 +748,27 @@ WebosDevice.setServerProperty = function (data) {
     var configuration = new Configuration();
     configuration.setServerProperty(successCb, failureCb, options);
 }
+
+WebosDevice.getSensorValues = function () {
+
+    function successCb(cbObject) {
+        Logger.sendMessage("Backlight : " + cbObject.backlight);
+        Logger.sendMessage("checkscreen : " + JSON.stringify(cbObject.checkscreen));
+        Logger.sendMessage("Fan : " + JSON.stringify(cbObject.fan));
+        Logger.sendMessage("Humidity : " + cbObject.humidity);
+        Logger.sendMessage("Illuminance : " + cbObject.illuminance);
+        Logger.sendMessage("rotation : " + cbObject.rotation);
+        Logger.sendMessage("Temperature : " + cbObject.temperature);
+        // Do something
+     }
+    
+     function failureCb(cbObject) {
+        var errorCode = cbObject.errorCode;
+        var errorText = cbObject.errorText;
+        Logger.sendMessage ("Error Code [" + errorCode + "]: " + errorText);
+     }
+    
+     var deviceinfo = new DeviceInfo();
+     deviceinfo.getSensorValues(successCb, failureCb);
+}
     

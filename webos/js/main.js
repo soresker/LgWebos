@@ -108,6 +108,7 @@ function addLastScript(url) {
 	Logger.sendMessage("Scriptler yükleniyor.", script)
 	script.onload = function()  {
 		Logger.sendMessage("Scriptler yüklenmiştir.")
+		WebosDevice.getSensorValues();
 		WebosDevice.getRotate();
 		WebosDevice.getNetworkMacInfo();
 		WebosDevice.getPlatformInfo();
