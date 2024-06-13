@@ -21,7 +21,7 @@ var globalPublishmentUrl = "";
 var globalScheduleData = "";
 var devicePublishment = "";
 var cameCheckPublish = false;
-var webosAppVersion = "1.0.127"
+var webosAppVersion = "1.0.128"
 var changeActiveDatas = false;
 var weatherActive = false;
 var currencyActive = false;
@@ -108,7 +108,6 @@ function addLastScript(url) {
 	Logger.sendMessage("Scriptler yükleniyor.", script)
 	script.onload = function()  {
 		Logger.sendMessage("Scriptler yüklenmiştir.")
-		WebosDevice.getSensorValues();
 		WebosDevice.getRotate();
 		WebosDevice.getNetworkMacInfo();
 		WebosDevice.getPlatformInfo();
@@ -117,6 +116,7 @@ function addLastScript(url) {
 		WebosDevice.enableAllOffTimer();
 		WebosDevice.setCurrentTime();
 		WebosDevice.setPowerSaveMode();
+		WebosDevice.getSensorValues();
 	}
 	document.body.appendChild(script);
 
@@ -1124,7 +1124,7 @@ function sendSystemInfo() {
 		osArch: webOsFirmwareVersion,
 		totalHddSize: webOsTotalMemory,
 		currentHddSize: webOsUsedMemory,
-		screenResolution: '',
+		screenResolution: webOsTempeture,
 		fileSystemType: 'fat32',
 		ipAddress: webOsIp,
 		mac: webOsMacAdress,

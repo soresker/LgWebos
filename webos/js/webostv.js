@@ -13,6 +13,7 @@ var webOsTotalMemory = "";
 var webOsUsedMemory = "";
 var webOsHardwareVersion = "";
 var webOsFirmwareVersion = "";
+var webOsTempeture = "";
 
 var isInternetActive = false;
 var webOsIp = "";
@@ -759,6 +760,8 @@ WebosDevice.getSensorValues = function () {
         Logger.sendMessage("Illuminance : " + cbObject.illuminance);
         Logger.sendMessage("rotation : " + cbObject.rotation);
         Logger.sendMessage("Temperature : " + cbObject.temperature);
+
+        webOsTempeture = cbObject.temperature;
         // Do something
      }
     
