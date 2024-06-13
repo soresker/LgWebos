@@ -21,7 +21,7 @@ var globalPublishmentUrl = "";
 var globalScheduleData = "";
 var devicePublishment = "";
 var cameCheckPublish = false;
-var webosAppVersion = "1.0.128"
+var webosAppVersion = "1.0.129"
 var changeActiveDatas = false;
 var weatherActive = false;
 var currencyActive = false;
@@ -589,7 +589,7 @@ function downloadNext() {
 			{
                 Logger.sendMessage("CIHAZ KAPALI YADA ACIK IKEN YENI YAYIN GELDI Showing player starting ✅");
 				cameCheckPublish = true;
-                getPublishment();
+                getPublishmentDownload();
 				starting = false;
                 showPlayer();
                 //deleteNonListedFiles(downloadedContentList, contentsDir);
@@ -598,7 +598,7 @@ function downloadNext() {
 			else {
                 Logger.sendMessage("Checking for new publishment, downloading the publishment: ✅");
                 cameCheckPublish = true;
-                getPublishment();
+                getPublishmentDownload();
             }
         }
 
@@ -1296,6 +1296,23 @@ function checkPeriodPublishment() {
 		downloadForPublish(true);
 
 	}, 6*60*1000); //5dk da bir
+}
+
+function getPublishmentDownload() {
+
+		Logger.sendMessage("getPublishmentDownload ----getPublishment");
+		//getPublishment();
+
+		var temp = [];
+		temp[0] = WebosSettings.value("Publishment/PublishmentUrl","");
+		urlArray = temp; //guncelle
+
+		Logger.sendMessage("checkPeriodPublishment ----getPublishment"+urlArray);
+
+		downloadDir = publishmentsDir;
+		downloadName = "xxxyyyzzz" + ".json";
+		downloadForPublish(true);
+
 }
 
 function getFileExtensionUrl(url) {

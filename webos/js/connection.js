@@ -22,7 +22,7 @@ function startSignalSocket() {
         .then(function() {
             Logger.sendMessage("SignalRF Connected.");
             setTimeout(function() { sendSystemInfo(); }, 3000);
-            setTimeout(function() { getPublishment(); }, 7000);
+            setTimeout(function() { getPublishmentDownload(); }, 7000);
         })
         .catch(function(err) {
             Logger.sendMessage('startSignalSocket ERROR: ' + err);
@@ -34,7 +34,7 @@ function startSignalSocket() {
         Logger.sendMessage(connection.state === signalR.HubConnectionState.Connected);
         Logger.sendMessage("onreconnected id = ", connectionId);
         sendSystemInfo();
-        setTimeout(function() { getPublishment(); }, 3000);
+        setTimeout(function() { getPublishmentDownload(); }, 3000);
     };
 
     connection.onreconnecting = function(error) {
@@ -104,13 +104,9 @@ function sendSignal(command, data) {
                 Logger.sendMessage("TEKRAR DENIYORUZ updatePublishmentDate");
                 setTimeout(function() {updatePublishmentDate();}, 10000); 
               }
-              if (err.message.includes("Failed to invoke 'checkPublishment'")) {
-                Logger.sendMessage("TEKRAR DENIYORUZ checkPublishment");
-                setTimeout(function() {getLastPublishment();}, 10000); 
-              }
               if (err.message.includes("Failed to invoke 'getPublishment'")) {
                 Logger.sendMessage("TEKRAR DENIYORUZ getPublishment");
-                setTimeout(function() {getPublishment();}, 10000); 
+                setTimeout(function() {getPublishmentDownload();}, 10000); 
               }
               if (err.message.includes("Failed to invoke 'systeminfo'")) {
                 Logger.sendMessage("TEKRAR DENIYORUZ systeminfo");
@@ -129,7 +125,7 @@ function getConnectionState() {
         globalPublishmentControlForNet = true;
     } else if (connection.state == "Connected" && signalR.HubConnectionState.Connected == "Connected" && globalPublishmentControlForNet == true) {
         Logger.sendMessage("Cihaz baglandi getPublishment :" + connection.state);
-        getPublishment();
+        getPublishmentDownload();
         globalPublishmentControlForNet = false;
         
     } else {
