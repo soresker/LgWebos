@@ -4,6 +4,10 @@ function Play_Template() {
     this.uniqueKey = ""; //undefined düzelt akin
     this.width = 0;
     this.height = 0; //manuel verildi düzeltilecek
+    this.x = 0;
+    this.y = 0;
+    this.z = 0;
+    this.isActive = true;
 }
 
 Play_Template.prototype.startTemplate = function (templateInfo) {
@@ -13,13 +17,17 @@ Play_Template.prototype.startTemplate = function (templateInfo) {
     this.width = templateInfo.width;
     this.height = templateInfo.height; //manuel verildi düzeltilecek
     this.position = templateInfo.position;
-
+    this.x = templateInfo.x;
+    this.y = templateInfo.y;
+    this.z = templateInfo.z;
+    this.isActive = templateInfo.isActive;
     //console.log("Play_Template name: " + templateInfo.name, 'Info');
     //console.log("Play_Template duration: " + templateInfo.duration, 'Info');
     //console.log("Play_Template uniqueKey: " + this.uniqueKey, 'Info');
     //console.log("Play_Template width: " + templateInfo.width, 'Info');
     //console.log("Play_Template height: " + templateInfo.height, 'Info');
     //console.log("Play_Template position: " + templateInfo.position, 'Info');
+    console.log("Play_Template isActive: "+templateInfo.isActive,'Info');
 
     //console.log("templateInfo.frameInfoList.lengtht: " + templateInfo.frameInfoList.length, 'Info');
 

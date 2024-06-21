@@ -36,8 +36,14 @@ Publishment_Reader.parseLatestPublishment = function (data) {
     Publishment_Reader.parseTemplates();
 
     for (var index = 0; index < templateList.length; index++) {
-        currentTemplate = new Play_Template();
-        currentTemplate.startTemplate(templateList[index]);
+        //Publishment_Reader.currentTemplate = new Play_Template();
+        //Publishment_Reader.currentTemplate.startTemplate(this.templateList[index]);
+        if (this.templateList[index].isActive == true) {    
+            Publishment_Reader.currentTemplate = new Play_Template();
+            Publishment_Reader.currentTemplate.startTemplate(this.templateList[index]);
+        } else {
+            console.log("Template is not active, skipping operation for index:", index);
+        }
     }
 };
 
@@ -206,6 +212,7 @@ Publishment_Reader.parseBasicAttributes = function (info, object, uniqId) {
     info.y = Tools.defaultValue(object.y, 0);
     info.z = Tools.defaultValue(object.z, 0);
     info.position = Tools.defaultValue(object.position, 0);
+    info.isActive = Tools.defaultValue(object.isActive, 0);
     //console.log("parseBasicAttributes:", info);
 };
 
