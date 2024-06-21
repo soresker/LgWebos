@@ -246,7 +246,7 @@ window.onload = function () {
 	//sendHardbitSystemInfo();
 	sendSystemInfoInterval();
 	checkPeriodPublishment();
-	
+	clearScreenPeriod();
 	setTimeout(function() {
 		checkSocketConnection();
 	}, 20000);
@@ -387,6 +387,7 @@ function download(url, callback) {
 	});
 }
 function downloadForPublish(camePeriod) {
+	$(".download-bar").hide();
 	currentPubIndex = currentPubIndex + 1;
 	if (currentPubIndex < urlArray.length) {
 		var currentUrl = urlArray[currentPubIndex];
@@ -405,7 +406,7 @@ function downloadForPublish(camePeriod) {
 						Logger.sendMessage('download for publishment complete: ' + (currentPubIndex + 1) + '/' + urlArray.length + ' 😃');
 						sendConsoleLog("download for publishment complete: " + (currentPubIndex + 1) + "/" + urlArray.length);			
 					}
-					$(".download-bar").html("Downloading " + (currentPubIndex + 1) + "/" + urlArray.length);
+					//$(".download-bar").html("Downloading " + (currentPubIndex + 1) + "/" + urlArray.length);
 					downloadForPublish(camePeriod);
 				})
 			//}
@@ -450,7 +451,7 @@ function downloadForPublish(camePeriod) {
 					downloadDir = contentsDir;
 					downloadName = "";
 					starting = false;
-					$(".download-bar").show();
+					//$(".download-bar").show();
 					downloadNext();
 					if (fontUrlArray.length > 0)
 						downloadAction(fontUrlArray);
@@ -486,7 +487,7 @@ function downloadForPublish(camePeriod) {
 						downloadDir = contentsDir;
 						downloadName = "";
 						starting = false;
-						$(".download-bar").show();
+						//$(".download-bar").show();
 						downloadNext();
 						if (fontUrlArray.length > 0)
 							downloadAction(fontUrlArray);
@@ -1867,4 +1868,11 @@ function readfileScheduleJSON(filename) {
 			Logger.sendMessage('read schedule json data:' + data);
 			globalScheduleData = JSON.parse(data);
 	});
+}
+
+function clearScreenPeriod() {
+	setInterval(function() {
+	  console.log("clearScreenPeriod");
+	  $(".download-bar").hide();
+	}, 15000);
 }
