@@ -21,7 +21,7 @@ var globalPublishmentUrl = "";
 var globalScheduleData = "";
 var devicePublishment = "";
 var cameCheckPublish = false;
-var webosAppVersion = "1.0.129"
+var webosAppVersion = "1.0.131"
 var changeActiveDatas = false;
 var weatherActive = false;
 var currencyActive = false;
@@ -1312,7 +1312,7 @@ function getPublishmentDownload() {
 
 		downloadDir = publishmentsDir;
 		downloadName = "xxxyyyzzz" + ".json";
-		downloadForPublish(true);
+		downloadForPublish(false);
 
 }
 
@@ -1706,14 +1706,23 @@ function setWeatherForecast(weatherArray) {
 function downloadAction(data) {
     console.warn("downloadAction FONT: " + data);
 
+    if (!Array.isArray(data)) {
+        console.error("data is not an array:", data);
+        return;
+    }
+
     for (var index = 0; index < data.length; index++) {
         var urlObj = data[index];
+        if (!urlObj || !urlObj.url || !urlObj.title) {
+            console.error("urlObj, url or title is undefined at index:", index, urlObj);
+            continue;
+        }
         var url = urlObj.url;
 
-		var parts = url.split(".");
-		fontExtension = parts[parts.length - 1];
+        var parts = url.split(".");
+        fontExtension = parts[parts.length - 1];
 
-		var name = urlObj.title + "."+fontExtension;
+        var name = urlObj.title + "." + fontExtension;
 
         console.warn("Font Dosya uzantisi adi: " + name);
 
@@ -1733,6 +1742,7 @@ function downloadAction(data) {
         });
     }
 }
+
 
 function fsync() {
 	// Failure callback function for copyFile() method.

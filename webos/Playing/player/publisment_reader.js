@@ -36,15 +36,20 @@ Publishment_Reader.parseLatestPublishment = function (data) {
     Publishment_Reader.parseTemplates();
 
     for (var index = 0; index < templateList.length; index++) {
-        //Publishment_Reader.currentTemplate = new Play_Template();
-        //Publishment_Reader.currentTemplate.startTemplate(this.templateList[index]);
-        if (this.templateList[index].isActive == true) {    
-            Publishment_Reader.currentTemplate = new Play_Template();
-            Publishment_Reader.currentTemplate.startTemplate(this.templateList[index]);
+        //currentTemplate = new Play_Template();
+        //currentTemplate.startTemplate(templateList[index]);
+        if (typeof templateList[index].isActive === "undefined") {
+            currentTemplate = new Play_Template();
+            currentTemplate.startTemplate(templateList[index]);
+        } else if (templateList[index].isActive === true) {
+            currentTemplate = new Play_Template();
+            currentTemplate.startTemplate(templateList[index]);
         } else {
             console.log("Template is not active, skipping operation for index:", index);
         }
+
     }
+        
 };
 
 Publishment_Reader.parseCalendars = function () {
@@ -80,6 +85,8 @@ Publishment_Reader.parseCalendars = function () {
             templateCalendarInfo.setEndTime(Tools.defaultValue(endTime, ""));
 
             templateCalendarInfo.setTemplateId(Tools.defaultValue(currentTemplateCalendarToParse.id, ""));
+            templateCalendarInfo.setTemplateType(Tools.defaultValue(currentTemplateCalendarToParse.type, ""));
+
             //console.log("parseCalendars: function() = > " + JSON.stringify(templateCalendarInfo), "Info");
 
             calendarList.push(templateCalendarInfo);

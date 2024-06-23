@@ -6,6 +6,8 @@ function Parse_Calendar() {
 	this.endTime = "";
 	this.templateUniqId = "";
 	this.templateId = "";
+  this.type = "";
+
   }
   
   Parse_Calendar.prototype.setDays = function (value) {
@@ -34,5 +36,10 @@ function Parse_Calendar() {
   
   Parse_Calendar.prototype.setTemplateUniqId = function (value) {
 	this.templateUniqId = Tools.defaultValue(value, "unknown");
+
+  Parse_Calendar.prototype.setTemplateType = function (value) {
+		this.type = Tools.defaultValue(value, "standard");
+	};
+
   };
     
