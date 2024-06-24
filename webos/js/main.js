@@ -21,7 +21,7 @@ var globalPublishmentUrl = "";
 var globalScheduleData = "";
 var devicePublishment = "";
 var cameCheckPublish = false;
-var webosAppVersion = "1.0.135"
+var webosAppVersion = "1.0.136"
 var changeActiveDatas = false;
 var weatherActive = false;
 var currencyActive = false;
@@ -410,7 +410,7 @@ function downloadForPublish(camePeriod) {
 						sendConsoleLog("download for publishment complete: " + (currentPubIndex + 1) + "/" + urlArray.length);			
 					}
 					//$(".download-bar").html("Downloading " + (currentPubIndex + 1) + "/" + urlArray.length);
-					//downloadForPublish(camePeriod);
+					downloadForPublish(camePeriod);
 				})
 			//}
 			/*else {
@@ -597,7 +597,7 @@ function downloadNext() {
 			{
                 Logger.sendMessage("CIHAZ KAPALI YADA ACIK IKEN YENI YAYIN GELDI Showing player starting ✅");
 				cameCheckPublish = true;
-                getPublishmentDownload();
+                //getPublishmentDownload();
 				starting = false;
                 showPlayer();
                 //deleteNonListedFiles(downloadedContentList, contentsDir);
@@ -763,35 +763,6 @@ function executeReceiveCommands(commands) {
 			
 			iframeDocument.getElementsByClassName('debug-bar')[0].textContent= commands.message+ "Privatekey:" +webOsMacAdress;
 			//iframeDocument.getElementsByClassName('debug-bar')[0].show();
-		}
-
-	} else if (commands.command === commandMessage.Check_Publishment) {
-		sendConsoleLog("Receive Command:" + commands.command);
-		Logger.sendMessage("commandMessage.Check_Publishment"+ JSON.stringify(commands));
-
-		var temp = WebosSettings.value("Publishment/NewVersion", "");
-		var playerStatus = WebosSettings.value("PlayerSettings/status", "");
-
-		if (temp == "" && playerStatus == true) {
-			Logger.sendMessage("Player ilk kez ayaga kalkiyor ve yayini indirmeli:", commands);
-			//WebosSettings.setValue("Publishment/NewVersion", commands.jsonData.publishmentName);
-			//WebosSettings.setValue("Publishment/OldVersion", commands.jsonData.publishmentName);
-			fetchPublishment(commands.jsonData.publishmentData);
-		}
-
-		if (temp != commands.jsonData.publishmentName && playerStatus == true) {
-			Logger.sendMessage("Publisment dosyasi indiriliyor:", commands);
-			//WebosSettings.setValue("Publishment/NewVersion", commands.jsonData.publishmentName);
-			//WebosSettings.setValue("Publishment/OldVersion", commands.jsonData.publishmentName);
-			fetchPublishment(commands.jsonData.publishmentData);
-		} else {
-			if(cameCheckPublish == false)
-			{
-				fetchPublishment(commands.jsonData.publishmentData);
-
-			}else{
-				Logger.sendMessage("DEVAMKEEEE :)");
-			}		
 		}
 
 	} else if (commands.command === commandMessage.WinScreenShotRequest) {
@@ -974,24 +945,6 @@ function showPlayer() {
 		Logger.sendMessage("showPlayer sikinti :)");
 
 	}
-}
-
-function fetchPublishment(readPublishment) {
-
-	Logger.sendMessage("received publishment:" + JSON.stringify(readPublishment));
-	//listDir(publishmentsDir)
-	globalPublishment = readPublishment;
-	urlArray = readPublishment.filesUrlArray;
-	fontUrlArray = readPublishment.fontsUrlArray;
-	downloadedContentList = readPublishment.filesUrlArray;
-	downloadDir = contentsDir;
-	downloadName = "";
-	$(".download-bar").show();
-	downloadNext();
-	if (fontUrlArray.length > 0)
-		downloadAction(fontUrlArray);
-	Logger.sendMessage("fetchPublishment download baslayacak");
-
 }
 
 function checkPublishment() {
@@ -1182,10 +1135,6 @@ function receive_Publishment(publishment) {
 		downloadDir = publishmentsDir;
 		downloadName = publishment.jsonData.publishmentName + ".json";
 
-		WebosSettings.setValue("Publishment/NewVersion", globalPublishmentName);
-		WebosSettings.setValue("Publishment/OldVersion", globalPublishmentName);
-		WebosSettings.setValue("Publishment/PublishmentUrl", globalPublishmentUrl);
-
 		downloadForPublish(false);
 		if (fontUrlArray.length > 0)
 			downloadAction(fontUrlArray);
@@ -1324,7 +1273,7 @@ function getPublishmentDownload() {
 
 		downloadDir = publishmentsDir;
 		downloadName = "xxxyyyzzz" + ".json";
-		downloadForPublish(false);
+		downloadForPublish(true);
 
 }
 

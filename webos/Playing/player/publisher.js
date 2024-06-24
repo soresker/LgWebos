@@ -18,7 +18,9 @@ Publisher.newPublishment = function(publishmentData) {
         console.log("error : ", exception);
     }
     Publishment_Reader.parseLatestPublishment(Publisher.publishData);
-    Publisher.startTemplateCheck();
+    
+    // Mevcut interval'i durdur ve yeniden başlat
+    Publisher.restartTemplateCheck();
 };
 
 Publisher.setGlobalData = function(data) {
@@ -46,6 +48,16 @@ Publisher.startTemplateCheck = function() {
     Publisher.templateCheckInterval = setInterval(function() {
         Publisher.checkTemplates();
     }, 10000); // 10 saniyede bir çalışır
+};
+
+Publisher.restartTemplateCheck = function() {
+    if (Publisher.templateCheckInterval !== null) {
+        clearInterval(Publisher.templateCheckInterval);
+        Publisher.templateCheckInterval = null;
+        console.log("Existing template check interval cleared.");
+    }
+    
+    Publisher.startTemplateCheck();
 };
 
 Publisher.checkTemplates = function() {

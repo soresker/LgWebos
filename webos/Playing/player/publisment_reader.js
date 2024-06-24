@@ -39,15 +39,19 @@ Publishment_Reader.parseLatestPublishment = function (data) {
         //currentTemplate = new Play_Template();
         //currentTemplate.startTemplate(templateList[index]);
         if (typeof templateList[index].isActive === "undefined") {
+            console.log("TEMPLATE IS ACTIVE undefined");
+
             currentTemplate = new Play_Template();
             currentTemplate.startTemplate(templateList[index]);
-        } else if (templateList[index].isActive === true) {
+        } else if (templateList[index].isActive == true) {
+            console.log("TEMPLATE IS ACTIVE:");
+
             currentTemplate = new Play_Template();
             currentTemplate.startTemplate(templateList[index]);
         } else {
-            console.log("Template is not active, skipping operation for index:", index);
-            currentTemplate = new Play_Template();
-            currentTemplate.startTemplate(templateList[index]);
+            console.log("TEMPLATE IS NOT ACTIVE, skipping operation for index:", index);
+            //currentTemplate = new Play_Template();
+            //currentTemplate.startTemplate(templateList[index]);
         }
 
     }
