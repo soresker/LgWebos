@@ -1213,7 +1213,7 @@ function StartSyncAction() {
 		console.log("StartSyncAction webosSyncMasterPort"+webosSyncMasterPort);
 		console.log("StartSyncAction isMac "+isMac);
 
-		if(webosIsMaster == "true")
+		if(webosIsMaster == true)
 		{
 			console.log("StartSyncAction: webosIsMaster");
 			webosServiceIsHere(webosSyncMasterIp,webosSyncMasterPort,webosIsMaster,isMac)
