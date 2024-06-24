@@ -21,7 +21,7 @@ var globalPublishmentUrl = "";
 var globalScheduleData = "";
 var devicePublishment = "";
 var cameCheckPublish = false;
-var webosAppVersion = "1.0.136"
+var webosAppVersion = "1.0.137"
 var changeActiveDatas = false;
 var weatherActive = false;
 var currencyActive = false;
@@ -325,6 +325,7 @@ function messageCheck(msg) {
 				
 				this.readPulishmentFile(path).then(function (publishmentContent) {
 					globalPublishment = JSON.parse(publishmentContent);
+					globalPublishmentName = globalPublishment.publishmentName;
 					//Logger.sendMessage("publishmentContent" + publishmentContent);
 					urlArray = globalPublishment.filesUrlArray;
 					//Logger.sendMessage("publishmentContent urlArray" + urlArray);
@@ -469,48 +470,47 @@ function downloadForPublish(camePeriod) {
 
 		}else{
 
-			if (downloadDir == publishmentsDir) {
 
-				WebosSettings.setValue("Publishment/NewVersion", globalPublishmentName);
-				WebosSettings.setValue("Publishment/OldVersion", globalPublishmentName);
-				WebosSettings.setValue("Publishment/PublishmentUrl", globalPublishmentUrl);
+			WebosSettings.setValue("Publishment/NewVersion", globalPublishmentName);
+			WebosSettings.setValue("Publishment/OldVersion", globalPublishmentName);
+			WebosSettings.setValue("Publishment/PublishmentUrl", globalPublishmentUrl);
 
 				//Logger.sendMessage("YENI PublishmentUrl ✅" +globalPublishmentUrl);
-				Logger.sendMessage("YENI Publisment Download edildi ✅" +globalPublishmentName);
+			Logger.sendMessage("YENI Publisment Download edildi ✅" +globalPublishmentName);
 
-				if(cameCheckPublish == false)
-				{
+			if(cameCheckPublish == false)
+			{
 
-					Logger.sendMessage("YENI PUBLISMENT VAR ONUN DA ICERIKLERINI INDIRMEYE BASLAYAK✅");
-					//getLastPublishment();
-					this.readPulishmentFile(globalPublishmentName+".json").then(function (publishmentContent) {
+				Logger.sendMessage("YENI PUBLISMENT VAR ONUN DA ICERIKLERINI INDIRMEYE BASLAYAK✅");
+				//getLastPublishment();
+				this.readPulishmentFile(globalPublishmentName+".json").then(function (publishmentContent) {
 
-						globalPublishment = JSON.parse(publishmentContent);
-						//Logger.sendMessage("publishmentContent" + publishmentContent);
-						urlArray = globalPublishment.filesUrlArray;
-						//Logger.sendMessage("publishmentContent urlArray" + urlArray);
-						downloadedContentList = globalPublishment.filesUrlArray;
-						fontUrlArray = globalPublishment.fontsUrlArray;
-						downloadDir = contentsDir;
-						downloadName = "";
-						starting = false;
-						//$(".download-bar").show();
-						downloadNext();
-						if (fontUrlArray.length > 0)
-							downloadAction(fontUrlArray);
-						//showPlayer();
-					})
+					globalPublishment = JSON.parse(publishmentContent);
+					//Logger.sendMessage("publishmentContent" + publishmentContent);
+					urlArray = globalPublishment.filesUrlArray;
+					//Logger.sendMessage("publishmentContent urlArray" + urlArray);
+					downloadedContentList = globalPublishment.filesUrlArray;
+					fontUrlArray = globalPublishment.fontsUrlArray;
+					downloadDir = contentsDir;
+					downloadName = "";
+					starting = false;
+					//$(".download-bar").show();
+					downloadNext();
+					if (fontUrlArray.length > 0)
+						downloadAction(fontUrlArray);
+					//showPlayer();
+				})
 
-				}else{
+			}else{
 
-					Logger.sendMessage("SHOWWW PLAYERE publishmentsDir✅");
-					showPlayer();
-					//deleteNonListedFiles(downloadedContentList,contentsDir);
-					cameCheckPublish = false;
-					this.updatePublishmentDate();
-				}
+				Logger.sendMessage("SHOWWW PLAYERE publishmentsDir✅");
+				showPlayer();
+				//deleteNonListedFiles(downloadedContentList,contentsDir);
+				cameCheckPublish = false;
+				this.updatePublishmentDate();
+			}
+		
 			
-			} 
 		}
 
 		$(".download-bar").hide()
@@ -584,31 +584,32 @@ function downloadNext() {
             $("#screen-shot-image").hide();
         }, 2000);
 
-		if (downloadDir == contentsDir) {
 
-            if (starting) {
-                Logger.sendMessage("Showing player starting ✅");
-				starting = false;
-                showPlayer();
-                //deleteNonListedFiles(downloadedContentList, contentsDir);
-                this.updatePublishmentDate();
-            } 
-			else if(cameCheckPublish == false)
-			{
-                Logger.sendMessage("CIHAZ KAPALI YADA ACIK IKEN YENI YAYIN GELDI Showing player starting ✅");
-				cameCheckPublish = true;
-                //getPublishmentDownload();
-				starting = false;
-                showPlayer();
-                //deleteNonListedFiles(downloadedContentList, contentsDir);
-                this.updatePublishmentDate();
-			}
-			else {
-                Logger.sendMessage("CIHAZ Checking for new publishment, downloading the publishment: ✅");
-                cameCheckPublish = true;
-                getPublishmentDownload();
-            }
-        }
+		if (starting) {
+			Logger.sendMessage("Showing player starting ✅");
+			starting = false;
+			showPlayer();
+			//deleteNonListedFiles(downloadedContentList, contentsDir);
+			this.updatePublishmentDate();
+		} 
+		else if(cameCheckPublish == false)
+		{
+			Logger.sendMessage("CIHAZ KAPALI YADA ACIK IKEN YENI YAYIN GELDI Showing player starting ✅");
+			cameCheckPublish = false;
+			//getPublishmentDownload();
+			starting = false;
+			showPlayer();
+			//deleteNonListedFiles(downloadedContentList, contentsDir);
+			this.updatePublishmentDate();
+		}
+		else {
+			Logger.sendMessage("CIHAZ Checking for new publishment, downloading the publishment: ✅");
+			//cameCheckPublish = true;
+			cameCheckPublish = false;
+
+			//getPublishmentDownload();
+		}
+        
 
         $(".download-bar").hide();
         listDir(publishmentsDir);
@@ -1244,8 +1245,6 @@ function getLastPublishment() {
 function checkPeriodPublishment() {
 
 	setInterval(function () {
-		Logger.sendMessage("checkPeriodPublishment ----getPublishment");
-		//getPublishment();
 
 		var temp = [];
 		temp[0] = WebosSettings.value("Publishment/PublishmentUrl","");
@@ -1268,8 +1267,6 @@ function getPublishmentDownload() {
 		var temp = [];
 		temp[0] = WebosSettings.value("Publishment/PublishmentUrl","");
 		urlArray = temp; //guncelle
-
-		Logger.sendMessage("checkPeriodPublishment ----getPublishment"+urlArray);
 
 		downloadDir = publishmentsDir;
 		downloadName = "xxxyyyzzz" + ".json";
