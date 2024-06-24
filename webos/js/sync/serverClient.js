@@ -3,39 +3,37 @@ var connectedActive = false;
 var masterIP = "";
 var masterPort = "";
 var isMaster = "";
-var syncThreshold = 0.2; // Sync interval in milliseconds
+var syncThreshold = 0.4; // Sync interval in milliseconds
 var globalData = "";
 var isMacAdress = "";
 
-function webosServiceIsHere(dev_ip, dev_port, isMaster,webOsMacAdress) {
+function webosServiceIsHere(dev_ip, dev_port, isMasterFlag, webOsMacAdress) {
+  masterIP = dev_ip;
+  masterPort = dev_port;
+  isMaster = isMasterFlag;
+  isMacAdress = webOsMacAdress;
 
-    masterIP = dev_ip;
-    masterPort = dev_port;
-    isMaster = isMaster;
-    isMacAdress = webOsMacAdress;
-
-    if (isMaster == "true") {
+  if (isMaster == "true") {
       webOS.service.request('luna://com.lg.app.signage.server', {
-        method: 'serverOn',
-        parameters: {},
-        onSuccess: function onSuccess(ret) {
-          console.log(ret);
-        },
-        onFailure: function onFailure(err) {
-          console.log(err);
-        },
-        subscribe: true
+          method: 'serverOn',
+          parameters: {},
+          onSuccess: function onSuccess(ret) {
+              console.log(ret);
+          },
+          onFailure: function onFailure(err) {
+              console.log(err);
+          },
+          subscribe: true
       });
-    }
+  }
 
-    if(isMaster == "true" )
-    {
+  if (isMaster == "true") {
       isMaster = "master";
       MasterTimer();
-    }else{
-      isMaster = "slave"
-    }
-    SocketStart(isMaster,masterIP,masterPort,isMacAdress);
+  } else {
+      isMaster = "slave";
+  }
+  SocketStart(isMaster, masterIP, masterPort, isMacAdress);
 }
 
 function SocketStart(isMaster,masterIP,masterPort,webOsMacAdress) {
@@ -117,14 +115,15 @@ function SocketStart(isMaster,masterIP,masterPort,webOsMacAdress) {
 
           console.log('timeDifference:'+timeDifference);
 
+          /*
           if (timeDifference > 1.1) {
             syncItem.currentTime = receivedTime+1;
             return;
-          }
+          }*/
 
           if (timeDifference > syncThreshold) {
             console.log('Time difference is greater than 500 ms. Syncing video...');
-            syncItem.currentTime = receivedTime;
+            syncItem.currentTime = receivedTime+timeDifference;
 
         }else{
           console.log("BEN MASTERIM VIDEO sync bana uymaz kardas git slave yapsin");
@@ -180,6 +179,6 @@ function MasterTimer() {
         }
       });
     
-  }, 7000);
+  }, 3000);
 
 }
