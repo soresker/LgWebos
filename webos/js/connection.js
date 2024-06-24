@@ -21,8 +21,8 @@ function startSignalSocket() {
     connection.start()
         .then(function() {
             Logger.sendMessage("SignalRF Connected.");
-            setTimeout(function() { sendSystemInfo(); }, 3000);
-            setTimeout(function() { getPublishmentDownload(); }, 7000);
+            setTimeout(function() { sendSystemInfo(); }, 10000);
+            setTimeout(function() { getPublishmentDownload(); }, 25000);
         })
         .catch(function(err) {
             Logger.sendMessage('startSignalSocket ERROR: ' + err);
@@ -34,7 +34,7 @@ function startSignalSocket() {
         Logger.sendMessage(connection.state === signalR.HubConnectionState.Connected);
         Logger.sendMessage("onreconnected id = ", connectionId);
         sendSystemInfo();
-        setTimeout(function() { getPublishmentDownload(); }, 3000);
+        setTimeout(function() { getPublishmentDownload(); }, 25000);
     };
 
     connection.onreconnecting = function(error) {
@@ -102,11 +102,11 @@ function sendSignal(command, data) {
 
             if (err.message.includes("Failed to invoke 'updatePublishmentDate'")) {
                 Logger.sendMessage("TEKRAR DENIYORUZ updatePublishmentDate");
-                setTimeout(function() {updatePublishmentDate();}, 10000); 
+                setTimeout(function() {updatePublishmentDate();}, 15000); 
               }
               if (err.message.includes("Failed to invoke 'getPublishment'")) {
                 Logger.sendMessage("TEKRAR DENIYORUZ getPublishment");
-                setTimeout(function() {getPublishmentDownload();}, 10000); 
+                setTimeout(function() {getPublishmentDownload();}, 25000); 
               }
               if (err.message.includes("Failed to invoke 'systeminfo'")) {
                 Logger.sendMessage("TEKRAR DENIYORUZ systeminfo");

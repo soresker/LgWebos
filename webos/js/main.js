@@ -225,6 +225,9 @@ window.onload = function () {
 			Logger.sendMessage('player register'+webosIsRegister);
 			Logger.sendMessage('player playerId:' + WebosSettings.value("PlayerSettings/playerId", ""));
 			Logger.sendMessage('player custormerId:' + WebosSettings.value("Customer/id", ""));
+			Logger.sendMessage('player Publishment/NewVersion:' + WebosSettings.value("Publishment/NewVersion", ""));
+			Logger.sendMessage('player Publishment/PublishmentUrl:' + WebosSettings.value("Publishment/PublishmentUrl", ""));
+
 			/*
 			setTimeout(function () {
 				$("#screen-shot-image").hide();
@@ -407,7 +410,7 @@ function downloadForPublish(camePeriod) {
 						sendConsoleLog("download for publishment complete: " + (currentPubIndex + 1) + "/" + urlArray.length);			
 					}
 					//$(".download-bar").html("Downloading " + (currentPubIndex + 1) + "/" + urlArray.length);
-					downloadForPublish(camePeriod);
+					//downloadForPublish(camePeriod);
 				})
 			//}
 			/*else {
@@ -418,7 +421,7 @@ function downloadForPublish(camePeriod) {
 	}
 	else {
 		currentPubIndex = -1;
-		Logger.sendMessage("download complated all files ✅");
+		Logger.sendMessage("download complated publishment ✅");
 
 		//this.fsync();
 		/*
@@ -428,6 +431,8 @@ function downloadForPublish(camePeriod) {
 		*/
 		if(camePeriod == true)
 		{
+
+			console.info("PUBLISMENT I OKUYACAGIZ");
 
 			this.readPulishmentFile("xxxyyyzzz"+".json").then(function (publishmentContent) {
 
@@ -443,7 +448,9 @@ function downloadForPublish(camePeriod) {
 					return;	
 				}else{
 
-					//Logger.sendMessage("publishmentContent" + publishmentContent);
+					console.info("PUBLISMENT I OKUYACAGIZ 2 ");
+
+					Logger.sendMessage("publishmentContent" + publishmentContent);
 					urlArray = globalPublishment.filesUrlArray;
 					//Logger.sendMessage("publishmentContent urlArray" + urlArray);
 					downloadedContentList = globalPublishment.filesUrlArray;
@@ -597,7 +604,7 @@ function downloadNext() {
                 this.updatePublishmentDate();
 			}
 			else {
-                Logger.sendMessage("Checking for new publishment, downloading the publishment: ✅");
+                Logger.sendMessage("CIHAZ Checking for new publishment, downloading the publishment: ✅");
                 cameCheckPublish = true;
                 getPublishmentDownload();
             }
@@ -1174,6 +1181,11 @@ function receive_Publishment(publishment) {
 		globalPublishmentName = publishment.jsonData.publishmentName;
 		downloadDir = publishmentsDir;
 		downloadName = publishment.jsonData.publishmentName + ".json";
+
+		WebosSettings.setValue("Publishment/NewVersion", globalPublishmentName);
+		WebosSettings.setValue("Publishment/OldVersion", globalPublishmentName);
+		WebosSettings.setValue("Publishment/PublishmentUrl", globalPublishmentUrl);
+
 		downloadForPublish(false);
 		if (fontUrlArray.length > 0)
 			downloadAction(fontUrlArray);
