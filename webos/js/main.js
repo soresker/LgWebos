@@ -21,7 +21,7 @@ var globalPublishmentUrl = "";
 var globalScheduleData = "";
 var devicePublishment = "";
 var cameCheckPublish = false;
-var webosAppVersion = "1.0.138"
+var webosAppVersion = "1.0.139"
 var changeActiveDatas = false;
 var weatherActive = false;
 var currencyActive = false;
@@ -324,25 +324,33 @@ function messageCheck(msg) {
 			setTimeout(function() {
 				
 				this.readPulishmentFile(path).then(function (publishmentContent) {
-					globalPublishment = JSON.parse(publishmentContent);
-					globalPublishmentName = globalPublishment.publishmentName;
-					//Logger.sendMessage("publishmentContent" + publishmentContent);
-					urlArray = globalPublishment.filesUrlArray;
-					//Logger.sendMessage("publishmentContent urlArray" + urlArray);
-					downloadedContentList = globalPublishment.filesUrlArray;
-					downloadDir = contentsDir;
-					downloadName = "";
-					starting = true;
-					fontUrlArray = globalPublishment.fontsUrlArray;
-
-					if (fontUrlArray.length > 0)
-						downloadAction(fontUrlArray);
-
-					$(".download-bar").show();
-					downloadNext();
-					
-					//showPlayer();
-				})
+					try {
+						globalPublishment = JSON.parse(publishmentContent);
+						globalPublishmentName = globalPublishment.publishmentName;
+						//Logger.sendMessage("publishmentContent" + publishmentContent);
+						urlArray = globalPublishment.filesUrlArray;
+						//Logger.sendMessage("publishmentContent urlArray" + urlArray);
+						downloadedContentList = globalPublishment.filesUrlArray;
+						downloadDir = contentsDir;
+						downloadName = "";
+						starting = true;
+						fontUrlArray = globalPublishment.fontsUrlArray;
+				
+						if (fontUrlArray.length > 0)
+							downloadAction(fontUrlArray);
+				
+						$(".download-bar").show();
+						downloadNext();
+						
+						//showPlayer();
+					} catch (error) {
+						console.error("Error parsing publishment content: ", error);
+						// Hata durumunda yapılacaklar, örneğin kullanıcıya mesaj göstermek
+						// alert("There was an error processing the publishment content.");
+						WebosSettings.setValue("Publishment/NewVersion", "");
+					}
+				});
+				
 
 			}, 2000);
 		
@@ -460,6 +468,12 @@ function downloadForPublish(camePeriod) {
 					downloadName = "";
 					starting = false;
 					//$(".download-bar").show();
+
+					Logger.sendMessage("globalPublishment.publishmentName:" + globalPublishment.publishmentName);
+
+					WebosSettings.setValue("Publishment/NewVersion", globalPublishment.publishmentName);
+					WebosSettings.setValue("Publishment/OldVersion", globalPublishment.publishmentName);
+
 					downloadNext();
 					if (fontUrlArray.length > 0)
 						downloadAction(fontUrlArray);

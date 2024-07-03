@@ -36,10 +36,8 @@ function Parse_Calendar() {
   
   Parse_Calendar.prototype.setTemplateUniqId = function (value) {
 	this.templateUniqId = Tools.defaultValue(value, "unknown");
-
+  };
+  
   Parse_Calendar.prototype.setTemplateType = function (value) {
 		this.type = Tools.defaultValue(value, "standard");
 	};
-
-  };
-    

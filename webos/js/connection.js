@@ -21,8 +21,8 @@ function startSignalSocket() {
     connection.start()
         .then(function() {
             Logger.sendMessage("SignalRF Connected.");
-            setTimeout(function() { sendSystemInfo(); }, 10000);
-            setTimeout(function() { getPublishmentDownload(); }, 25000);
+            setTimeout(function() { sendSystemInfo(); }, 7000);
+            setTimeout(function() { getPublishmentDownload(); }, 8000);
         })
         .catch(function(err) {
             Logger.sendMessage('startSignalSocket ERROR: ' + err);
@@ -106,7 +106,7 @@ function sendSignal(command, data) {
               }
               if (err.message.includes("Failed to invoke 'getPublishment'")) {
                 Logger.sendMessage("TEKRAR DENIYORUZ getPublishment");
-                setTimeout(function() {getPublishmentDownload();}, 25000); 
+                setTimeout(function() {getPublishmentDownload();}, 8000); 
               }
               if (err.message.includes("Failed to invoke 'systeminfo'")) {
                 Logger.sendMessage("TEKRAR DENIYORUZ systeminfo");
