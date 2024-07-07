@@ -5,7 +5,6 @@ var publishmentsDir = defaultDir + 'publishments/';
 var contentsDir = defaultDir + 'contents/';
 var fontsDir = defaultDir + 'fonts/';
 var scheduleDir = defaultDir + 'schedule/';
-var contentsDirReq = './content/publishments/';
 var connection = null;
 var downloadedContentList = "";
 var currentIndex = -1;
@@ -21,7 +20,7 @@ var globalPublishmentUrl = "";
 var globalScheduleData = "";
 var devicePublishment = "";
 var cameCheckPublish = false;
-var webosAppVersion = "1.0.144"
+var webosAppVersion = "1.0.146"
 var changeActiveDatas = false;
 var weatherActive = false;
 var currencyActive = false;
@@ -706,19 +705,19 @@ function listDir(dir) {
 
 function removeDir() {
 	var path = defaultDir;
-	Logger.sendMessage('rmdir path' + path);
+	Logger.sendMessage('rmdir contents path' + path);
 	fs.rmdir(path, { recursive: true }, function (error, data) {
 		if (error)
 			return Logger.sendMessage('error', error);
-		Logger.sendMessage('data' + data);
+		Logger.sendMessage('silinen contents data' + data);
 	})
 
-	var path = publishmentsDir;
-	Logger.sendMessage('rmdir path' + path);
+	path = publishmentsDir;
+	Logger.sendMessage('rmdir publishment path' + path);
 	fs.rmdir(path, { recursive: true }, function (error, data) {
 		if (error)
 			return Logger.sendMessage('error', error);
-		Logger.sendMessage('data' + data);
+		Logger.sendMessage('silinen publishment data' + data);
 	})
 }
 
@@ -926,13 +925,8 @@ function executeReceiveCommands(commands) {
 
 		Logger.sendMessage(" Receive PublishmentDelete", JSON.stringify(commands));
 
-		var path = contentsDir;
-		Logger.sendMessage('rmdir path' + path);
-		fs.rmdir(path, { recursive: true }, function (error, data) {
-			if (error)
-				return Logger.sendMessage('error', error);
-			Logger.sendMessage('data' + data);
-		})
+		removeDir();
+
 	}
 
 	else {

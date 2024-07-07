@@ -38,7 +38,7 @@ Content_Abstractor.prototype.deleteContent = function() {
     this.parentFrameObject = 0;
 
     if (this.contentStartDate != "") {
-        //console.log(this.templateUniqueKey, this.frameUniqueKey, this.uniqueKey, this.playlistUniqueKey, this.type, this.contentStartDate, Tools.getDateTimeNow().format(("YYYY-MM-DD HH:mm:ss.SSS")), this.categoryId, this.playLimit);
+        console.log(this.templateUniqueKey, this.frameUniqueKey, this.uniqueKey, this.playlistUniqueKey, this.type, this.contentStartDate, Tools.getDateTimeNow().format(("YYYY-MM-DD HH:mm:ss.SSS")), this.categoryId, this.playLimit);
         
     }
 };
@@ -60,7 +60,7 @@ Content_Abstractor.prototype.hideFailoverImage = function() {
 Content_Abstractor.prototype.showContent = function() {
 
     this.contentStartDate = Tools.getDateTimeNow().format("YYYY-MM-DD HH:mm:ss.SSS");
-    //console.log("Content_Abstractor.showContent"+ this.contentStartDate);
+    console.log("Content_Abstractor.showContent"+ this.contentStartDate);
 
     var _this = this;
 
@@ -100,5 +100,5 @@ Content_Abstractor.prototype.getName = function() {
 
 Content_Abstractor.prototype.OnError = function(exception) {
 
-    //console.log("Content_Abstractor.prototype.OnError | " + this.name, this.name + " | " + exception, "error");
+    console.log("Content_Abstractor.prototype.OnError | " + this.name, this.name + " | " + exception, "error");
 };

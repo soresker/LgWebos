@@ -86,7 +86,7 @@ Content_Video.prototype.showContent = function(func) {
 
         $(this.videoSelector).attr('src',fileUrlEdits);
         //var video = document.getElementById("content-" + this.playlistContentUniqueKey + "-video");
-        //console.log("Video.basePath2:" +fileUrlEdits);
+        console.log("Video.basePath2:" +fileUrlEdits);
 
         if (this.settingSeekStart)
             this.settingSeekStart = false;
@@ -105,7 +105,7 @@ Content_Video.prototype.showContent = function(func) {
         this_.videoPlayed = true;
 
     } catch (exception) {
-        //console.log("[Video][Error]", exception)
+        console.log("[Video][Error]", exception)
         this.parentFrameObject.setCurrentContentValidity(false);
         if (func)
             func();
@@ -117,7 +117,7 @@ Content_Video.prototype.showContent = function(func) {
 
 Content_Video.prototype.deleteUIElement = function() {
 
-   //console.log("Video deleteUIElement "+ "info");
+   console.log("Video deleteUIElement "+ "info");
     try {
         //var video = document.getElementById("content-" + this.playlistContentUniqueKey + "-video");
         //this.removeAllListeners(video, 'timeupdate');
