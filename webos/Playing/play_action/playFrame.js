@@ -521,11 +521,16 @@ Play_Frame.prototype.playNextContent = function (isComeFromEndOfAContent) {
                 //this.setContentAnimations();
 
             }
-            else if (this.previousContent && webOsHardwareVersion >= "3.0") {
+            else if (this.previousContent && webOsHardwareVersion > "3.2") {
                 this.currentContent.showContent(function () {
                     setTimeout(function () {
                         this_.deletePreviousContent();
                     }, 1000);
+                });
+            }
+            else if (this.previousContent && webOsHardwareVersion <= "3.2") {
+                this_.deletePreviousContent();
+                this.currentContent.showContent(function () {
                 });
             }
             else {

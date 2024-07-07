@@ -116,7 +116,9 @@ function addLastScript(url) {
 		WebosDevice.enableAllOffTimer();
 		WebosDevice.setCurrentTime();
 		WebosDevice.setPowerSaveMode();
-		WebosDevice.getSensorValues();
+		
+		if (webOsHardwareVersion > "3.2") 
+			WebosDevice.getSensorValues();
 	}
 	document.body.appendChild(script);
 
