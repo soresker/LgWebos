@@ -529,9 +529,12 @@ Play_Frame.prototype.playNextContent = function (isComeFromEndOfAContent) {
                 });
             }
             else if (this.previousContent && webOsHardwareVersion <= "3.2") {
-                this_.deletePreviousContent();
+              
                 this.currentContent.showContent(function () {
                 });
+
+                this_.deletePreviousContent();
+
             }
             else {
                 ////console.log("else this.currentContent.showContent : " + contentInfo)
